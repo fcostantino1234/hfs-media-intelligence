@@ -282,9 +282,10 @@
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
       setTimeout(() => {
-        const firstRow = document.querySelector('#leads-tbody tr');
-        if (firstRow) firstRow.click();
-      }, 200);
+        if (filteredLeads && filteredLeads.length > 0) {
+          openLeadDrawer(filteredLeads[0]);
+        }
+      }, 100);
     }
     if (hash === 'columns') {
       const leadsTab = document.getElementById('tab-sales-leads');
