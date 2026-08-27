@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hormel Foodservice - Strategic Media & Sales Leads Intelligence Suite</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="brand_catalog_data.js"></script>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="logo-mark" style="background: var(--jtm-chartreuse); color: #0A1921; font-weight: 900; letter-spacing: 0.05em;">
+          JT MEGA
+        </div>
+        <div class="header-titles">
+          <div class="brand-eyebrow" style="display: flex; align-items: center; gap: 6px;">
+            <span style="color: var(--jtm-chartreuse); font-size: 0.625rem;">●</span>
+            THOUGHT FOR FOOD • 50 YEARS • JT MEGA FOOD ADVERTISING
+          </div>
+          <h1 class="brand-main">Hormel Foodservice Media & Leads Intelligence</h1>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="header-nav">
+        <button class="nav-tab active" id="tab-sales-leads" data-view="leads">
+          <span class="tab-icon">📋</span> Sales Leads (<span id="header-leads-count">25,326</span>)
+        </button>
+        <button class="nav-tab" id="tab-audience" data-view="audience">
+          <span class="tab-icon">👥</span> Audience Profile
+        </button>
+        <button class="nav-tab" id="tab-brand-catalog" data-view="brand-catalog">
+          <span class="tab-icon">🍽️</span> Brands & Products
+        </button>
+        <button class="nav-tab" id="tab-tactic-isolator" data-view="isolator">
+          <span class="tab-icon">🎯</span> Tactic Performance
+        </button>
+        <button class="nav-tab" id="tab-media-timeline" data-view="timeline">
+          <span class="tab-icon">⏱️</span> Media Timeline
+        </button>
+        <button class="nav-tab" id="tab-trends" data-view="trends">
+          <span class="tab-icon">📈</span> Trends & Analytics
+        </button>
+        <button class="nav-tab" id="tab-roi-simulator" data-view="roi">
+          <span class="tab-icon">💰</span> ROI & Big Bets
+        </button>
+      </nav>
+    </div>
+
+    <!-- GLOBAL PERSISTENT CONTROL BAR (DATE RANGE + BRAND + TACTIC) -->
+    <div class="global-filter-bar">
+      <div class="global-filter-inner">
+        
+        <!-- Date Range Presets -->
+        <div class="global-control-group">
+          <span class="control-label">Date Range:</span>
+          <div class="date-preset-chips">
+            <button class="date-chip active" data-preset="all">All Time</button>
+            <button class="date-chip" data-preset="fy26">FY26 (Current)</button>
+            <button class="date-chip" data-preset="fy25">FY25</button>
+            <button class="date-chip" data-preset="fy24">FY24</button>
+            <button class="date-chip" data-preset="l12m">Last 12M</button>
+            <button class="date-chip" data-preset="custom">Custom...</button>
+          </div>
+          
+          <div class="custom-date-inputs" id="custom-date-container" style="display: none;">
+            <input type="date" id="global-start-date" class="date-input">
+            <span class="date-sep">➔</span>
+            <input type="date" id="global-end-date" class="date-input">
+          </div>
+        </div>
+
+        <!-- Global Brand Filter -->
+        <div class="global-control-group">
+          <span class="control-label">Brand:</span>
+          <select id="global-brand-select" class="global-select">
+            <option value="">All Brands</option>
+            <option value="Fontanini">Fontanini</option>
+            <option value="Hormel Bacon 1">Hormel Bacon 1</option>
+            <option value="Flash 180">Flash 180</option>
+            <option value="Fire Braised">Fire Braised</option>
+            <option value="Austin Blues">Austin Blues</option>
+            <option value="Hormel Halal">Hormel Halal</option>
+            <option value="Jennie-O Foodservice">Jennie-O Foodservice</option>
+            <option value="HFS Convenience">HFS Convenience</option>
+            <option value="Hormel Foodservice">Hormel Master Portfolio</option>
+          </select>
+        </div>
+
+        <!-- Global Channel Filter -->
+        <div class="global-control-group">
+          <span class="control-label">Channel:</span>
+          <select id="global-channel-select" class="global-select">
+            <option value="">All Channels</option>
+            <option value="Paid Trade Media">Paid Trade Media</option>
+            <option value="Integrated Campaign">Integrated Campaign</option>
+            <option value="Paid SEM & Social">Paid SEM & Social</option>
+            <option value="Events & Exhibitions">Events & Exhibitions</option>
+            <option value="Digital Acquisition">Digital Acquisition</option>
+            <option value="Owned Database Marketing">Owned Email Nurture</option>
+            <option value="Organic Inbound">Organic & SEO Inbound</option>
+          </select>
+        </div>
+
+        <!-- History Back & Master Reset Buttons -->
+        <div class="global-actions-group" style="display: flex; gap: 8px; align-items: center;">
+          <button id="btn-global-back" class="btn-global-back" disabled title="Go back to previous filter or view state">
+            ⬅ Back
+          </button>
+          <button id="btn-global-reset" class="btn-global-reset btn-global-reset-prominent" title="Completely reset all filters and restorations across the entire suite">
+            ↺ Reset All Filters
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 1: TACTIC ISOLATOR & HIERARCHICAL MACRO ROLLUP                       -->
+  <!-- ========================================================================= -->
+  <main id="view-isolator" class="app-view">
+    <div class="view-container">
+      
+      <!-- Tactic Isolator Hero Banner -->
+      <div class="isolator-hero">
+        <div class="isolator-hero-text">
+          <span class="hero-badge">MEDIA ARCHITECTURE</span>
+          <h2>Media Architecture & Performance</h2>
+          <p>Analyze performance across <strong>Publications</strong>, <strong>Formats</strong>, and <strong>Key Hooks</strong>, with drill-downs into individual tactics and leads.</p>
+        </div>
+
+        <div class="tactic-selector-wrapper">
+          <div class="selector-label-row">
+            <label for="tactic-select" class="selector-label">Direct Tactic Selector:</label>
+            <span class="selector-status-badge" id="selector-year-badge">All Time (18 Tactics)</span>
+          </div>
+          <div class="tactic-selector-controls">
+            <select id="tactic-select" class="form-select tactic-select-large">
+              <!-- Dynamically populated from TACTICS_DATA with 'All Tactics' option & year filtering -->
+            </select>
+            <button id="btn-bypass-tactic" class="btn btn-bypass-tactic" title="Bypass single tactic isolation to see full portfolio rollups">
+              🌟 Full Portfolio Rollup
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MACRO LEVEL ROLLUP EXPLORER SECTION -->
+      <div class="macro-rollup-section">
+        <div class="macro-rollup-header">
+          <div>
+            <span class="section-badge">ROLLUP</span>
+            <h3 class="section-title">Performance Rollup</h3>
+            <p class="section-subtitle">Aggregate metrics across key media dimensions</p>
+          </div>
+
+          <!-- Macro Dimension Toggle Buttons -->
+          <div class="macro-dimension-tabs">
+            <button class="btn-dim-tab active" id="dim-tab-hook" data-dim="hook">
+              🎯 By Key Hook
+            </button>
+            <button class="btn-dim-tab" id="dim-tab-pub" data-dim="pub">
+              🏢 By Publisher
+            </button>
+            <button class="btn-dim-tab" id="dim-tab-type" data-dim="type">
+              🎨 By Format
+            </button>
+          </div>
+        </div>
+
+        <!-- Macro Rollup Cards Grid -->
+        <div class="macro-cards-grid" id="macro-cards-grid">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Quick Tactic Filter Chips -->
+      <div class="tactic-chips-row">
+        <span class="chip-label">Filter Tactics:</span>
+        <button class="tactic-chip active" data-filter="all">All Channels</button>
+        <button class="tactic-chip" data-filter="Paid Trade Media">📰 Trade Publications</button>
+        <button class="tactic-chip" data-filter="Integrated Campaign">🚀 Brand Campaigns</button>
+        <button class="tactic-chip" data-filter="Events & Exhibitions">🎪 Trade Shows & Events</button>
+        <button class="tactic-chip" data-filter="Paid SEM & Social">🔍 Paid Search & Halal</button>
+        <button class="tactic-chip" data-filter="Owned Database Marketing">📬 Owned Email Nurture</button>
+      </div>
+
+      <!-- ISOLATED TACTIC SCORECARD (Hero Card) -->
+      <div class="tactic-scorecard-card" id="tactic-scorecard">
+        <div class="scorecard-header">
+          <div class="scorecard-title-area">
+            <div class="scorecard-badges">
+              <span class="badge badge-job" id="sc-job" style="background: #0E313D; color: var(--jtm-chartreuse); border: 1.5px solid var(--jtm-chartreuse); font-weight: 800; letter-spacing: 0.05em;">Job # HFS0925-266</span>
+              <span class="badge badge-rundate" id="sc-run-date">📅 Run Date: 2/1/26 - 2/28/26</span>
+              <span class="badge badge-hook" id="sc-key-hook">🎯 Labor-Saving & Prep-Free Execution</span>
+              <span class="badge badge-channel" id="sc-channel">Paid Trade Media</span>
+              <span class="badge badge-brand" id="sc-brand">Hormel Bacon 1</span>
+              <span class="badge badge-publisher attr-clickable" id="sc-publisher" title="Click to isolate leads from this publisher">QSR Magazine</span>
+              <span class="badge badge-type" id="sc-tactic-type">Digital Native Slideshow</span>
+              <span class="badge badge-date-active" id="sc-flight-active">Active Flight</span>
+            </div>
+            <h3 class="scorecard-name" id="sc-name">QSR Magazine - Bacon 1 Slideshow & Native Ads</h3>
+            <p class="scorecard-meta" id="sc-meta">Format: Digital Slideshow • Creative: Fully cooked labor-free bacon</p>
+            <div class="scorecard-utm-row" id="sc-utm-row" style="margin-top: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Tracking Tags:</span>
+              <span class="utm-chip" id="sc-utm-source" title="Click to isolate leads with this UTM Source"></span>
+              <span class="utm-chip" id="sc-utm-medium" title="Click to isolate leads with this UTM Medium"></span>
+              <span class="utm-chip" id="sc-utm-campaign" title="Click to isolate leads with this UTM Campaign"></span>
+              <span class="utm-chip" id="sc-utm-content" title="Click to isolate leads with this UTM Content"></span>
+            </div>
+          </div>
+          
+          <div class="scorecard-cta-area">
+            <button class="btn btn-chartreuse btn-large" id="btn-drill-leads">
+              🔍 Inspect <span id="sc-leads-btn-count">389</span> Leads from this Tactic ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- 8 Metric Grid -->
+        <div class="scorecard-kpi-grid">
+          <!-- 1. Media Spend -->
+          <div class="kpi-card">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Media Investment</div>
+              <div class="kpi-value" id="sc-spend">$20,161.92</div>
+              <div class="kpi-sub">Avg CPC: <strong id="sc-cpc">$9.57</strong></div>
+            </div>
+          </div>
+
+          <!-- 2. Impressions -->
+          <div class="kpi-card">
+            <div class="kpi-icon">👁️</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Target Impressions</div>
+              <div class="kpi-value" id="sc-impressions">322,621</div>
+              <div class="kpi-sub">CTR: <strong id="sc-ctr">0.65%</strong></div>
+            </div>
+          </div>
+
+          <!-- 3. Clicks -->
+          <div class="kpi-card">
+            <div class="kpi-icon">🖱️</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Engagement Clicks</div>
+              <div class="kpi-value" id="sc-clicks">2,106</div>
+              <div class="kpi-sub">Publisher Traffic</div>
+            </div>
+          </div>
+
+          <!-- 4. Web Sessions -->
+          <div class="kpi-card">
+            <div class="kpi-icon">🌐</div>
+            <div class="kpi-content">
+              <div class="kpi-label">HFS Website Sessions</div>
+              <div class="kpi-value" id="sc-sessions">1,980</div>
+              <div class="kpi-sub">GA4 Tracked Traffic</div>
+            </div>
+          </div>
+
+          <!-- 5. Distributor Lookups -->
+          <div class="kpi-card">
+            <div class="kpi-icon">🧭</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Distributor Lookups</div>
+              <div class="kpi-value" id="sc-lookups">84</div>
+              <div class="kpi-sub">Key Purchasing Intent</div>
+            </div>
+          </div>
+
+          <!-- 6. Sales Leads -->
+          <div class="kpi-card highlight-card">
+            <div class="kpi-icon">👥</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Verified Sales Leads</div>
+              <div class="kpi-value highlight-val" id="sc-leads">389</div>
+              <div class="kpi-sub" id="sc-leads-sub">Within Selected Date Range</div>
+            </div>
+          </div>
+
+          <!-- 7. Cost Per Lead (CPL) -->
+          <div class="kpi-card highlight-card">
+            <div class="kpi-icon">🏷️</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Cost Per Lead (CPL)</div>
+              <div class="kpi-value highlight-val" id="sc-cpl">$51.83</div>
+              <div class="kpi-sub">Acquisition Cost</div>
+            </div>
+          </div>
+
+          <!-- 8. Conversion Rate -->
+          <div class="kpi-card">
+            <div class="kpi-icon">🎯</div>
+            <div class="kpi-content">
+              <div class="kpi-label">Click-to-Lead Conv.</div>
+              <div class="kpi-value" id="sc-conv-rate">18.47%</div>
+              <div class="kpi-sub">High Operator Intent</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Strategic Takeaways -->
+        <div class="scorecard-notes-box">
+          <div class="notes-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="notes-icon">💡</span>
+              <strong>Ground-Truth Media Intelligence & HFSDATA Triangulation:</strong>
+            </div>
+            <span id="sc-source-deck" style="font-size: 0.75rem; color: var(--jtm-chartreuse); background: rgba(204, 215, 0, 0.15); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(204, 215, 0, 0.3); font-weight: 700;">📁 Source Deck</span>
+          </div>
+          <p id="sc-notes" class="notes-body">High engagement among Quick-Service and Fast-Casual operators seeking labor-saving, fully cooked bacon.</p>
+        </div>
+      </div>
+
+      <!-- Comparative Benchmarking Table -->
+      <div class="benchmarking-section">
+        <div class="section-title-row">
+          <div>
+            <h3 class="section-title">All Ad Tactics & Placement Efficiency Matrix</h3>
+            <p class="section-subtitle">Ranked by Leads Generated, Cost Per Lead (CPL), and Total Reach</p>
+          </div>
+          <div class="matrix-sort-controls">
+            <button id="btn-matrix-all-tactics" class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; border: 1.5px solid var(--jtm-chartreuse); color: var(--jtm-chartreuse); font-weight: 700; background: rgba(204, 215, 0, 0.1); cursor: pointer; border-radius: var(--radius-sm);">
+              🌟 Full Portfolio Rollup
+            </button>
+            <label>Sort Matrix by:</label>
+            <select id="matrix-sort-select" class="form-select">
+              <option value="leads">Most Leads Generated</option>
+              <option value="cpl_asc">Lowest Cost Per Lead (Most Efficient)</option>
+              <option value="spend">Highest Media Spend</option>
+              <option value="impressions">Highest Impressions</option>
+              <option value="clicks">Highest Clicks</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table" id="tactics-matrix-table">
+            <thead>
+              <tr>
+                <th class="th-sortable" data-matrix-sort="name" title="Click to sort by Tactic Name">Ad Tactic / Media Placement<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="key_hook" title="Click to sort by Strategic Key Hook">Strategic Key Hook<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="publication_group" title="Click to sort by Publisher / Network">Publisher / Network<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="brand" title="Click to sort by Brand Focus">Brand Focus<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="run_date" title="Click to sort by Run Date">📅 Run Date<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="spend" style="text-align: right;" title="Click to sort by Media Spend">Media Spend<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="impressions" style="text-align: right;" title="Click to sort by Target Impressions">Impressions<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="clicks" style="text-align: right;" title="Click to sort by Clicks">Clicks<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="cpc" style="text-align: right;" title="Click to sort by Cost Per Click">CPC<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="web_sessions" style="text-align: right;" title="Click to sort by Web Sessions">Web Sessions<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="distributor_lookups" style="text-align: right;" title="Click to sort by Distributor Lookups">Dist. Lookups<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable sorted sorted-desc" data-matrix-sort="leads" style="text-align: right;" title="Click to sort by Verified Leads">Leads (Window)<span class="sort-icon"> ▼</span></th>
+                <th class="th-sortable" data-matrix-sort="cpl" style="text-align: right;" title="Click to sort by Cost Per Lead">CPL<span class="sort-icon"> ⇅</span></th>
+                <th style="text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="tactics-matrix-tbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 2: MEDIA TIMELINE & EFFORTS ROADMAP (ZOOM-OUT VIEW)                  -->
+  <!-- ========================================================================= -->
+  <main id="view-timeline" class="app-view">
+    <div class="view-container">
+
+      <!-- Zoom-Out Header -->
+      <div class="timeline-hero">
+        <div class="timeline-hero-text">
+          <span class="hero-badge">MACRO ROADMAP</span>
+          <h2>Zoom-Out View: All Media Efforts & Campaign Flighting Over Time</h2>
+          <p>Chronological roadmap of all trade media placements, brand innovation launches, industry expos, and always-on search efforts across FY24, FY25, and FY26.</p>
+        </div>
+        <div class="timeline-stats-summary">
+          <div class="tl-stat-item">
+            <span class="tl-stat-label">Active Flights</span>
+            <span class="tl-stat-val" id="tl-active-count">18 Campaigns</span>
+          </div>
+          <div class="tl-stat-item">
+            <span class="tl-stat-label">Tracked Window</span>
+            <span class="tl-stat-val">FY24 Q1 – FY26 Q4</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Media Flighting Matrix / Gantt Roadmap -->
+      <div class="timeline-container-card">
+        <div class="timeline-matrix-header">
+          <div class="matrix-brand-col">Brand / Tactic Placement</div>
+          <div class="quarters-timeline-wrapper">
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q1<small>Nov-Jan</small></div>
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q2<small>Feb-Apr</small></div>
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q3<small>May-Jul</small></div>
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q4<small>Aug-Oct</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q1<small>Nov-Jan</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q2<small>Feb-Apr</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q3<small>May-Jul</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q4<small>Aug-Oct</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q1<small>Nov-Jan</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q2<small>Feb-Apr</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q3<small>May-Jul</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q4<small>Aug-Oct</small></div>
+          </div>
+        </div>
+
+        <div class="timeline-matrix-body" id="timeline-matrix-body">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- Media Flighting vs Lead Acquisition Spikes Correlation -->
+      <div class="chart-card" style="margin-top: 28px;">
+        <div class="chart-header">
+          <h4>Media Flight Intensity vs. Operator Lead Generation Trajectory</h4>
+          <span class="chart-tag">Flighting & Inbound Convergence</span>
+        </div>
+        <div class="chart-canvas-wrapper" style="height: 320px;">
+          <canvas id="chart-flight-convergence"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 3: TRENDS OVER TIME & WEB ANALYTICS                                   -->
+  <!-- ========================================================================= -->
+  <main id="view-trends" class="app-view">
+    <div class="view-container">
+
+      <!-- Time Series Controls -->
+      <div class="trends-header-card">
+        <div class="trends-header-left">
+          <h3>📈 Performance Trends & Web Analytics Over Time</h3>
+          <p>Analyze how media flights, search queries, and content marketing drive inbound leads and website traffic.</p>
+        </div>
+        <div class="trends-controls">
+          <span class="control-label">Aggregation View:</span>
+          <div class="btn-group-toggle">
+            <button class="btn-toggle active" id="toggle-granularity-month" data-granularity="month">Monthly Trend</button>
+            <button class="btn-toggle" id="toggle-granularity-quarter" data-granularity="quarter">Quarterly Trend</button>
+            <button class="btn-toggle" id="toggle-granularity-year" data-granularity="year">Fiscal Year</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Advertising & Web Traffic Correlation Executive KPI Strip -->
+      <div class="correlation-kpi-grid">
+        <div class="correlation-kpi-card">
+          <div class="corr-kpi-top">
+            <span class="corr-kpi-label">Statistical Correlation (r)</span>
+            <span class="badge badge-emerald" id="corr-kpi-strength">Very Strong</span>
+          </div>
+          <div class="corr-kpi-val" id="corr-r-val">+0.892</div>
+          <div class="corr-kpi-sub">Pearson correlation coefficient between Media Spend ($) and Total Web Traffic (R² = 0.795)</div>
+        </div>
+
+        <div class="correlation-kpi-card">
+          <div class="corr-kpi-top">
+            <span class="corr-kpi-label">Flight Traffic Multiplier</span>
+            <span class="badge badge-chartreuse">Flight Surge</span>
+          </div>
+          <div class="corr-kpi-val" id="corr-surge-val">3.4x Velocity</div>
+          <div class="corr-kpi-sub">Web traffic during active campaign bursts vs non-flight baseline periods</div>
+        </div>
+
+        <div class="correlation-kpi-card">
+          <div class="corr-kpi-top">
+            <span class="corr-kpi-label">Distributor Action Ratio</span>
+            <span class="badge badge-hook">B2B Purchase Intent</span>
+          </div>
+          <div class="corr-kpi-val" id="corr-lookups-ratio">22 : 1</div>
+          <div class="corr-kpi-sub">"Where to Buy" / Dot Foods distributor lookups per captured lead form fill</div>
+        </div>
+
+        <div class="correlation-kpi-card">
+          <div class="corr-kpi-top">
+            <span class="corr-kpi-label">Dark Funnel Halo Lift</span>
+            <span class="badge badge-publisher">Organic Brand Search</span>
+          </div>
+          <div class="corr-kpi-val" id="corr-halo-val">+41.8% Lift</div>
+          <div class="corr-kpi-sub">Organic/Direct traffic increase driven by trade publication awareness</div>
+        </div>
+      </div>
+
+      <!-- 2. Master Dual-Axis Advertising & Web Traffic Correlation Chart -->
+      <div class="chart-card full-width-chart" style="margin-bottom: 24px;">
+        <div class="chart-header">
+          <div>
+            <h4 id="corr-chart-title">Media Spend vs. Web Traffic (Dual-Axis)</h4>
+            <span class="section-subtitle">Paid flight spend compared against monthly web sessions and distributor lookups</span>
+          </div>
+          <span class="chart-tag" id="corr-chart-tag">r = +0.892 Pearson Correlation</span>
+        </div>
+        <div class="chart-canvas-wrapper" style="height: 360px;">
+          <canvas id="chart-advertising-traffic-correlation"></canvas>
+        </div>
+      </div>
+
+      <!-- 3. The 3-Tier Omnichannel Attribution Framework -->
+      <div class="correlation-framework-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <h4 style="font-size: 1.0625rem; font-weight: 800; color: var(--jtm-petrol); margin-bottom: 4px;">
+              Attribution Framework: Media to Action
+            </h4>
+            <p style="font-size: 0.8125rem; color: var(--text-secondary); margin: 0;">
+              How advertising drives traffic and purchasing actions beyond direct clicks:
+            </p>
+          </div>
+          <span class="badge badge-primary" style="font-size: 0.75rem;">Multi-Touch Reality</span>
+        </div>
+
+        <div class="corr-fw-grid">
+          <div class="corr-fw-col">
+            <span class="corr-fw-badge badge-brand">Layer 1: Direct Click-Through</span>
+            <div class="corr-fw-title">Paid Campaign Referral Traffic</div>
+            <div class="corr-fw-desc">
+              Immediate click-throughs from eNews headers, native articles, and banners tracked via UTM tags. Accounts for ~15–22% of total traffic during active flights, driving high immediate landing page engagement.
+            </div>
+          </div>
+
+          <div class="corr-fw-col">
+            <span class="corr-fw-badge badge-hook">Layer 2: The "Dark Funnel" Halo</span>
+            <div class="corr-fw-title">Organic & Direct Brand Search Lift</div>
+            <div class="corr-fw-desc">
+              Chefs and operators reading <em>Pizza Today</em> or <em>SmartBrief</em> on mobile rarely fill long B2B sample forms on the spot. Over 70% later Google <em>"Hormel Bacon 1"</em> or visit on desktop, generating a <strong>+41.8% lift in organic search</strong>.
+            </div>
+          </div>
+
+          <div class="corr-fw-col">
+            <span class="corr-fw-badge badge-publisher">Layer 3: Purchasing Action</span>
+            <div class="corr-fw-title">Distributor "Where to Buy" Lookups</div>
+            <div class="corr-fw-desc">
+              Foodservice operators buy through Sysco, US Foods, and Dot Foods. High-intent traffic converts into <strong>34,300+ distributor lookups</strong> annually at a <strong>22:1 ratio to sample forms</strong>, directly validating campaign marketing ROI.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Time-Series Chart (Full Width) -->
+      <div class="chart-card full-width-chart" style="margin-bottom: 24px;">
+        <div class="chart-header" style="flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h4 id="time-series-title">Monthly Lead Velocity</h4>
+            <span class="section-subtitle">Volume of verified operator inquiries across all channels</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <!-- Axis Zoom Controls to address 11/24 outlier -->
+            <div class="chart-scale-toggle-group" title="Adjust Y-Axis zoom scale to reveal baseline monthly trends">
+              <span class="scale-label">Y-Axis:</span>
+              <button type="button" class="btn-scale-toggle active" data-scale="zoom" id="btn-scale-zoom" title="Capped at peak organic baseline to zoom in on monthly nuances">
+                🔍 Smart Zoom
+              </button>
+              <button type="button" class="btn-scale-toggle" data-scale="log" id="btn-scale-log" title="Logarithmic scale proportionally displays all data points from 10 to 20,000">
+                📈 Log Scale
+              </button>
+              <button type="button" class="btn-scale-toggle" data-scale="full" id="btn-scale-full" title="Full uncapped scale (0 to 18,000)">
+                🌐 Full Scale
+              </button>
+            </div>
+
+            <span class="chart-tag" id="time-series-tag">25,326 Total Leads</span>
+          </div>
+        </div>
+        <div class="chart-canvas-wrapper" style="height: 340px;">
+          <canvas id="chart-leads-timeseries"></canvas>
+        </div>
+        <div id="timeseries-outlier-banner" class="timeseries-outlier-banner">
+          <span class="outlier-icon">⚡</span>
+          <span><strong>Smart Zoom Active:</strong> The <strong>11/24</strong> consolidation spike (<strong>17,199 leads</strong>) is clamped at the ceiling to reveal organic monthly trends (0–1,200 leads/mo).</span>
+        </div>
+      </div>
+
+      <!-- Secondary Dual Charts Grid -->
+      <div class="charts-grid">
+        <!-- Chart 1: Media Spend vs Leads Trajectory -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4>Media Spend vs. Leads by Brand</h4>
+            <span class="chart-tag">Campaign ROI</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-spend-vs-leads"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 2: Publisher Share of Voice -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4>Trade Publisher Share of Leads Generated</h4>
+            <span class="chart-tag">Publisher Volume</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-publisher-share"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 3: IFMA Segment Distribution -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4>Operator IFMA Segment Breakdown</h4>
+            <span class="chart-tag">Audience Profile</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-segment-breakdown"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart 4: Full-Funnel Conversion -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h4>Full-Funnel Omnichannel Conversion Flow</h4>
+            <span class="chart-tag">Awareness to Purchase</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-funnel"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 4: MASTER SALES LEADS ACTION TOOL (ALL FIELDS + FILTERABLE)           -->
+  <!-- ========================================================================= -->
+  <main id="view-leads" class="app-view active">
+    <div class="view-container">
+
+      <!-- Action Tool Toolbar -->
+      <div class="toolbar-card">
+        <div class="toolbar-top">
+          
+          <!-- Search Box -->
+          <div class="search-box-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="lead-search-input" class="search-input" placeholder="Search by name, company, title, city, distributor, or CRM ID...">
+            <button id="btn-clear-search" class="btn-clear-search">✕</button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="toolbar-actions">
+            <!-- Go Back Button -->
+            <button id="btn-leads-back" class="btn btn-outline btn-leads-back" disabled title="Return to previous state">
+              ⬅ Back
+            </button>
+
+            <!-- Columns Customizer -->
+            <div class="dropdown-wrapper">
+              <button id="btn-toggle-columns" class="btn btn-outline">
+                ⚙️ Columns (<span id="active-cols-count">10</span>)
+              </button>
+              <div id="columns-dropdown" class="dropdown-menu columns-dropdown">
+                <div class="dropdown-header">
+                  <strong>Visible Columns</strong>
+                  <div class="dropdown-quick-actions">
+                    <button id="btn-cols-select-all" class="btn-link">All (30)</button>
+                    <button id="btn-cols-reset" class="btn-link">Reset</button>
+                  </div>
+                </div>
+                <div class="columns-checklist" id="columns-checklist-container">
+                  <!-- Checkboxes populated via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Export CSV -->
+            <button id="btn-export-csv" class="btn btn-primary">
+              📥 Export CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Active Attribute / UTM Isolation & Performance Stat Strip -->
+        <div id="isolation-banner" class="isolation-banner" style="display: none;">
+          <div class="isolation-header-row">
+            <div class="isolation-banner-content">
+              <span class="isolation-icon">⚡</span>
+              <span class="isolation-label">Highlighted Parameter:</span>
+              <span id="isolation-badge" class="isolation-badge"></span>
+              <span id="isolation-count" class="isolation-count"></span>
+            </div>
+            <button id="btn-clear-isolation" class="btn-clear-isolation" title="Clear this isolation filter">✕ Clear Highlight / Reset View</button>
+          </div>
+
+          <!-- Real-Time Highlighted Parameter KPI Stat Strip -->
+          <div class="utm-stats-strip" id="utm-stats-strip">
+            <div class="utm-stat-card">
+              <div class="utm-stat-label">Associated Leads</div>
+              <div class="utm-stat-value" id="utm-stat-leads">0</div>
+              <div class="utm-stat-sub" id="utm-stat-share">0% of filtered window</div>
+            </div>
+            <div class="utm-stat-card">
+              <div class="utm-stat-label">Enterprise / Tier 1</div>
+              <div class="utm-stat-value" id="utm-stat-enterprise" style="color: #f59e0b;">0</div>
+              <div class="utm-stat-sub">High-volume chain/HQ ops</div>
+            </div>
+            <div class="utm-stat-card">
+              <div class="utm-stat-label">Hot Leads (Score 80+)</div>
+              <div class="utm-stat-value" id="utm-stat-hot" style="color: var(--jtm-chartreuse);">0</div>
+              <div class="utm-stat-sub" id="utm-stat-hot-sub">Ready for sales contact</div>
+            </div>
+            <div class="utm-stat-card">
+              <div class="utm-stat-label">Top Associated Brand</div>
+              <div class="utm-stat-value" id="utm-stat-top-brand" style="font-size: 0.9375rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
+              <div class="utm-stat-sub" id="utm-stat-top-brand-sub">Primary product interest</div>
+            </div>
+            <div class="utm-stat-card">
+              <div class="utm-stat-label">Pipeline Potential</div>
+              <div class="utm-stat-value" id="utm-stat-pipeline" style="color: #38bdf8;">$0</div>
+              <div class="utm-stat-sub" id="utm-stat-pipeline-sub">Est. annual order value</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Controls Row -->
+        <div class="filters-row">
+          <!-- Strategic Key Hook Filter -->
+          <div class="filter-group">
+            <label>Key Hook:</label>
+            <select id="filter-hook" class="form-select">
+              <option value="">All Key Hooks</option>
+              <option value="Labor-Saving & Prep-Free Execution">Labor-Saving & Prep-Free Execution</option>
+              <option value="Artisan Flavor & Pizzeria Differentiation">Artisan Flavor & Pizzeria Differentiation</option>
+              <option value="Specialty Sourcing & Dietary Certification">Specialty Sourcing & Dietary Certification</option>
+              <option value="High-Margin Grab-and-Go & Speed of Service">High-Margin Grab-and-Go & Speed of Service</option>
+              <option value="Non-Commercial Healthcare & Campus Versatility">Non-Commercial Healthcare & Campus</option>
+              <option value="Daily Industry Mindshare & Portfolio Breadth">Daily Industry Mindshare</option>
+            </select>
+          </div>
+
+          <!-- Publication Network Filter -->
+          <div class="filter-group">
+            <label>Publisher:</label>
+            <select id="filter-pub-group" class="form-select">
+              <option value="">All Media Partners</option>
+              <option value="WTWH Media">WTWH Media (QSR / FSR)</option>
+              <option value="Emerald Expositions">Emerald (Pizza Today / Expo)</option>
+              <option value="Winsight Media">Winsight Media (FSD)</option>
+              <option value="SmartBrief / NRA">SmartBrief / NRA</option>
+              <option value="Informa / CSP">Informa / CSP (C-Store)</option>
+              <option value="PMQ Media">PMQ Media</option>
+              <option value="Alphabet / Microsoft">Alphabet / Microsoft (SEM/Ads)</option>
+              <option value="Hormel Owned & Direct">Hormel Owned & Direct</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Brand:</label>
+            <select id="filter-brand" class="form-select">
+              <option value="">All Brands</option>
+              <option value="Fontanini">Fontanini</option>
+              <option value="Hormel Bacon 1">Hormel Bacon 1</option>
+              <option value="Flash 180">Flash 180</option>
+              <option value="Fire Braised">Fire Braised</option>
+              <option value="Austin Blues">Austin Blues</option>
+              <option value="Hormel Halal">Hormel Halal</option>
+              <option value="Jennie-O Foodservice">Jennie-O Foodservice</option>
+              <option value="HFS Convenience">HFS Convenience</option>
+              <option value="Hormel Foodservice">Hormel Master Portfolio</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Tactic:</label>
+            <select id="filter-tactic" class="form-select">
+              <option value="">All Tactics</option>
+              <!-- Populated via JS from TACTICS_DATA -->
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Qualification (MQL):</label>
+            <select id="filter-operator-type" class="form-select">
+              <option value="">All Leads & Contacts (25,326)</option>
+              <option value="certified_mql">🛡️ Certified Foodservice Outlets (MQL) — 15,958</option>
+              <option value="distributor">🤝 Distributor & Broker Partners — 5,099</option>
+              <option value="prospective">🟡 Prospective Operators (Pending Match) — 784</option>
+              <option value="consumer">🏠 Home Cooks / Consumers — 3,094</option>
+              <option value="internal">🏢 Internal Hormel Accounts — 391</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Segment:</label>
+            <select id="filter-segment" class="form-select">
+              <option value="">All Segments</option>
+              <option value="Commercial Restaurants">Commercial Restaurants</option>
+              <option value="On-Site Foodservice">On-Site Foodservice</option>
+              <option value="Retail Foodservice">Retail Foodservice</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Subsegment:</label>
+            <select id="filter-subsegment" class="form-select">
+              <option value="">All Sub-Segments</option>
+              <option value="Pizzeria">Pizzeria / Italian</option>
+              <option value="College & University">College & University (C&U)</option>
+              <option value="Casual & Family">Casual & Family Dining</option>
+              <option value="Healthcare">Healthcare (Hospitals & Senior Living)</option>
+              <option value="K-12 School">K-12 School Districts</option>
+              <option value="C-Store">Convenience Store</option>
+              <option value="Business & Industry">Business & Industry (B&I)</option>
+              <option value="QSR">QSR / Fast Casual</option>
+              <option value="Lodging">Lodging & Hospitality</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Status:</label>
+            <select id="filter-status" class="form-select">
+              <option value="">All Follow-up Statuses</option>
+              <option value="New">🟢 New Inquiries</option>
+              <option value="Attempted Contact">🟡 Attempted Contact</option>
+              <option value="Contacted">🔵 Contacted</option>
+              <option value="Qualified">⭐ Qualified Opportunity</option>
+              <option value="Unqualified">⚪ Unqualified</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Lead Score:</label>
+            <select id="filter-score" class="form-select">
+              <option value="">All Lead Scores</option>
+              <option value="80">🔥 High Priority (80-100 pts)</option>
+              <option value="60">⚡ Medium Priority (60-79 pts)</option>
+              <option value="low">🌱 Base Priority (&lt;60 pts)</option>
+            </select>
+          </div>
+
+          <div class="filter-group checkbox-filter">
+            <label class="checkbox-label">
+              <input type="checkbox" id="filter-comments"> Has Custom Comments
+            </label>
+          </div>
+
+          <button id="btn-reset-filters" class="btn btn-primary btn-reset" style="background: #0E313D; border-color: #0E313D; font-weight: 800;" title="Clear all lead filters and view full portfolio">
+            ↺ Reset All Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-Time Filtered Leads Intelligence Summary Dashboard -->
+      <div class="isolated-summary-panel" id="isolated-summary-panel">
+        <div class="summary-panel-header">
+          <div class="summary-panel-title-area">
+            <span class="summary-panel-badge" id="sum-panel-badge">📊 LEADS SUMMARY</span>
+            <h3 class="summary-panel-heading">
+              <span id="sum-total-leads">25,326</span> Filtered Leads
+              <span class="summary-subtext" id="sum-portfolio-share">(100% of total)</span>
+            </h3>
+          </div>
+
+          <div class="summary-quick-kpis">
+            <div class="quick-kpi-item">
+              <span class="kpi-label">Certified MQLs:</span>
+              <strong id="sum-verified-ops" style="color: var(--jtm-emerald);">15,958 (63.0%)</strong>
+            </div>
+            <div class="quick-kpi-item">
+              <span class="kpi-label">Distributor Partners:</span>
+              <strong id="sum-dist-partners" style="color: #2563eb;">5,099 (20.1%)</strong>
+            </div>
+            <div class="quick-kpi-item">
+              <span class="kpi-label">Enterprise Accounts:</span>
+              <strong id="sum-enterprise-count" style="color: #f59e0b;">2,840 (11.2%)</strong>
+            </div>
+            <div class="quick-kpi-item">
+              <span class="kpi-label">Avg MQL Score:</span>
+              <strong id="sum-avg-score">76 / 100</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Dimensional Breakdown Grid: Segments, Geography, Distributors -->
+        <div class="summary-breakdowns-grid">
+          <!-- Breakdown 1: IFMA Segment & Key Sub-segments -->
+          <div class="summary-breakdown-card">
+            <div class="breakdown-card-header">
+              <span class="breakdown-icon">🍽️</span>
+              <h4>Operator Segments</h4>
+            </div>
+            <div class="breakdown-list" id="sum-segment-breakdown">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Breakdown 2: Geographic Distribution (Top States & Regions) -->
+          <div class="summary-breakdown-card">
+            <div class="breakdown-card-header">
+              <span class="breakdown-icon">🗺️</span>
+              <h4>Top States & Regions</h4>
+            </div>
+            <div class="breakdown-list" id="sum-geo-breakdown">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <!-- Breakdown 3: Distributors Listed -->
+          <div class="summary-breakdown-card">
+            <div class="breakdown-card-header">
+              <span class="breakdown-icon">🚛</span>
+              <h4>Distributor Footprint</h4>
+            </div>
+            <div class="breakdown-list" id="sum-dist-breakdown">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Stats Banner -->
+      <div class="results-stats-banner">
+        <div class="stats-text">
+          Showing <strong id="results-count">0</strong> of <strong id="total-count">25,326</strong> leads
+          <span id="active-filter-indicator" class="active-filter-indicator"></span>
+        </div>
+        <div class="page-size-selector">
+          <label>Rows per page:</label>
+          <select id="page-size-select" class="form-select form-select-sm">
+            <option value="25">25</option>
+            <option value="50" selected>50</option>
+            <option value="100">100</option>
+            <option value="250">250</option>
+            <option value="all">Show All</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Leads Table -->
+      <div class="table-responsive leads-table-container">
+        <table class="data-table leads-table" id="leads-table">
+          <thead id="leads-thead">
+            <!-- Headers populated dynamically -->
+          </thead>
+          <tbody id="leads-tbody">
+            <!-- Rows populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div id="leads-empty-state" class="empty-state" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <h3>No Leads Found</h3>
+        <p>No sales leads match your active search and filter combinations.</p>
+        <button id="btn-empty-reset" class="btn btn-chartreuse">Clear All Filters</button>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="pagination-bar" id="pagination-bar">
+        <div class="pagination-info" id="pagination-info">Showing 1-50 of 25,326</div>
+        <div class="pagination-buttons">
+          <button id="btn-prev-page" class="btn-page" disabled>Previous</button>
+          <div id="page-numbers" class="page-numbers"></div>
+          <button id="btn-next-page" class="btn-page">Next</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW: AUDIENCE & OPERATOR INTELLIGENCE PROFILE                            -->
+  <!-- ========================================================================= -->
+  <main id="view-audience" class="app-view">
+    <div class="view-container">
+
+      <!-- Audience Hero Banner & Interactive Brand Chips Filter -->
+      <div class="audience-hero">
+        <div class="audience-hero-header">
+          <div class="audience-hero-title-group">
+            <span class="audience-eyebrow">AUDIENCE PROFILE</span>
+            <h2>Audience & Operator Profile</h2>
+            <p class="audience-hero-sub">Profile of 25,326 verified operators: decision-maker seniority, IFMA segments, geography, and resonant hooks.</p>
+          </div>
+          <div class="audience-brand-filter-box">
+            <span class="brand-filter-label">Filter by Brand:</span>
+            <div class="audience-brand-chips" id="audience-brand-chips">
+              <button class="btn-audience-brand active" data-brand="all">All Brands (Master)</button>
+              <button class="btn-audience-brand" data-brand="Fontanini">Fontanini</button>
+              <button class="btn-audience-brand" data-brand="Hormel Bacon 1">Hormel Bacon 1</button>
+              <button class="btn-audience-brand" data-brand="Flash 180">Flash 180</button>
+              <button class="btn-audience-brand" data-brand="Fire Braised">Fire Braised</button>
+              <button class="btn-audience-brand" data-brand="Austin Blues">Austin Blues</button>
+              <button class="btn-audience-brand" data-brand="Hormel Halal">Hormel Halal</button>
+              <button class="btn-audience-brand" data-brand="Jennie-O Foodservice">Jennie-O</button>
+              <button class="btn-audience-brand" data-brand="HFS Convenience">HFS Convenience</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audience Master KPI Summary Strip -->
+        <div class="audience-kpi-strip">
+          <div class="audience-kpi-card">
+            <span class="aud-kpi-label">Total Leads</span>
+            <strong class="aud-kpi-val" id="aud-total-leads">25,326</strong>
+            <span class="aud-kpi-sub" id="aud-brand-share">100% of Master Portfolio</span>
+          </div>
+          <div class="audience-kpi-card">
+            <span class="aud-kpi-label">Certified Operators</span>
+            <strong class="aud-kpi-val" id="aud-verified-rate" style="color: var(--jtm-emerald);">22,383 (88.4%)</strong>
+            <span class="aud-kpi-sub">Foodservice operator accounts</span>
+          </div>
+          <div class="audience-kpi-card">
+            <span class="aud-kpi-label">Enterprise Accounts</span>
+            <strong class="aud-kpi-val" id="aud-enterprise-rate" style="color: #f59e0b;">2,840 (11.2%)</strong>
+            <span class="aud-kpi-sub">Large chains & institutional systems</span>
+          </div>
+          <div class="audience-kpi-card">
+            <span class="aud-kpi-label">Avg Intent Score</span>
+            <strong class="aud-kpi-val" id="aud-avg-score">72 / 100</strong>
+            <span class="aud-kpi-sub">Propensity to sample & adopt</span>
+          </div>
+          <div class="audience-kpi-card">
+            <span class="aud-kpi-label">Top Buyer Persona</span>
+            <strong class="aud-kpi-val" id="aud-top-persona" style="font-size: 1.0625rem;">Owner / Executive Chef</strong>
+            <span class="aud-kpi-sub">62% with direct culinary veto</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: 🎯 Likely Highest-Value Operator Targets (Enterprise & Growth Whales) -->
+      <div class="audience-section-card high-value-targets-card">
+        <div class="audience-section-header">
+          <div class="section-title-group">
+            <span class="section-badge badge-gold">PRIORITY ACCOUNTS</span>
+            <h3>High-Value Operator Targets</h3>
+            <p>Accounts ranked by scale, decision-maker seniority, and estimated case adoption.</p>
+          </div>
+          <div class="target-tier-chips">
+            <span class="tier-chip tier-1">⭐ Tier 1 ($250k+)</span>
+            <span class="tier-chip tier-2">💎 Tier 2 ($75k-$250k)</span>
+            <span class="tier-chip tier-3">🚀 Tier 3 ($25k-$75k)</span>
+          </div>
+        </div>
+        <div class="high-value-targets-grid" id="aud-high-value-targets">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- 2-Column Grid: Demographics vs Segments -->
+      <div class="audience-two-col-grid">
+        
+        <!-- Section 1: Demographics & Decision-Maker Hierarchy -->
+        <div class="audience-section-card">
+          <div class="audience-section-header">
+            <div class="section-title-group">
+              <span class="section-badge">ROLES</span>
+              <h3>Decision-Maker Roles</h3>
+            </div>
+          </div>
+          <p class="section-desc">Job titles and buying authority across responding operators.</p>
+          <div class="demographics-breakdown" id="aud-demographics-list">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Section 2: Foodservice Operator Segments (IFMA Standards) -->
+        <div class="audience-section-card">
+          <div class="audience-section-header">
+            <div class="section-title-group">
+              <span class="section-badge">SEGMENTS</span>
+              <h3>Operator Segments</h3>
+            </div>
+          </div>
+          <p class="section-desc">Breakdown across Commercial Restaurants, C&U, Healthcare, K-12, and C-Stores.</p>
+          <div class="segments-breakdown" id="aud-segments-list">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2-Column Grid: Location Footprint vs Publications Most Engaged -->
+      <div class="audience-two-col-grid">
+        
+        <!-- Section 3: Type of Location & Geographic Footprint -->
+        <div class="audience-section-card">
+          <div class="audience-section-header">
+            <div class="section-title-group">
+              <span class="section-badge">GEOGRAPHY</span>
+              <h3>Geographic Footprint</h3>
+            </div>
+          </div>
+          <p class="section-desc">State volume and regional operator concentration.</p>
+          <div class="location-breakdown" id="aud-location-list">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Section 6: Media Publications Most Engaged With -->
+        <div class="audience-section-card">
+          <div class="audience-section-header">
+            <div class="section-title-group">
+              <span class="section-badge">MEDIA</span>
+              <h3>Top Publications</h3>
+            </div>
+          </div>
+          <p class="section-desc">Trade publishers driving verified operator conversions.</p>
+          <div class="publications-breakdown" id="aud-publications-list">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2-Column Grid: Tactics Most Resonant vs Messages Most Resonant -->
+      <div class="audience-two-col-grid">
+        
+        <!-- Section 4: Tactics Most Resonant -->
+        <div class="audience-section-card">
+          <div class="audience-section-header">
+            <div class="section-title-group">
+              <span class="section-badge">TACTICS</span>
+              <h3>Top Ad Formats</h3>
+            </div>
+          </div>
+          <p class="section-desc">Placements delivering highest engagement and lead volume.</p>
+          <div class="tactics-resonance-list" id="aud-tactics-list">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Section 5: Messages Most Resonant (Strategic Messaging Hooks) -->
+        <div class="audience-section-card">
+          <div class="audience-section-header">
+            <div class="section-title-group">
+              <span class="section-badge">MESSAGING</span>
+              <h3>Top Creative Hooks</h3>
+            </div>
+          </div>
+          <p class="section-desc">Value propositions resonating strongest with operators.</p>
+          <div class="hooks-resonance-list" id="aud-hooks-list">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 5: ADVERTISING ROI & 2027 BIG BETS SIMULATOR                         -->
+  <!-- ========================================================================= -->
+  <main id="view-roi" class="app-view">
+    <div class="view-inner">
+
+      <!-- Executive Full-Funnel Closed Loop Banner -->
+      <section class="roi-hero-section">
+        <div class="roi-hero-content">
+          <div class="roi-badge">JT MEGA AGENCY • HORMEL FOODSERVICE</div>
+          <h2 class="roi-title">Advertising ROI & 2027 Strategy</h2>
+          <p class="roi-subtitle">
+            Connecting paid media to website dwell time, distributor lookups, enterprise accounts, and projected pipeline.
+          </p>
+        </div>
+
+        <!-- 4-Tier Full-Funnel Closed Loop Ribbon -->
+        <div class="roi-funnel-grid">
+          <div class="roi-funnel-card tier-1">
+            <div class="funnel-tier-tag">Tier 1 • Reach & Dwell</div>
+            <div class="funnel-metric-num">420.9K</div>
+            <div class="funnel-metric-label">Annual Website Sessions</div>
+            <div class="funnel-subtext">
+              <span class="highlight-pill green">+14% Paid Engagement Lift</span>
+              <span>3m 34s Spec Sheet Dwell</span>
+            </div>
+          </div>
+
+          <div class="roi-funnel-card tier-2">
+            <div class="funnel-tier-tag">Tier 2 • Purchase Intent</div>
+            <div class="funnel-metric-num">34,333</div>
+            <div class="funnel-metric-label">Find-a-Distributor Lookups</div>
+            <div class="funnel-subtext">
+              <span class="highlight-pill blue">15:1 Ratio to Forms</span>
+              <span>+309% YoY Key Events</span>
+            </div>
+          </div>
+
+          <div class="roi-funnel-card tier-3">
+            <div class="funnel-tier-tag">Tier 3 • Account Pipeline</div>
+            <div class="funnel-metric-num">2,305</div>
+            <div class="funnel-metric-label">Enterprise "Whale" Accounts</div>
+            <div class="funnel-subtext">
+              <span class="highlight-pill amber">9.1% of Total Leads</span>
+              <span>UMass, Marriott, Aramark</span>
+            </div>
+          </div>
+
+          <div class="roi-funnel-card tier-4">
+            <div class="funnel-tier-tag">Tier 4 • Projected Pipeline</div>
+            <div class="funnel-metric-num" id="hero-gross-pipeline">$4,095,000</div>
+            <div class="funnel-metric-label">Projected Annual Pipeline</div>
+            <div class="funnel-subtext">
+              <span class="highlight-pill chartreuse" id="hero-roas-badge">10.24x ROAS</span>
+              <span id="hero-accounts-won">70 Won Accounts</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 1: INTERACTIVE PIPELINE & ROAS SCENARIO SIMULATOR -->
+      <section class="roi-section-container">
+        <div class="section-header-flex">
+          <div>
+            <h3 class="section-title">🧮 Pipeline & ROAS Simulator</h3>
+            <p class="section-desc">
+              Model annual case volume and return on ad spend (ROAS) from qualified inquiries.
+            </p>
+          </div>
+          <div class="roi-presets-group">
+            <span class="preset-label">Model Presets:</span>
+            <button class="btn-roi-preset active" data-preset="base">Annual Plan ($585K)</button>
+            <button class="btn-roi-preset" data-preset="conservative">Single Flight ($150K)</button>
+            <button class="btn-roi-preset" data-preset="aggressive">Scale Plan ($750K)</button>
+            <button class="btn-roi-preset" data-preset="decade">10-Yr Portfolio ($4.6M)</button>
+          </div>
+        </div>
+
+        <div class="simulator-layout">
+          <!-- Left Column: Input Sliders -->
+          <div class="simulator-controls-card">
+            <div class="sim-controls-header">
+              <h4>Simulation Parameters</h4>
+              <button id="btn-reset-sim" class="btn-reset-sim">Reset to Default</button>
+            </div>
+
+            <!-- Slider 1: Qualified Sample Inquiries -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <label for="sim-inquiries">1. Qualified Inquiries / Samples:</label>
+                <span class="slider-value-display" id="val-inquiries">1,000 inquiries</span>
+              </div>
+              <input type="range" id="sim-inquiries" class="sim-slider" min="200" max="30000" step="100" value="2500">
+              <div class="slider-range-bounds">
+                <span>200</span>
+                <span>2,500 (Annual FY25)</span>
+                <span>30,000 (10-Yr Total)</span>
+              </div>
+            </div>
+
+            <!-- Slider 2: Sample to Menu Adoption Rate -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <label for="sim-conv-rate">2. Sample-to-Menu Conversion:</label>
+                <span class="slider-value-display" id="val-conv-rate">7.0%</span>
+              </div>
+              <input type="range" id="sim-conv-rate" class="sim-slider" min="1.0" max="20.0" step="0.5" value="7.0">
+              <div class="slider-range-bounds">
+                <span>1.0% (Low)</span>
+                <span>7.0% (Foodservice Avg)</span>
+                <span>20.0% (High)</span>
+              </div>
+            </div>
+
+            <!-- Slider 3: Weekly Case Volume per Account -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <label for="sim-cases-week">3. Weekly Cases per Account:</label>
+                <span class="slider-value-display" id="val-cases-week">15 cases / week</span>
+              </div>
+              <input type="range" id="sim-cases-week" class="sim-slider" min="5" max="50" step="1" value="15">
+              <div class="slider-range-bounds">
+                <span>5 cs/wk (Small Diner)</span>
+                <span>15 cs/wk (Midscale/Pizzeria)</span>
+                <span>50 cs/wk (Campus/Chain)</span>
+              </div>
+            </div>
+
+            <!-- Slider 4: Price per Case -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <label for="sim-case-price">4. Wholesale Price per Case:</label>
+                <span class="slider-value-display" id="val-case-price">$75 / case</span>
+              </div>
+              <input type="range" id="sim-case-price" class="sim-slider" min="40" max="150" step="5" value="75">
+              <div class="slider-range-bounds">
+                <span>$40</span>
+                <span>$75 (Premium Protein Avg)</span>
+                <span>$150</span>
+              </div>
+            </div>
+
+            <!-- Slider 5: Total Media Spend -->
+            <div class="slider-group">
+              <div class="slider-label-row">
+                <label for="sim-media-spend">5. Total Paid Media Program Investment:</label>
+                <span class="slider-value-display" id="val-media-spend">$585,000</span>
+              </div>
+              <input type="range" id="sim-media-spend" class="sim-slider" min="50000" max="6000000" step="25000" value="585000">
+              <div class="slider-range-bounds">
+                <span>$50K (Single Flight)</span>
+                <span>$585K (Annual FY24/25)</span>
+                <span>$6.0M (10-Yr Decade)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Dynamic Outputs & Visualization -->
+          <div class="simulator-results-card">
+            <h4 class="results-heading">Projected Pipeline Return</h4>
+
+            <div class="results-kpi-grid">
+              <div class="result-kpi-box">
+                <div class="res-label">Won Operator Accounts</div>
+                <div class="res-num" id="res-accounts">70</div>
+                <div class="res-sub">Active recurring buyers</div>
+              </div>
+
+              <div class="result-kpi-box">
+                <div class="res-label">Annual Cases Generated</div>
+                <div class="res-num" id="res-cases">54,600</div>
+                <div class="res-sub">Annual recurring volume</div>
+              </div>
+
+              <div class="result-kpi-box highlight-box">
+                <div class="res-label">Gross First-Year Pipeline</div>
+                <div class="res-num gold" id="res-pipeline">$4,095,000</div>
+                <div class="res-sub">Wholesale revenue impact</div>
+              </div>
+
+              <div class="result-kpi-box roas-box">
+                <div class="res-label">Program Pipeline ROAS</div>
+                <div class="res-num chartreuse" id="res-roas">10.24x</div>
+                <div class="res-sub">Return on media spend</div>
+              </div>
+            </div>
+
+            <!-- Net Economic Value Added Bar -->
+            <div class="net-value-container">
+              <div class="net-value-row">
+                <span>Net Pipeline Value Added (Pipeline − Spend):</span>
+                <strong class="net-value-amount" id="res-net-value">+$3,695,000</strong>
+              </div>
+              <div class="net-value-bar-track">
+                <div class="net-value-bar-fill" id="res-net-bar" style="width: 90%;"></div>
+              </div>
+            </div>
+
+            <!-- Visual Chart -->
+            <div class="chart-wrapper-roi">
+              <canvas id="chart-roi-waterfall" height="170"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: ENTERPRISE INSTITUTIONAL "WHALE" SPOTLIGHT -->
+      <section class="roi-section-container">
+        <div class="section-header-flex">
+          <div>
+            <h3 class="section-title">🐳 Enterprise Accounts</h3>
+            <p class="section-desc">
+              High-volume accounts captured across non-commercial dining, lodging, and contract management.
+            </p>
+          </div>
+          <div class="whale-search-box">
+            <input type="text" id="input-whale-search" class="whale-search-input" placeholder="Search enterprise organization...">
+          </div>
+        </div>
+
+        <!-- Segment Filter Chips for Whales -->
+        <div class="whale-filter-chips" id="whale-segment-chips">
+          <button class="chip-whale active" data-whale-seg="all">All Institutional Accounts (2,305)</button>
+          <button class="chip-whale" data-whale-seg="higher-ed">🎓 Higher Education Dining (1,240)</button>
+          <button class="chip-whale" data-whale-seg="hospitality">🏨 Lodging & Hospitality (310)</button>
+          <button class="chip-whale" data-whale-seg="contract">🏢 Contract Management (175)</button>
+          <button class="chip-whale" data-whale-seg="healthcare">🏥 Healthcare & Hospitals (480)</button>
+          <button class="chip-whale" data-whale-seg="k12">🏫 K-12 Mega Districts (100)</button>
+        </div>
+
+        <!-- Whale Cards Grid -->
+        <div class="whale-cards-grid" id="whale-cards-container">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </section>
+
+      <!-- SECTION 3: 2027 STRATEGIC BIG BETS & BUDGET REALLOCATION -->
+      <section class="roi-section-container">
+        <div class="section-header-flex">
+          <div>
+            <h3 class="section-title">🎯 2027 Big Bets & Budget Strategy</h3>
+            <p class="section-desc">
+              Reallocating spend from static banners into labor-saving solutions, pizzeria differentiation, and institutional volume.
+            </p>
+          </div>
+          <div class="scenario-toggle-group">
+            <button class="btn-scenario active" data-scenario="recommended">✨ 2027 Big Bets Recommended Plan</button>
+            <button class="btn-scenario" data-scenario="status-quo">📊 Status Quo (FY25/26 Baseline)</button>
+          </div>
+        </div>
+
+        <div class="bigbets-layout">
+          <!-- The 4 Big Bets Cards -->
+          <div class="bigbets-cards-column">
+            <h4 class="column-heading green-heading">🚀 The 4 Big Bets (Budget Increases)</h4>
+
+            <div class="bigbet-card bet-1">
+              <div class="bet-header">
+                <div class="bet-badge">BIG BET 1 • LABOR-SAVING SOLUTIONS</div>
+                <div class="bet-delta positive">+$40,000 Shift</div>
+              </div>
+              <h5 class="bet-title">Bacon 1, Flash 180 & Fire Braised Meats</h5>
+              <p class="bet-summary">
+                Targeting the universal operator crisis: chronic kitchen labor shortages and wage inflation. Shift static banners into interactive native culinary slideshows with WTWH/QSR demonstrating preparation minutes saved per service.
+              </p>
+              <div class="bet-kpis">
+                <span>Target: <strong>1,450 Verified Leads</strong></span>
+                <span>Expected Blended CPL: <strong>~$135</strong></span>
+              </div>
+            </div>
+
+            <div class="bigbet-card bet-2">
+              <div class="bet-header">
+                <div class="bet-badge">BIG BET 2 • PIZZERIA DIFFERENTIATION</div>
+                <div class="bet-delta positive">+$30,000 Shift</div>
+              </div>
+              <h5 class="bet-title">Fontanini Artisan Meats & Pizza Expo Engine</h5>
+              <p class="bet-summary">
+                Pizzerias boast the lowest CPL in the portfolio ($64.92) and the fastest sampling-to-menu adoption cycle. Expand PMQ editorial, build an "Artisan Pizzeria Profitability Hub," and bridge physical Pizza Expo with digital retargeting.
+              </p>
+              <div class="bet-kpis">
+                <span>Target: <strong>1,380 Verified Leads</strong></span>
+                <span>Expected Blended CPL: <strong>~$65</strong></span>
+              </div>
+            </div>
+
+            <div class="bigbet-card bet-3">
+              <div class="bet-header">
+                <div class="bet-badge">BIG BET 3 • NON-COMMERCIAL ACCELERATION</div>
+                <div class="bet-delta positive">+$25,000 Shift</div>
+              </div>
+              <h5 class="bet-title">Higher Education, Healthcare & Sodexo/Aramark</h5>
+              <p class="bet-summary">
+                Institutional dining programs provide recession-resilient, contract-backed volume. Expand Winsight <em>FoodService Director</em> ($48.56 CPL) campaigns focused on batch-cooking efficiency, clean label, and sodium reduction.
+              </p>
+              <div class="bet-kpis">
+                <span>Target: <strong>890 Verified Leads</strong></span>
+                <span>Expected Blended CPL: <strong>~$48</strong></span>
+              </div>
+            </div>
+
+            <div class="bigbet-card bet-4">
+              <div class="bet-header">
+                <div class="bet-badge">BIG BET 4 • DISTRIBUTOR LEAKAGE CAPTURE</div>
+                <div class="bet-delta positive">+$15,000 Tech Add</div>
+              </div>
+              <h5 class="bet-title">Digitizing the 34,333 "Find a Distributor" Lookups</h5>
+              <p class="bet-summary">
+                Deploy a high-converting micro-interaction on the Distributor Locator: <em>"Send Product Spec Sheet & Distributor Item Code to My Phone/Email."</em> Capturing even 5% of anonymous lookups generates <strong>1,700+ high-intent leads</strong> for field broker reps.
+              </p>
+              <div class="bet-kpis">
+                <span>Target: <strong>+1,716 Direct Inbound Leads</strong></span>
+                <span>Expected Blended CPL: <strong>~$8.74</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pruning & Cuts Column -->
+          <div class="pruning-cards-column">
+            <h4 class="column-heading red-heading">✂️ Pruned & Reallocated Spend (Self-Funding)</h4>
+
+            <div class="prune-card">
+              <div class="prune-header">
+                <div class="prune-badge">CUT 1 • GENERIC DISPLAY</div>
+                <div class="prune-delta negative">-$40,000</div>
+              </div>
+              <h5 class="prune-title">De-Fund Generic Flash 180 Display Banners</h5>
+              <p class="prune-summary">
+                Broadline display banners resulted in an unsustainable $1,044.82 CPL due to 0.05% CTR. Reallocate 100% of these dollars into high-dwell native culinary articles and direct sampling incentives.
+              </p>
+            </div>
+
+            <div class="prune-card">
+              <div class="prune-header">
+                <div class="prune-badge">CUT 2 • UNINTEGRATED PRINT</div>
+                <div class="prune-delta negative">-$25,000</div>
+              </div>
+              <h5 class="prune-title">Eliminate Standalone Awareness Print</h5>
+              <p class="prune-summary">
+                Shift away from passive print ads without direct tracking. Only invest in print when paired with digital CoverTips (like <em>Pizza Today</em>) featuring QR-activated sample request workflows.
+              </p>
+            </div>
+
+            <div class="prune-card">
+              <div class="prune-header">
+                <div class="prune-badge">CUT 3 • SOCIAL RETARGETING OPTIMIZATION</div>
+                <div class="prune-delta negative">-$15,000</div>
+              </div>
+              <h5 class="prune-title">Streamline Paid Social to LinkedIn Only</h5>
+              <p class="prune-summary">
+                Prune broad consumer-facing social channels. Concentrate remaining social budget strictly on LinkedIn sponsored content targeting verified Executive Chefs, Culinary Directors, and F&B Directors.
+              </p>
+            </div>
+
+            <!-- Comparison Chart Card -->
+            <div class="bigbets-chart-card">
+              <h5 class="chart-card-title">Scenario Comparison: Baseline vs 2027 Recommended</h5>
+              <div class="chart-wrapper-comparison">
+                <canvas id="chart-bigbets-comparison" height="190"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: EXECUTIVE MEETING TALKING POINTS FOR TOMORROW -->
+      <section class="roi-section-container executive-briefing-card">
+        <div class="briefing-header">
+          <div class="briefing-tag">INTERNAL PREPARATION • JT MEGA STRATEGY TEAM</div>
+          <h3 class="briefing-title">Executive Presentation Narrative for Tomorrow's Meeting</h3>
+        </div>
+        <div class="talking-points-grid">
+          <div class="point-card">
+            <div class="point-num">01</div>
+            <h5>Reframe from "Ad Cost" to "Gross Pipeline Multiplier"</h5>
+            <p>
+              Present the <strong>10.24x ROAS Pipeline Model</strong> ($4.1M in gross recurring case volume from ~$400K media). Explain that foodservice advertising must be judged by annual account lifetime value rather than single e-commerce transactions.
+            </p>
+          </div>
+          <div class="point-card">
+            <div class="point-num">02</div>
+            <h5>Leverage the 15:1 Purchase-Intent Multiplier</h5>
+            <p>
+              Highlight that <strong>34,333 operators</strong> used the Find-a-Distributor locator—15 times the volume of form submissions. This proves massive latent operator demand generated by JT Mega's creative and media flighting.
+            </p>
+          </div>
+          <div class="point-card">
+            <div class="point-num">03</div>
+            <h5>Spotlight the 2,305 Enterprise Institutional "Whales"</h5>
+            <p>
+              Display the institutional client list (UMass, Marriott, Aramark, Cornell). Emphasize to Hormel leadership that their advertising is reaching the biggest contract dining and university accounts in North America.
+            </p>
+          </div>
+          <div class="point-card">
+            <div class="point-num">04</div>
+            <h5>Self-Fund the 2027 Big Bets through Pruning</h5>
+            <p>
+              Demonstrate fiscal stewardship: by cutting $80,000 from high-CPL display and broad print, Hormel can fully fund the 4 Big Bets (Labor-Saving, Pizzerias, Higher Ed, Locator capture) with <strong>zero net budget increase</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 7: BRAND SOLUTIONS & CULINARY CATALOG                                -->
+  <!-- ========================================================================= -->
+  <main id="view-brand-catalog" class="app-view">
+    <div class="view-inner brand-catalog-inner">
+
+      <!-- Hero Header -->
+      <section class="brand-hero-section">
+        <div class="brand-hero-content">
+          <div class="hero-badge">CULINARY SOLUTIONS</div>
+          <h2 class="hero-title">Brand Portfolio & Culinary Solutions</h2>
+          <p class="hero-subtitle">
+            Official brand positioning, preparation guidelines, and distributor SKUs across all 8 portfolio lines.
+          </p>
+        </div>
+      </section>
+
+      <!-- Interactive Operator Segment Solution Matcher -->
+      <section class="operator-solution-matcher-card">
+        <div class="matcher-header-row">
+          <div>
+            <div class="matcher-badge">SEGMENT PLAYBOOK</div>
+            <h3 class="matcher-title">Segment Solution Matcher</h3>
+            <p class="matcher-subtext">
+              Curated product packages, prep advantages, and selling scripts tailored to each segment:
+            </p>
+          </div>
+          <div class="matcher-control-box">
+            <label for="matcher-segment-select"><strong>Target Operator Segment:</strong></label>
+            <select id="matcher-segment-select" class="form-select matcher-select">
+              <option value="pizzerias">🍕 Pizzerias & Italian Dining</option>
+              <option value="college_university">🎓 College & University Dining (C&U)</option>
+              <option value="healthcare_senior">🏥 Healthcare & Senior Living</option>
+              <option value="sports_bar_casual">🍔 Sports Bars, Brewpubs & Casual Grills</option>
+              <option value="k12_schools">🏫 K-12 School Nutrition</option>
+              <option value="c_store_grab_go">🏪 Convenience Stores & Fast Grab & Go</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="matcher-result-container" class="matcher-result-grid">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </section>
+
+      <!-- Master Brand Portfolio Section -->
+      <section class="brand-portfolio-section">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-title">Brand Portfolio</h3>
+            <p class="section-subtext">Brand value propositions, prep advantages, and flagship SKUs from the official website.</p>
+          </div>
+          <div class="brand-filter-chips" id="brand-catalog-chips">
+            <button class="brand-chip active" data-brand-id="all">All Brands (8)</button>
+            <button class="brand-chip" data-brand-id="bacon-1">Bacon 1™</button>
+            <button class="brand-chip" data-brand-id="fontanini">Fontanini®</button>
+            <button class="brand-chip" data-brand-id="flash-180">Flash 180™</button>
+            <button class="brand-chip" data-brand-id="fire-braised">Fire Braised™</button>
+            <button class="brand-chip" data-brand-id="austin-blues">Austin Blues®</button>
+            <button class="brand-chip" data-brand-id="hormel-halal">Hormel® Halal</button>
+            <button class="brand-chip" data-brand-id="cafe-h">Café H®</button>
+            <button class="brand-chip" data-brand-id="jennie-o">Jennie-O®</button>
+          </div>
+        </div>
+
+        <div id="brand-catalog-grid" class="brand-cards-grid">
+          <!-- Dynamically populated from BRAND_CATALOG_DATA -->
+        </div>
+      </section>
+
+      <!-- Flagship SKU Quick-Reference Directory -->
+      <section class="sku-directory-section">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-title">Flagship Product SKU Directory & Spec Guide</h3>
+            <p class="section-subtext">Search across all flagship Hormel Foodservice items, pack sizes, preparation methods, and distributor item codes.</p>
+          </div>
+          <div class="sku-search-box">
+            <input type="text" id="sku-search-input" class="form-input" placeholder="🔍 Search SKUs (e.g., #137666, Bacon, Calabrian, Halal, 5 oz)...">
+          </div>
+        </div>
+
+        <div class="sku-table-wrapper">
+          <table class="data-table sku-table" id="sku-data-table">
+            <thead>
+              <tr>
+                <th>Brand Line</th>
+                <th>Item Code</th>
+                <th>Product Description</th>
+                <th>Pack Size</th>
+                <th>Culinary Profile & Advantage</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="sku-table-body">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- LEAD DETAIL DRAWER                                                        -->
+  <!-- ========================================================================= -->
+  <div id="drawer-overlay" class="drawer-overlay"></div>
+  <aside id="lead-drawer" class="lead-drawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div class="drawer-header-left">
+        <h2 id="drawer-lead-name">Operator Name</h2>
+        <div id="drawer-lead-company" class="drawer-company-line">Company Name • City, State</div>
+        <div id="drawer-badges" class="drawer-badges"></div>
+      </div>
+      <button id="btn-close-drawer" class="btn-close-drawer">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      
+      <!-- Action Toolbar -->
+      <div class="drawer-action-toolbar">
+        <button id="action-email" class="btn-action btn-action-email">📧 Quick Email</button>
+        <button id="action-call" class="btn-action btn-action-call">📞 Call Operator</button>
+        <button id="action-website" class="btn-action btn-action-web">🌐 Company Website</button>
+        <button id="action-maps" class="btn-action btn-action-map">🗺️ Google Maps</button>
+        <button id="action-crm" class="btn-action btn-action-crm">☁️ Salesforce CRM</button>
+      </div>
+
+      <!-- Priority & Status Section -->
+      <div class="drawer-section drawer-priority-section">
+        <div class="priority-row">
+          <div class="priority-item">
+            <label>Status:</label>
+            <select id="drawer-lead-status" class="form-select form-select-status">
+              <option value="New">🟢 New Lead</option>
+              <option value="Attempted Contact">🟡 Attempted Contact</option>
+              <option value="Contacted">🔵 Contacted</option>
+              <option value="Qualified">⭐ Qualified Opportunity</option>
+              <option value="Unqualified">⚪ Unqualified</option>
+            </select>
+          </div>
+          <div class="priority-item">
+            <div class="score-header-row">
+              <label>Lead Score:</label>
+              <span id="drawer-lead-score-badge" class="badge badge-brand">Score: 85</span>
+            </div>
+            <div class="score-progress-bar-container">
+              <div id="drawer-lead-score-fill" class="score-progress-bar-fill" style="width: 85%;"></div>
+            </div>
+            <div id="drawer-lead-score-breakdown" class="score-breakdown-text">Base: 40 pts • High-Value Operator: +35 pts</div>
+          </div>
+        </div>
+
+        <div class="rep-notes-wrapper">
+          <label for="drawer-rep-notes">Sales Rep Follow-up Notes (Auto-saved locally):</label>
+          <textarea id="drawer-rep-notes" class="rep-notes-textarea" placeholder="Record operator conversation, sample delivery status, menu interest, or distributor follow-up notes..."></textarea>
+        </div>
+      </div>
+
+      <!-- Marketing Pathway -->
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">🎯 Marketing Pathway</h4>
+        <div class="attribution-pathway" id="drawer-attribution-pathway">
+          <!-- Pathway nodes rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Hormel Brand Pitch & Culinary Playbook Section -->
+      <div class="drawer-section" id="drawer-culinary-playbook-section">
+        <h4 class="drawer-section-title">🍽️ Brand Pitch & Distributor Intel</h4>
+        <div id="drawer-brand-pitch-container">
+          <!-- Dynamically populated via JS from BRAND_CATALOG_DATA -->
+        </div>
+      </div>
+
+      <!-- Operator Contact & Details -->
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">👤 Operator Details</h4>
+        <div class="drawer-grid">
+          <div class="drawer-grid-item">
+            <label>Email Address</label>
+            <a id="drawer-email-link" href="#" class="text-link">operator@email.com</a>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Phone Number</label>
+            <span id="drawer-phone">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Job Title</label>
+            <span id="drawer-job-title">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Restaurant / Company</label>
+            <span id="drawer-company-name">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Street Address</label>
+            <span id="drawer-address">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>City, State, Zip</label>
+            <span id="drawer-city-state-zip">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Primary Distributor</label>
+            <span id="drawer-distributor">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Hormel Sales Rep</label>
+            <span id="drawer-sales-rep">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>Products Interested In</label>
+            <span id="drawer-products">—</span>
+          </div>
+          <div class="drawer-grid-item">
+            <label>CRM Salesforce ID</label>
+            <span id="drawer-crm-id">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Comments -->
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">💬 Inbound Inquiry</h4>
+        <div id="drawer-comments-box" class="comments-box"></div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- EMAIL OUTREACH MODAL                                                      -->
+  <!-- ========================================================================= -->
+  <div id="email-modal-overlay" class="modal-overlay"></div>
+  <div id="email-modal" class="modal-container">
+    <div class="modal-header">
+      <h3>📧 Email Outreach</h3>
+      <button id="btn-close-email-modal" class="btn-close-modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Template:</label>
+        <select id="email-template-select" class="form-select">
+          <option value="follow_up_sample">Sample Request Follow-up (Distributor & Menu logistics)</option>
+          <option value="brand_pitch">🍽️ Official Hormel Brand Pitch (Site Copy, BOH Labor Savings & SKUs)</option>
+          <option value="general_intro">General Introductory Meeting (Hormel Portfolio)</option>
+          <option value="brand_interest">Brand Culinary Innovation & Labor-Saving Solutions</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Subject:</label>
+        <input type="text" id="email-subject-preview" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label>Message Body:</label>
+        <textarea id="email-body-preview" class="form-textarea" rows="9"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="btn-cancel-email" class="btn btn-outline">Cancel</button>
+      <button id="btn-launch-mailto" class="btn btn-chartreuse">Launch in Email Client ➔</button>
+    </div>
+  </div>
+
+  <!-- JT Mega Agency Footer Bar -->
+  <footer class="jtmega-agency-footer">
+    <div class="footer-container">
+      <div class="footer-col-left">
+        <div class="footer-logo">JT MEGA</div>
+        <div class="footer-tagline">Thought for Food • A Food Advertising Agency • Celebrating 50 Years of Independent Leadership</div>
+      </div>
+      <div class="footer-col-right">
+        <span class="footer-item">Minneapolis, MN</span>
+        <span class="footer-sep">•</span>
+        <span class="footer-item"><a href="https://jtmega.com/" target="_blank" rel="noopener">jtmega.com ↗</a></span>
+        <span class="footer-sep">•</span>
+        <span class="footer-item">Hormel Foodservice Strategic Media Partner</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="tactics_data.js"></script>
+  <script src="leads_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
