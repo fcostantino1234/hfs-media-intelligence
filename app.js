@@ -3514,14 +3514,24 @@
     };
   }
 
-  function openLeadDrawer(lead) {
+    function openLeadDrawer(lead) {
     const intel = getRestaurantConceptProfile(lead);
 
-    document.getElementById('drawer-lead-name').textContent = lead.full_name || 'Anonymous Contact';
+    const nameEl = document.getElementById('drawer-lead-name');
+    if (nameEl) nameEl.textContent = lead.full_name || 'Anonymous Foodservice Contact';
     
     // Populate Top Venue Card
     const venueNameEl = document.getElementById('drawer-company-name');
-    if (venueNameEl) venueNameEl.textContent = lead.company || 'Private Dining Operation';
+    if (venueNameEl) {
+      const webSearchQ = encodeURIComponent(`${lead.company || lead.full_name} ${lead.city || ''} ${lead.state || ''} address phone foodservice menu`);
+      venueNameEl.innerHTML = `
+        <strong>${escapeHtml(lead.company || 'Personal / Household')}</strong> 
+        <a href="https://www.google.com/search?q=${webSearchQ}" target="_blank" class="btn-web-search" style="margin-left: 8px; font-size: 0.72rem; padding: 2px 8px;" title="Search web to verify address, phone, and menu">Web Search &rarr;</a>
+        <div style="font-size: 0.72rem; color: #64748b; margin-top: 3px; font-weight: 500;">
+          Audit: <span style="color: #0f172a; font-weight: 700;">${escapeHtml(lead.verification_source || 'Standard Contact')}</span>
+        </div>
+      `;
+    }
 
     const jobTitleEl = document.getElementById('drawer-job-title');
     if (jobTitleEl) jobTitleEl.textContent = lead.job_title || 'Foodservice Decision Maker';
@@ -3549,358 +3559,146 @@
     }
 
     // Populate Contact Reach Pills
+    const phoneEl = document.getElementById('drawer-phone');
+    if (phoneEl) {
+      phoneEl.innerHTML = lead.phone 
+        ? `<a href="tel:${escapeHtml(lead.phone)}" class="text-link">${escapeHtml(lead.phone)}</a>` 
+        : '<span style="color: #94a3b8; font-style: italic;">Phone not listed</span>';
+    }
+
+    const emailLink = document.getElementById('drawer-email-link');
+    if (emailLink) {
+      emailLink.textContent = lead.email || 'Email not listed';
+      emailLink.href = lead.email ? `mailto:${lead.email}` : '#';
+    }
+
     const distPill = document.getElementById('drawer-distributor-pill');
     if (distPill) {
-      distPill.textContent = lead.distributor ? `Distributor: ${lead.distributor}` : 'Distributor: Unspecified';
+      distPill.textContent = lead.distributor ? `Distributor: ${lead.distributor}` : 'Distributor: Direct / Unspecified';
     }
 
     const badges = document.getElementById('drawer-badges');
-    let opBadgeHtml = '';
-    if (lead.mql_tier === 'certified_mql' || lead.is_verified_operator) {
-      opBadgeHtml = `<span class="badge-operator-certified" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🛡️ Certified Foodservice Outlet (MQL)</span>`;
-    } else if (lead.mql_tier === 'distributor') {
-      opBadgeHtml = `<span class="badge-distributor-partner" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🤝 Foodservice Distributor Partner</span>`;
-    } else if (lead.mql_tier === 'prospective') {
-      opBadgeHtml = `<span class="badge-operator-prospective" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🟡 Prospective Operator (Pending Match)</span>`;
-    } else if (lead.mql_tier === 'internal') {
-      opBadgeHtml = `<span class="badge-internal" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏢 Internal Corporate Record</span>`;
-    } else {
-      opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏠 Home Cook / Consumer Profile</span>`;
+    if (badges) {
+      let opBadgeHtml = '';
+      if (lead.mql_tier === 'certified_mql' || lead.is_verified_operator) {
+        opBadgeHtml = `<span class="badge-operator-certified" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🛡️ Certified Foodservice Outlet (MQL)</span>`;
+      } else if (lead.mql_tier === 'distributor') {
+        opBadgeHtml = `<span class="badge-distributor-partner" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🤝 Foodservice Distributor Partner</span>`;
+      } else if (lead.mql_tier === 'prospective') {
+        opBadgeHtml = `<span class="badge-operator-prospective" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🟡 Prospective Operator (Pending Match)</span>`;
+      } else if (lead.mql_tier === 'internal') {
+        opBadgeHtml = `<span class="badge-internal" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏢 Internal Corporate Record</span>`;
+      } else {
+        opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏠 Home Cook / Consumer Profile</span>`;
+      }
+
+      const depDateStr = lead.tactic_run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
+      badges.innerHTML = `
+        ${opBadgeHtml}
+        <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">Flight: ${escapeHtml(depDateStr)}</span>
+        <span class="badge badge-brand">${escapeHtml(lead.brand)}</span>
+        <span class="badge badge-segment">${escapeHtml(lead.subsegment || lead.segment)}</span>
+        ${lead.is_enterprise ? '<span class="badge badge-brand" style="background-color: #fef08a; color: #854d0e;">[ ENTERPRISE ]</span>' : ''}
+      `;
     }
 
+    // Extended Attributes
+    const distEl = document.getElementById('drawer-distributor');
+    if (distEl) distEl.textContent = lead.distributor || '—';
+
+    const repEl = document.getElementById('drawer-sales-rep');
+    if (repEl) repEl.textContent = lead.sales_rep || 'Unassigned';
+
+    const prodEl = document.getElementById('drawer-products');
+    if (prodEl) prodEl.textContent = lead.products || '—';
+
+    const crmEl = document.getElementById('drawer-crm-id');
+    if (crmEl) crmEl.innerHTML = lead.crm_id ? `<a href="${getCrmUrl(lead.crm_id)}" target="_blank" class="text-link">${escapeHtml(lead.crm_id)}</a>` : '—';
+
     const depDateStr = lead.tactic_run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
-    badges.innerHTML = `
-      ${opBadgeHtml}
-      <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">Flight: ${escapeHtml(depDateStr)}</span>
-      <span class="badge badge-brand">${escapeHtml(lead.brand)}</span>
-      <span class="badge badge-segment">${escapeHtml(lead.subsegment || lead.segment)}</span>
-      ${lead.is_enterprise ? '<span class="badge badge-brand" style="background-color: #fef08a; color: #854d0e;">[ ENTERPRISE ]</span>' : ''}
-    `;
-
-    const emailLink = document.getElementById('drawer-email-link');
-    emailLink.textContent = lead.email || '—';
-    emailLink.href = lead.email ? `mailto:${lead.email}` : '#';
-
-    const webSearchQ = encodeURIComponent(`${lead.company || lead.full_name} ${lead.city || ''} ${lead.state || ''} address phone foodservice menu`);
-
-    document.getElementById('drawer-phone').innerHTML = lead.phone 
-      ? `<a href="tel:${escapeHtml(lead.phone)}" class="text-link">${escapeHtml(lead.phone)}</a>` 
-      : '<span style="color: var(--text-muted); font-style: italic;">Phone not listed</span>';
-    document.getElementById('drawer-job-title').textContent = lead.job_title || '—';
-    document.getElementById('drawer-company-name').innerHTML = `
-      <strong>${escapeHtml(lead.company || 'Personal / Household')}</strong> 
-      <a href="https://www.google.com/search?q=${webSearchQ}" target="_blank" class="btn-web-search" style="margin-left: 10px;" title="Search web to verify address, phone, and menu">Web Search Operator Info -></a>
-      ${lead.company ? `<a href="${escapeHtml(lead.menu_search_url)}" target="_blank" class="text-link" style="margin-left: 8px;">Menu -></a>` : ''}
-      <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px; font-weight: 500;">
-        Audit: <span style="color: #0f172a; font-weight: 700;">${escapeHtml(lead.verification_source || 'Standard Contact')}</span>
-      </div>
-    `;
-
-    document.getElementById('drawer-address').innerHTML = lead.address 
-      ? escapeHtml(lead.address) 
-      : '<span style="color: var(--text-muted); font-style: italic;">Address not listed</span>';
-    document.getElementById('drawer-city-state-zip').textContent = `${lead.city || '—'}, ${lead.state || ''} ${lead.zip || ''}`;
-    document.getElementById('drawer-distributor').textContent = lead.distributor || '—';
-    document.getElementById('drawer-sales-rep').textContent = lead.sales_rep || 'Unassigned';
-    document.getElementById('drawer-products').textContent = lead.products || '—';
-    document.getElementById('drawer-crm-id').innerHTML = lead.crm_id ? `<a href="${getCrmUrl(lead.crm_id)}" target="_blank" class="text-link">${escapeHtml(lead.crm_id)}</a>` : '—';
     const depEl = document.getElementById('drawer-tactic-deployment-date');
     if (depEl) depEl.textContent = `${depDateStr}`;
+
     const adUnitEl = document.getElementById('drawer-ad-unit-name');
     if (adUnitEl) adUnitEl.textContent = lead.tactic_name || '—';
 
     const commentsBox = document.getElementById('drawer-comments-box');
-    commentsBox.innerHTML = lead.comments ? escapeHtml(lead.comments) : '<span style="color: var(--text-muted); font-style: italic;">No custom inquiry submitted with form.</span>';
+    if (commentsBox) {
+      commentsBox.innerHTML = lead.comments ? escapeHtml(lead.comments) : '<span style="color: var(--text-muted); font-style: italic;">No custom inquiry submitted with form.</span>';
+    }
 
     const statusSelect = document.getElementById('drawer-lead-status');
-    statusSelect.value = getLeadStatus(lead);
-    statusSelect.onchange = (e) => {
-      setLeadStatus(lead, e.target.value);
-      applyGlobalFilters();
-      showToast(`Status updated to ${e.target.value}`);
-    };
+    if (statusSelect) {
+      statusSelect.value = getLeadStatus(lead);
+      statusSelect.onchange = (e) => {
+        setLeadStatus(lead, e.target.value);
+        applyGlobalFilters();
+        showToast(`Status updated to ${e.target.value}`);
+      };
+    }
 
     const notesArea = document.getElementById('drawer-rep-notes');
-    notesArea.value = getRepNotes(lead.email);
-    notesArea.oninput = (e) => {
-      setRepNotes(lead.email, e.target.value);
-    };
-    notesArea.onblur = () => {
-      renderTable();
-    };
+    if (notesArea) {
+      notesArea.value = getRepNotes(lead.email);
+      notesArea.oninput = (e) => {
+        setRepNotes(lead.email, e.target.value);
+      };
+      notesArea.onblur = () => {
+        renderTable();
+      };
+    }
 
     const scoreVal = lead.lead_score || 0;
     const scoreBadge = document.getElementById('drawer-lead-score-badge');
-    scoreBadge.textContent = `Score: ${scoreVal}`;
+    if (scoreBadge) scoreBadge.textContent = `Score: ${scoreVal}`;
     const scoreFill = document.getElementById('drawer-lead-score-fill');
-    scoreFill.style.width = `${scoreVal}%`;
-    scoreFill.style.backgroundColor = scoreVal >= 80 ? 'var(--hfs-emerald)' : (scoreVal >= 60 ? 'var(--jtm-orange)' : 'var(--text-muted)');
-    document.getElementById('drawer-lead-score-breakdown').textContent = getScoreExplanation(lead);
-
-    const primaryTactic = allTactics.find(item => item.id === lead.tactic_id);
-
-    const srcTokens = (lead.utm_source || '').split(';').map(s => s.trim()).filter(Boolean);
-    const medTokens = (lead.utm_medium || '').split(';').map(s => s.trim()).filter(Boolean);
-    const cmpTokens = (lead.utm_campaign || '').split(';').map(s => s.trim()).filter(Boolean);
-    const cntTokens = (lead.utm_content || '').split(';').map(s => s.trim()).filter(Boolean);
-
-    const maxTouches = Math.max(1, srcTokens.length, medTokens.length, cmpTokens.length, cntTokens.length);
-
-    // Parse conversion date timestamp as anchor
-    let conversionTs = 0;
-    if (lead.date) {
-      const parsed = Date.parse(lead.date.replace(' ', 'T'));
-      if (!isNaN(parsed)) conversionTs = parsed;
-    }
-    if (!conversionTs) conversionTs = Date.now();
-
-    const touchpointList = [];
-
-    for (let i = 0; i < maxTouches; i++) {
-      const src = srcTokens[i] || (i === 0 ? (lead.utm_source || lead.publication_group || 'Direct Web') : '');
-      const med = medTokens[i] || (i === 0 ? (lead.utm_medium || lead.tactic_channel || 'Inbound') : '');
-      const cmp = cmpTokens[i] || (i === 0 ? (lead.utm_campaign || lead.brand || 'General') : '');
-      const cnt = cntTokens[i] || (i === 0 ? (lead.utm_content || lead.key_hook || 'Default') : '');
-
-      // Find best-matching tactic for this touchpoint
-      let touchTactic = primaryTactic;
-      if (i > 0) {
-        const altTactic = allTactics.find(t => 
-          (src && t.utm_source && t.utm_source.toLowerCase().includes(src.toLowerCase())) ||
-          (cmp && t.utm_campaign && t.utm_campaign.toLowerCase().includes(cmp.toLowerCase())) ||
-          (src && t.publisher && t.publisher.toLowerCase().includes(src.toLowerCase()))
-        );
-        if (altTactic) touchTactic = altTactic;
-      }
-
-      const placementName = touchTactic ? touchTactic.name : lead.tactic_name;
-      const placementPub = touchTactic ? (touchTactic.publisher || touchTactic.publication_group) : lead.publication_group;
-      const placementType = touchTactic ? touchTactic.tactic_type : (lead.tactic_type || 'Digital Ad');
-      const creativeImg = touchTactic ? touchTactic.creative_image : null;
-
-      // Determine chronological placement date
-      let touchDateStr = '';
-      let touchDateTs = 0;
-
-      if (touchTactic && touchTactic.run_date && touchTactic.run_date !== 'Flight Period') {
-        const parsedTacticDate = Date.parse(touchTactic.run_date);
-        if (!isNaN(parsedTacticDate) && parsedTacticDate <= conversionTs) {
-          touchDateStr = touchTactic.run_date;
-          touchDateTs = parsedTacticDate;
-        }
-      }
-
-      // If tactic date is missing or after conversion date, determine realistic preceding date
-      if (!touchDateTs) {
-        const daysPrior = (maxTouches - i) * 6 + 4;
-        const calcDate = new Date(conversionTs - (daysPrior * 86400000));
-        touchDateStr = calcDate.toISOString().slice(0, 10);
-        touchDateTs = calcDate.getTime();
-      }
-
-      touchpointList.push({
-        index: i,
-        tactic: touchTactic,
-        name: placementName,
-        pub: placementPub,
-        type: placementType,
-        img: creativeImg,
-        dateStr: touchDateStr,
-        dateTs: touchDateTs,
-        src,
-        med,
-        cmp,
-        cnt
-      });
+    if (scoreFill) {
+      scoreFill.style.width = `${Math.min(100, scoreVal)}%`;
+      if (scoreVal >= 80) scoreFill.style.backgroundColor = 'var(--status-contacted)';
+      else if (scoreVal >= 60) scoreFill.style.backgroundColor = 'var(--status-attempted)';
+      else scoreFill.style.backgroundColor = 'var(--status-unqualified)';
     }
 
-    // STRICT CHRONOLOGICAL SORTING: Ascending order (earliest interaction first -> latest before conversion)
-    touchpointList.sort((a, b) => a.dateTs - b.dateTs);
+    const scoreBreakdown = document.getElementById('drawer-lead-score-breakdown');
+    if (scoreBreakdown) scoreBreakdown.textContent = getScoreExplanation(lead);
 
-    let touchesHtml = '';
-    touchpointList.forEach((touch, seqIdx) => {
-      const isInitial = seqIdx === 0;
-      const isFinalTouch = seqIdx === touchpointList.length - 1;
-      const touchTitle = isInitial
-        ? 'Touchpoint 1: Initial Ad Impression'
-        : (isFinalTouch && touchpointList.length > 1 
-            ? `Touchpoint ${seqIdx + 1}: Pre-Conversion Touch` 
-            : `Touchpoint ${seqIdx + 1}: Re-Engagement`);
-
-      const thumbHtml = touch.img ? `
-        <div class="pathway-thumb-col" title="Click to open full creative image">
-          <img src="${escapeHtml(touch.img)}" alt="${escapeHtml(touch.name)}" class="tactic-thumb-img" onclick="window.open('${escapeHtml(touch.img)}', '_blank')" onerror="this.parentElement.innerHTML='<div class=\'creative-thumb-fallback\'><span>[ Image ]</span><small>Image not available</small></div>';">
-        </div>
-      ` : `
-        <div class="pathway-thumb-col">
-          <div class="creative-thumb-fallback" title="Creative visual not found in media deck">
-            <span>[ Image ]</span>
-            <small>Image not available</small>
-          </div>
-        </div>
-      `;
-
-      touchesHtml += `
-        <div class="pathway-step-card">
-          ${thumbHtml}
-          <div class="pathway-details-col">
-            <div class="pathway-step-header">
-              <span>${touchTitle}</span>
-              <span class="attr-clickable drawer-isolate-tactic" data-isolate-tactic="${touch.tactic ? touch.tactic.id : lead.tactic_id}" style="color: #0284c7; text-decoration: underline; font-size: 0.6875rem;" title="Isolate leads for this placement">Isolate Tactic &rarr;</span>
-            </div>
-            
-            <div style="font-weight: 700; font-size: 0.8125rem; color: var(--jtm-petrol); margin-bottom: 3px;">
-              ${escapeHtml(touch.name)}
-            </div>
-
-            <div class="pathway-date-badge">
-              Run Date: <strong>${escapeHtml(touch.dateStr)}</strong>
-            </div>
-
-            <div style="font-size: 0.6875rem; color: var(--text-muted); margin-bottom: 6px;">
-              Publisher: <span class="attr-clickable drawer-isolate-pub" data-isolate-pub="${escapeHtml(touch.pub)}" style="color: #0284c7; font-weight: 600; text-decoration: underline;">${escapeHtml(touch.pub)}</span> • Format: ${escapeHtml(touch.type)}
-            </div>
-
-            <div class="touchpoint-tags">
-              ${touch.src ? `<span class="utm-chip drawer-utm-chip" data-utm-key="utm_source" data-utm-val="${escapeHtml(touch.src)}" title="Click to isolate leads with source: ${escapeHtml(touch.src)}">source: <strong>${escapeHtml(touch.src)}</strong></span>` : ''}
-              ${touch.med ? `<span class="utm-chip drawer-utm-chip" data-utm-key="utm_medium" data-utm-val="${escapeHtml(touch.med)}" title="Click to isolate leads with medium: ${escapeHtml(touch.med)}">medium: <strong>${escapeHtml(touch.med)}</strong></span>` : ''}
-              ${touch.cmp ? `<span class="utm-chip drawer-utm-chip" data-utm-key="utm_campaign" data-utm-val="${escapeHtml(touch.cmp)}" title="Click to isolate leads with campaign: ${escapeHtml(touch.cmp)}">campaign: <strong>${escapeHtml(touch.cmp)}</strong></span>` : ''}
-              ${touch.cnt ? `<span class="utm-chip drawer-utm-chip" data-utm-key="utm_content" data-utm-val="${escapeHtml(touch.cnt)}" title="Click to isolate leads with content: ${escapeHtml(touch.cnt)}">content: <strong>${escapeHtml(touch.cnt)}</strong></span>` : ''}
-            </div>
-          </div>
-        </div>
-      `;
-    });
-
-    const pageInfo = getConversionPageInfo(lead);
-    const pathway = document.getElementById('drawer-attribution-pathway');
-    pathway.innerHTML = `
-      <div class="attribution-node">
-        <div class="attribution-dot dot-tactic" title="Strategic Key Hook"></div>
-        <div class="attribution-label">Strategic Focus: ${escapeHtml(lead.key_hook)}</div>
-      </div>
-      <div class="attribution-meta">Creative Angle: ${escapeHtml(lead.creative_angle || lead.tactic_name)}</div>
-
-      <div class="attribution-connector"></div>
-      
-      <div style="margin: 6px 0 10px 0;">
-        <div style="font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;">
-          Sequential Marketing Pathway (${maxTouches} Placement Interaction${maxTouches > 1 ? 's' : ''}):
-        </div>
-        ${touchesHtml}
-      </div>
-
-      <div class="attribution-connector"></div>
-      <div class="attribution-node">
-        <div class="attribution-dot dot-touchpoint" title="Web Inbound Lead Conversion"></div>
-        <div class="attribution-label" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-          <span>Website Form Conversion</span>
-          <span class="badge" style="font-size: 0.6875rem; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;">
-            ${pageInfo.badgeText}
-          </span>
-        </div>
-      </div>
-
-      <div class="conversion-page-step-card" style="margin-top: 8px; margin-left: 26px;">
-        <div class="conversion-thumb-col" title="Click to view live conversion page: ${escapeHtml(pageInfo.rawUrl)}" onclick="window.open('${escapeHtml(pageInfo.rawUrl)}', '_blank')">
-          <img src="${escapeHtml(pageInfo.thumbImg)}" alt="${escapeHtml(pageInfo.pageTitle)}" class="conversion-thumb-img" onerror="this.src='assets/landing_pages/real_hfs_home.png'">
-          <div class="thumb-hover-overlay">
-            <span>Open Live Page -></span>
-          </div>
-        </div>
-
-        <div class="pathway-details-col">
-          <div class="pathway-step-header">
-            <span style="color: #047857; font-weight: 800;">Landing Page Viewed</span>
-            <a href="${escapeHtml(pageInfo.rawUrl)}" target="_blank" class="conversion-external-btn" title="Open page in new tab">
-              Open Page ↗
-            </a>
-          </div>
-
-          <div style="font-weight: 800; font-size: 0.8125rem; color: var(--jtm-petrol); margin-bottom: 4px;">
-            ${escapeHtml(pageInfo.pageTitle)}
-          </div>
-
-          <div class="pathway-date-badge" style="background: #f0fdf4; color: #166534; border-color: #bbf7d0; margin-bottom: 6px;">
-            Conversion Date: <strong>${escapeHtml(lead.date)}</strong>
-          </div>
-
-          <div class="conversion-url-container">
-            <span class="conversion-url-label">Destination URL:</span>
-            <a href="${escapeHtml(pageInfo.rawUrl)}" target="_blank" class="conversion-clickable-url" title="Click to open conversion page in new browser tab">
-              ${escapeHtml(pageInfo.rawUrl)}
-            </a>
-          </div>
-        </div>
-      </div>
-    `;
-
-    pathway.querySelectorAll('.drawer-utm-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        closeLeadDrawer();
-        isolateByUtm(chip.getAttribute('data-utm-key'), chip.getAttribute('data-utm-val'));
-      });
-    });
-    pathway.querySelectorAll('.drawer-isolate-pub').forEach(el => {
-      el.addEventListener('click', () => {
-        closeLeadDrawer();
-        isolateByPublication(el.getAttribute('data-isolate-pub'));
-      });
-    });
-    pathway.querySelectorAll('.drawer-isolate-tactic').forEach(el => {
-      el.addEventListener('click', () => {
-        closeLeadDrawer();
-        isolateByTactic(el.getAttribute('data-isolate-tactic'));
-      });
-    });
-
-    // Action Buttons
     const actEmail = document.getElementById('action-email');
-    if (lead.email) {
-      actEmail.style.display = 'inline-flex';
-      actEmail.onclick = () => openEmailModal(lead);
-    } else {
-      actEmail.style.display = 'none';
+    if (actEmail) {
+      actEmail.onclick = () => {
+        openEmailModal(lead);
+      };
     }
 
     const actCall = document.getElementById('action-call');
-    if (lead.phone) {
-      actCall.style.display = 'inline-flex';
-      actCall.onclick = () => window.open(`tel:${lead.phone.replace(/\D/g, '')}`, '_self');
-    } else {
-      actCall.style.display = 'none';
+    if (actCall) {
+      actCall.disabled = !lead.phone;
+      actCall.onclick = () => {
+        if (lead.phone) window.location.href = `tel:${lead.phone}`;
+      };
     }
 
     const actWeb = document.getElementById('action-website');
-    if (lead.company_website) {
-      actWeb.style.display = 'inline-flex';
-      actWeb.onclick = () => window.open(lead.company_website, '_blank');
-    } else {
-      actWeb.style.display = 'none';
-    }
-
-    const actMaps = document.getElementById('action-maps');
-    if (lead.address || lead.city) {
-      const qStr = lead.address ? `${lead.address}, ${lead.city}, ${lead.state}` : `${lead.company}, ${lead.city}, ${lead.state}`;
-      actMaps.style.display = 'inline-flex';
-      actMaps.onclick = () => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(qStr)}`, '_blank');
-    } else {
-      actMaps.style.display = 'none';
+    if (actWeb) {
+      actWeb.disabled = !lead.company_website;
+      actWeb.onclick = () => {
+        if (lead.company_website) window.open(lead.company_website, '_blank');
+      };
     }
 
     const actCrm = document.getElementById('action-crm');
-    if (lead.crm_id) {
-      actCrm.style.display = 'inline-flex';
-      actCrm.innerHTML = 'Salesforce CRM';
-      actCrm.onclick = () => window.open(getCrmUrl(lead.crm_id), '_blank');
-    } else if (lead.company || lead.full_name) {
-      actCrm.style.display = 'inline-flex';
-      actCrm.innerHTML = 'Search CRM';
-      actCrm.onclick = () => window.open(`https://hormel.lightning.force.com/lightning/globalSearch/results?q=${encodeURIComponent(lead.company || lead.full_name)}`, '_blank');
-    } else {
-      actCrm.style.display = 'none';
+    if (actCrm) {
+      if (lead.crm_id) {
+        actCrm.disabled = false;
+        actCrm.innerHTML = 'Salesforce CRM';
+        actCrm.onclick = () => window.open(getCrmUrl(lead.crm_id), '_blank');
+      } else {
+        actCrm.disabled = false;
+        actCrm.innerHTML = 'Search CRM';
+        actCrm.onclick = () => window.open(`https://na1.salesforce.com/_ui/search/ui/UnifiedSearchResults?searchType=2&sen=001&sen=003&str=${encodeURIComponent(lead.company || lead.full_name)}`, '_blank');
+      }
     }
 
+    renderAttributionPathway(lead);
     renderDrawerCulinaryPlaybook(lead);
     renderDrawerRestaurantMenuIdeation(lead);
 
