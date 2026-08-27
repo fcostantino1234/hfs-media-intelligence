@@ -16,11 +16,11 @@
   // 1. COLUMN REGISTRY FOR ALL 30 FIELDS
   // ===========================================================================
     const COLUMN_CATEGORIES = [
-    { key: 'core', label: '📌 Core Lead & Operator Identity', icon: '📌' },
-    { key: 'media', label: '🎯 Media, Placement & Flight Timing', icon: '🎯' },
-    { key: 'brand', label: '🥩 Brand & Foodservice Profile', icon: '🥩' },
-    { key: 'sales', label: '🤝 Distributor & Sales Assignment', icon: '🤝' },
-    { key: 'digital', label: '🔗 Digital Tracking & Web Footprint', icon: '🔗' }
+    { key: 'core', label: '// CORE LEAD & OPERATOR IDENTITY //', icon: '//' },
+    { key: 'media', label: 'Media, Placement & Flight Timing', icon: '//' },
+    { key: 'brand', label: '// BRAND & FOODSERVICE PROFILE //', icon: '//' },
+    { key: 'sales', label: '// DISTRIBUTOR & SALES ASSIGNMENT //', icon: '//' },
+    { key: 'digital', label: '// DIGITAL TRACKING & WEB FOOTPRINT //', icon: '//' }
   ];
 
   const ALL_COLUMNS = [
@@ -916,7 +916,7 @@
           </div>
 
           <button class="btn-inspect-macro" data-dim-type="${macroDimension}" data-dim-val="${escapeHtml(g.name)}">
-            🔍 Inspect All ${g.leads.toLocaleString()} Leads from this Group ➔
+            Inspect All ${g.leads.toLocaleString()} Leads from this Group &rarr;
           </button>
         </div>
       `;
@@ -1004,7 +1004,7 @@
     // TOP OPTION: ALL TACTICS (PORTFOLIO ROLLUP)
     const allOpt = document.createElement('option');
     allOpt.value = 'all';
-    allOpt.textContent = `🌟 All Tactics (Portfolio Rollup — ${activeTactics.length} Active in ${yearLabel})`;
+    allOpt.textContent = `All Tactics (Portfolio Rollup — ${activeTactics.length} Active in ${yearLabel})`;
     select.appendChild(allOpt);
 
     // Group active tactics by channel
@@ -1016,7 +1016,7 @@
 
     Object.keys(channels).forEach(ch => {
       const optgroup = document.createElement('optgroup');
-      optgroup.label = `⚡ Active in ${yearLabel}: ${ch}`;
+      optgroup.label = `Active in ${yearLabel}: ${ch}`;
 
       channels[ch].forEach(t => {
         const opt = document.createElement('option');
@@ -1041,7 +1041,7 @@
     // Inactive tactics in this year (if any)
     if (inactiveTactics.length > 0) {
       const inactGroup = document.createElement('optgroup');
-      inactGroup.label = `⏸️ Concluded / Inactive in ${yearLabel} (${inactiveTactics.length} Tactics)`;
+      inactGroup.label = `Concluded / Inactive in ${yearLabel} (${inactiveTactics.length} Tactics)`;
 
       inactiveTactics.forEach(t => {
         const opt = document.createElement('option');
@@ -1132,7 +1132,7 @@
           // Option: All in this channel
           const chAllOpt = document.createElement('option');
           chAllOpt.value = 'all';
-          chAllOpt.textContent = `🌟 All ${filter} Campaigns (${matching.length} Active)`;
+          chAllOpt.textContent = `All ${filter} Campaigns (${matching.length} Active)`;
           select.appendChild(chAllOpt);
 
           matching.forEach(t => {
@@ -1201,8 +1201,8 @@
       const blendedCpl = totalLeads > 0 ? (totalSpend / totalLeads) : 0;
       const convRate = totalClicks > 0 ? ((totalLeads / totalClicks) * 100).toFixed(2) : '—';
 
-      document.getElementById('sc-name').textContent = `🌟 Hormel Foodservice — Complete Media Portfolio Rollup (${activeTactics.length} Active in ${yearLabel})`;
-      document.getElementById('sc-key-hook').textContent = `🎯 Cross-Portfolio Multi-Hook Strategy`;
+      document.getElementById('sc-name').textContent = `Hormel Foodservice — Complete Media Portfolio Rollup (${activeTactics.length} Active in ${yearLabel})`;
+      document.getElementById('sc-key-hook').textContent = `Cross-Portfolio Multi-Hook Strategy`;
       document.getElementById('sc-channel').textContent = `Omnichannel Integrated Portfolio`;
       document.getElementById('sc-brand').textContent = `All HFS Brands Portfolio`;
       
@@ -1215,7 +1215,7 @@
 
       const runEl = document.getElementById('sc-run-date');
       if (runEl) {
-        runEl.textContent = `📅 Run Date: Complete Decade Flowchart Portfolio (${yearLabel})`;
+        runEl.textContent = `Run Date: Complete Decade Flowchart Portfolio (${yearLabel})`;
       }
 
       const utmRow = document.getElementById('sc-utm-row');
@@ -1225,7 +1225,7 @@
       const jobEl = document.getElementById('sc-job');
       if (jobEl) jobEl.textContent = `Omnichannel Master (${activeTactics.length} Flights)`;
       const deckEl = document.getElementById('sc-source-deck');
-      if (deckEl) deckEl.textContent = '📁 48 Decks Triangulated in HFSDATA';
+      if (deckEl) deckEl.textContent = '48 Decks Triangulated in HFSDATA';
 
       document.getElementById('sc-notes').innerHTML = `
         <div style="margin-bottom: 6px;"><strong>Strategic Angle:</strong> Comprehensive portfolio summary across all active flights in ${yearLabel}.</div>
@@ -1246,7 +1246,7 @@
 
       const drillBtn = document.getElementById('btn-drill-leads');
       if (drillBtn) {
-        drillBtn.innerHTML = `🔍 Inspect All <span id="sc-leads-btn-count">${totalLeads.toLocaleString()}</span> Leads from Portfolio ➔`;
+        drillBtn.innerHTML = `Inspect All <span id="sc-leads-btn-count">${totalLeads.toLocaleString()}</span> Leads from Portfolio &rarr;`;
         drillBtn.onclick = () => {
           clearAttributeIsolation();
           const leadsTab = document.getElementById('tab-sales-leads');
@@ -1278,7 +1278,7 @@
     const cplVal = t.cpl_in_window !== undefined && t.cpl_in_window > 0 ? `$${t.cpl_in_window}` : (t.cost_per_lead > 0 ? `$${t.cost_per_lead.toFixed(2)}` : 'Owned / Inbound');
 
     document.getElementById('sc-name').textContent = t.name;
-    document.getElementById('sc-key-hook').textContent = `🎯 ${t.key_hook}`;
+    document.getElementById('sc-key-hook').textContent = `${t.key_hook}`;
     document.getElementById('sc-channel').textContent = t.channel;
     document.getElementById('sc-brand').textContent = t.brand;
     
@@ -1292,7 +1292,7 @@
 
     const runEl = document.getElementById('sc-run-date');
     if (runEl) {
-      runEl.textContent = `📅 Run Date: ${t.run_date || 'Flowchart Flight'}`;
+      runEl.textContent = `Run Date: ${t.run_date || 'Flowchart Flight'}`;
     }
 
     const utmRow = document.getElementById('sc-utm-row');
@@ -1327,7 +1327,7 @@
     const jobEl = document.getElementById('sc-job');
     if (jobEl) jobEl.textContent = `Job # ${t.job_number || 'HFS-General'}`;
     const deckEl = document.getElementById('sc-source-deck');
-    if (deckEl) deckEl.textContent = `📁 ${t.source_deck || 'Official Media Deck'}`;
+    if (deckEl) deckEl.textContent = `${t.source_deck || 'Official Media Deck'}`;
 
     document.getElementById('sc-notes').innerHTML = `
       <div style="margin-bottom: 6px;"><strong>Strategic Angle:</strong> ${escapeHtml(t.notes)}</div>
@@ -1350,7 +1350,7 @@
 
     const drillBtn = document.getElementById('btn-drill-leads');
     if (drillBtn) {
-      drillBtn.innerHTML = `🔍 Inspect <span id="sc-leads-btn-count">${leadsCount.toLocaleString()}</span> Leads from this Tactic ➔`;
+      drillBtn.innerHTML = `Inspect <span id="sc-leads-btn-count">${leadsCount.toLocaleString()}</span> Leads from this Tactic &rarr;`;
       drillBtn.onclick = () => isolateByTactic(t.id);
     }
 
@@ -1483,7 +1483,7 @@
             Scorecard
           </button>
           <button class="btn btn-primary btn-isolate-leads-direct" data-tactic-id="${t.id}" style="padding: 3px 8px; font-size: 0.72rem;" title="Isolate matching leads in Explorer">
-            🔍 Leads ➔
+            Leads &rarr;
           </button>
         </td>
       `;
@@ -1724,12 +1724,12 @@
                 const spendVal = spendPerQuarter[idx];
 
                 if (context.dataset.type === 'bar') {
-                  return ` 💰 Media Flight Spend: $${spendVal}K ($${(spendVal * 1000).toLocaleString()})`;
+                  return ` Media Flight Spend: $${spendVal}K ($${(spendVal * 1000).toLocaleString()})`;
                 } else {
                   if (qName === 'FY25 Q1' && flightScaleMode === 'smart') {
-                    return ` 🎯 Inbound Leads: 17,288 total (Clamped • 17,199 one-time CRM migration + 89 organic)`;
+                    return ` Inbound Leads: 17,288 total (Clamped • 17,199 one-time CRM migration + 89 organic)`;
                   }
-                  return ` 🎯 Operator Leads: ${rawCount.toLocaleString()} inquiries`;
+                  return ` Operator Leads: ${rawCount.toLocaleString()} inquiries`;
                 }
               }
             }
@@ -1896,7 +1896,7 @@
                   const actualVal = values[idx];
                   const lbl = labels[idx];
                   if (actualVal > 5000) {
-                    return ` ⚡ ${lbl}: ${actualVal.toLocaleString()} Leads (Database Consolidation Influx — Capped at Top to Reveal Trends)`;
+                    return ` ${lbl}: ${actualVal.toLocaleString()} Leads (Database Consolidation Influx — Capped at Top to Reveal Trends)`;
                   }
                   return ` Verified Inbound Leads: ${actualVal.toLocaleString()}`;
                 }
@@ -2266,9 +2266,9 @@
               label: (context) => {
                 const label = context.dataset.label || '';
                 const val = context.parsed.y;
-                if (label.includes('Spend')) return ` 💰 ${label}: $${val}K ($${(val * 1000).toLocaleString()})`;
-                if (label.includes('Distributor')) return ` 🚚 ${label}: ${val}K (${(val * 1000).toLocaleString()} lookups)`;
-                return ` 🌐 ${label}: ${val}K (${(val * 1000).toLocaleString()} sessions)`;
+                if (label.includes('Spend')) return ` ${label}: $${val}K ($${(val * 1000).toLocaleString()})`;
+                if (label.includes('Distributor')) return ` ${label}: ${val}K (${(val * 1000).toLocaleString()} lookups)`;
+                return ` ${label}: ${val}K (${(val * 1000).toLocaleString()} sessions)`;
               }
             }
           }
@@ -2418,7 +2418,7 @@
     if (container.children.length === 0) {
       container.innerHTML = `
         <div style="text-align: center; padding: 30px 10px; color: #64748b;">
-          <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
+          
           <div style="font-weight: 700; font-size: 0.875rem; color: #334155;">No matching columns found</div>
           <div style="font-size: 0.75rem;">Try searching for a different keyword like "utm", "rep", or "date".</div>
         </div>
@@ -2507,14 +2507,14 @@
               </td>
             `;
           } else if (col.key === 'company') {
-            const star = lead.is_enterprise ? '<span title="Tier 1 High-Volume Account" style="color: #d97706; margin-right: 4px;">⭐</span>' : '';
+            const star = lead.is_enterprise ? '<span title="Tier 1 High-Volume Account" style="color: #d97706; margin-right: 4px;">[ENT]</span>' : '';
             rowHtml += `
               <td>
                 <div style="font-weight: 700;">${star}${escapeHtml(lead.company || '—')}</div>
                 <div style="display: flex; gap: 8px; font-size: 0.6875rem; align-items: center; margin-top: 2px;">
                   <span style="color: var(--text-muted);">${escapeHtml(lead.job_title || '—')}</span>
-                  ${lead.company ? `<a href="${escapeHtml(lead.menu_search_url)}" target="_blank" class="text-link" title="Google Restaurant Menu">🔍 Menu</a>` : ''}
-                  ${lead.company_website ? `<a href="${escapeHtml(lead.company_website)}" target="_blank" class="text-link" title="Visit Operator Website">🌐 Web</a>` : ''}
+                  ${lead.company ? `<a href="${escapeHtml(lead.menu_search_url)}" target="_blank" class="text-link" title="Google Restaurant Menu">Menu</a>` : ''}
+                  ${lead.company_website ? `<a href="${escapeHtml(lead.company_website)}" target="_blank" class="text-link" title="Visit Operator Website">Web</a>` : ''}
                 </div>
               </td>
             `;
@@ -2535,7 +2535,7 @@
                   <span class="attr-clickable attr-isolate-pub" data-isolate-pub="${escapeHtml(lead.publication_group)}" style="color: #0284c7; text-decoration: underline;" title="Click to isolate leads from ${escapeHtml(lead.publication_group)}">${escapeHtml(lead.publication_group)}</span>
                   <span style="color: #cbd5e1;">•</span>
                   <span class="badge-rundate" style="font-size: 0.6875rem; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 1px 6px; border-radius: 4px;" title="Ad Unit Deployment / Flowchart Run Date">
-                    📅 Deployed: <strong>${escapeHtml(depDate)}</strong>
+                    Deployed: <strong>${escapeHtml(depDate)}</strong>
                   </span>
                 </div>
               </td>
@@ -2545,7 +2545,7 @@
             rowHtml += `
               <td style="white-space: nowrap;">
                 <span class="badge-rundate" style="font-size: 0.72rem; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 2px 7px; border-radius: 4px;" title="Ad Unit Deployment Date per media flowchart">
-                  📅 ${escapeHtml(depDate)}
+                  ${escapeHtml(depDate)}
                 </span>
               </td>
             `;
@@ -2575,20 +2575,20 @@
           } else if (col.key === 'status') {
             rowHtml += `<td>${getStatusBadgeHtml(lead)}</td>`;
           } else if (col.key === 'comments') {
-            const hasNotes = getRepNotes(lead.email) ? ' <span title="Has custom rep follow-up notes" style="cursor: help;">📝</span>' : '';
+            const hasNotes = getRepNotes(lead.email) ? ' <span title="Has custom rep follow-up notes" style="cursor: help;">[Note]</span>' : '';
             const cText = lead.comments ? escapeHtml(lead.comments.substring(0, 75)) + (lead.comments.length > 75 ? '...' : '') : '<span style="color: var(--text-muted); font-style: italic;">No comments</span>';
             rowHtml += `<td><div style="max-width: 220px; line-height: 1.3;">${cText}${hasNotes}</div></td>`;
           } else if (col.key === 'verification_badge') {
             if (lead.mql_tier === 'certified_mql' || lead.is_verified_operator) {
-              rowHtml += `<td><span class="badge-operator-certified" title="Certified Foodservice Outlet (MQL): ${escapeHtml(lead.verification_source || 'Foodservice Facility')}">🛡️ Certified MQL</span></td>`;
+              rowHtml += `<td><span class="badge-operator-certified" title="Certified Foodservice Outlet (MQL): ${escapeHtml(lead.verification_source || 'Foodservice Facility')}"> Certified MQL</span></td>`;
             } else if (lead.mql_tier === 'distributor') {
-              rowHtml += `<td><span class="badge-distributor-partner" title="Distributor / Broker Channel Partner: ${escapeHtml(lead.verification_source || 'Distributor Channel')}">🤝 Distributor Partner</span></td>`;
+              rowHtml += `<td><span class="badge-distributor-partner" title="Distributor / Broker Channel Partner: ${escapeHtml(lead.verification_source || 'Distributor Channel')}"> Distributor Partner</span></td>`;
             } else if (lead.mql_tier === 'prospective') {
-              rowHtml += `<td><span class="badge-operator-prospective" title="Prospective Operator (Unverified): ${escapeHtml(lead.verification_source || 'Pending Facility Verification')}">🟡 Prospective</span></td>`;
+              rowHtml += `<td><span class="badge-operator-prospective" title="Prospective Operator (Unverified): ${escapeHtml(lead.verification_source || 'Pending Facility Verification')}"> Prospective</span></td>`;
             } else if (lead.mql_tier === 'internal') {
-              rowHtml += `<td><span class="badge-internal" title="Internal Account: ${escapeHtml(lead.verification_source || 'Internal')}">🏢 Internal</span></td>`;
+              rowHtml += `<td><span class="badge-internal" title="Internal Account: ${escapeHtml(lead.verification_source || 'Internal')}"> Internal</span></td>`;
             } else {
-              rowHtml += `<td><span class="badge-consumer" title="Consumer / Home Cook Profile: ${escapeHtml(lead.verification_source || 'Consumer Profile')}">🏠 Home Cook</span></td>`;
+              rowHtml += `<td><span class="badge-consumer" title="Consumer / Home Cook Profile: ${escapeHtml(lead.verification_source || 'Consumer Profile')}"> Home Cook</span></td>`;
             }
           } else if (col.key === 'phone') {
             rowHtml += `<td>${lead.phone ? `<a href="tel:${escapeHtml(lead.phone)}" class="text-link" style="white-space: nowrap;">${escapeHtml(lead.phone)}</a>` : '<span style="color: var(--text-muted);">—</span>'}</td>`;
@@ -2598,7 +2598,7 @@
             const rawUrl = lead.page_url || '';
             const url = rawUrl || (lead.brand ? `https://www.hormelfoodservice.com/brand/${lead.brand.toLowerCase().replace(/\s+/g, '-')}/` : 'https://www.hormelfoodservice.com/contact/');
             const cleanPath = url.replace(/^https?:\/\/(www\.)?(go\.)?hormelfoodservice\.com\/?/, '/').split('?')[0] || '/';
-            rowHtml += `<td><a href="${escapeHtml(url)}" target="_blank" class="url-referring-link" title="Open referring form page: ${escapeHtml(url)}">🌐 ${escapeHtml(cleanPath)} ↗</a></td>`;
+            rowHtml += `<td><a href="${escapeHtml(url)}" target="_blank" class="url-referring-link" title="Open referring form page: ${escapeHtml(url)}"> ${escapeHtml(cleanPath)} ↗</a></td>`;
           } else {
             rowHtml += `<td>${escapeHtml(lead[col.key] || '—')}</td>`;
           }
@@ -2608,7 +2608,7 @@
       rowHtml += `
         <td style="text-align: center; white-space: nowrap;">
           <button class="btn btn-chartreuse btn-view-lead" data-id="${lead.id}" style="padding: 4px 10px; font-size: 0.75rem;">
-            View ➔
+            View &rarr;
           </button>
         </td>
       `;
@@ -2707,22 +2707,22 @@
 
     if (leadFilters.tactic) {
       const t = allTactics.find(item => item.id === leadFilters.tactic);
-      attrType = '🎯 Ad Tactic';
+      attrType = 'Ad Tactic';
       activeAttr = t ? t.name : leadFilters.tactic;
     } else if (leadFilters.publication) {
-      attrType = '📰 Publication';
+      attrType = 'Publication';
       activeAttr = leadFilters.publication;
     } else if (leadFilters.utm_source) {
-      attrType = '🏷️ utm_source';
+      attrType = 'utm_source';
       activeAttr = leadFilters.utm_source;
     } else if (leadFilters.utm_medium) {
-      attrType = '🏷️ utm_medium';
+      attrType = 'utm_medium';
       activeAttr = leadFilters.utm_medium;
     } else if (leadFilters.utm_campaign) {
-      attrType = '🏷️ utm_campaign';
+      attrType = 'utm_campaign';
       activeAttr = leadFilters.utm_campaign;
     } else if (leadFilters.utm_content) {
-      attrType = '🏷️ utm_content';
+      attrType = 'utm_content';
       activeAttr = leadFilters.utm_content;
     }
 
@@ -3131,11 +3131,11 @@
   function getStatusBadgeHtml(lead) {
     const status = getLeadStatus(lead);
     let css = 'status-new';
-    let icon = '🟢';
-    if (status === 'Attempted Contact') { css = 'status-attempted'; icon = '🟡'; }
-    if (status === 'Contacted') { css = 'status-contacted'; icon = '🔵'; }
-    if (status === 'Qualified') { css = 'status-qualified'; icon = '⭐'; }
-    if (status === 'Unqualified') { css = 'status-unqualified'; icon = '⚪'; }
+    let icon = '[NEW]';
+    if (status === 'Attempted Contact') { css = 'status-attempted'; icon = '[ATTEMPTED]'; }
+    if (status === 'Contacted') { css = 'status-contacted'; icon = '[CONTACTED]'; }
+    if (status === 'Qualified') { css = 'status-qualified'; icon = '[ENT]'; }
+    if (status === 'Unqualified') { css = 'status-unqualified'; icon = '[UNQUALIFIED]'; }
     return `<span class="status-badge ${css}">${icon} ${status}</span>`;
   }
 
@@ -3459,43 +3459,43 @@
     if (u.includes('calabrian') || tactic.includes('calabrian') || hook.includes('calabrian') || hook.includes('chili')) {
       pageTitle = 'Fontanini® Calabrian Chili Campaign';
       thumbImg = 'assets/landing_pages/real_calabrian_chili.png';
-      badgeText = '🌶️ Campaign Landing Page';
+      badgeText = 'Campaign Landing Page';
     } else if (u.includes('bacon-1') || u.includes('bacon1') || brand.includes('bacon')) {
       pageTitle = 'HORMEL® BACON 1™ Brand Portal';
       thumbImg = 'assets/landing_pages/real_bacon_1.png';
-      badgeText = '🥓 Brand Sample Page';
+      badgeText = 'Brand Sample Page';
     } else if (u.includes('fontanini') || brand.includes('fontanini') || u.includes('meatball')) {
       pageTitle = 'FONTANINI® Italian Meats & Pizza';
       thumbImg = 'assets/landing_pages/real_fontanini.png';
-      badgeText = '🍕 Brand Solutions Portal';
+      badgeText = 'Brand Solutions Portal';
     } else if (u.includes('flash-180') || brand.includes('flash 180') || hook.includes('under 3 min')) {
       pageTitle = 'FLASH 180™ Battered Chicken';
       thumbImg = 'assets/landing_pages/real_flash_180.png';
-      badgeText = '🍗 Speed-of-Service Portal';
+      badgeText = 'Speed-of-Service Portal';
     } else if (u.includes('fire-braised') || brand.includes('fire braised')) {
       pageTitle = 'HORMEL® FIRE BRAISED™ Meats';
       thumbImg = 'assets/landing_pages/real_fire_braised.png';
-      badgeText = '🔥 Flame-Seared Solutions';
+      badgeText = 'Flame-Seared Solutions';
     } else if (u.includes('austin-blues') || brand.includes('austin blues') || hook.includes('smokehouse')) {
       pageTitle = 'AUSTIN BLUES® BBQ';
       thumbImg = 'assets/landing_pages/real_austin_blues.png';
-      badgeText = '🍖 Hardwood BBQ Portal';
+      badgeText = 'Hardwood BBQ Portal';
     } else if (u.includes('find-distributor') || u.includes('locate-distributor')) {
       pageTitle = 'Find a Distributor Tool';
       thumbImg = 'assets/landing_pages/real_find_distributor.png';
-      badgeText = '🔍 Distributor Finder';
+      badgeText = 'Distributor Finder';
     } else if (u.includes('opt-in') || u.includes('newsletter')) {
       pageTitle = 'Operator Registration Portal';
       thumbImg = 'assets/landing_pages/real_opt_in.png';
-      badgeText = '📧 Operator Opt-In';
+      badgeText = 'Operator Opt-In';
     } else if (u.includes('contact')) {
       pageTitle = 'Contact A Rep Portal';
       thumbImg = 'assets/landing_pages/real_contact_us.png';
-      badgeText = '🤝 Contact A Rep';
+      badgeText = 'Contact A Rep';
     } else {
       pageTitle = 'Culinary Solutions Hub';
       thumbImg = 'assets/landing_pages/real_hfs_home.png';
-      badgeText = '🌐 Solutions Portal';
+      badgeText = 'Solutions Portal';
     }
 
     return {
@@ -3513,26 +3513,26 @@
     const badges = document.getElementById('drawer-badges');
     let opBadgeHtml = '';
     if (lead.mql_tier === 'certified_mql' || lead.is_verified_operator) {
-      opBadgeHtml = `<span class="badge-operator-certified" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🛡️ Certified Foodservice Outlet (MQL)</span>`;
+      opBadgeHtml = `<span class="badge-operator-certified" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ CERTIFIED MQL ]</span>`;
     } else if (lead.mql_tier === 'distributor') {
-      opBadgeHtml = `<span class="badge-distributor-partner" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🤝 Foodservice Distributor Partner</span>`;
+      opBadgeHtml = `<span class="badge-distributor-partner" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ DISTRIBUTOR PARTNER ]</span>`;
     } else if (lead.mql_tier === 'prospective') {
-      opBadgeHtml = `<span class="badge-operator-prospective" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🟡 Prospective Operator (Pending Match)</span>`;
+      opBadgeHtml = `<span class="badge-operator-prospective" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ PROSPECTIVE OPERATOR ]</span>`;
     } else if (lead.mql_tier === 'internal') {
-      opBadgeHtml = `<span class="badge-internal" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏢 Internal Corporate Record</span>`;
+      opBadgeHtml = `<span class="badge-internal" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ INTERNAL RECORD ]</span>`;
     } else {
-      opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏠 Home Cook / Consumer Profile</span>`;
+      opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ CONSUMER PROFILE ]</span>`;
     }
 
     const depDateStr = lead.tactic_run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
     badges.innerHTML = `
       ${opBadgeHtml}
-      <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">📅 Ad Deployed: ${escapeHtml(depDateStr)}</span>
-      <span class="badge badge-hook">🎯 ${escapeHtml(lead.key_hook)}</span>
+      <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">Flight Deployed: ${escapeHtml(depDateStr)}</span>
+      <span class="badge badge-hook">${escapeHtml(lead.key_hook)}</span>
       <span class="badge badge-brand">${escapeHtml(lead.brand)}</span>
       <span class="badge badge-segment">${escapeHtml(lead.subsegment || lead.segment)}</span>
       <span class="badge badge-type">${escapeHtml(lead.tactic_type)}</span>
-      ${lead.is_enterprise ? '<span class="badge badge-brand" style="background-color: #fef08a; color: #854d0e;">⭐ Enterprise Account</span>' : ''}
+      ${lead.is_enterprise ? '<span class="badge badge-brand" style="background-color: #fef08a; color: #854d0e;">[ ENTERPRISE ACCOUNT ]</span>' : ''}
     `;
 
     const emailLink = document.getElementById('drawer-email-link');
@@ -3547,8 +3547,8 @@
     document.getElementById('drawer-job-title').textContent = lead.job_title || '—';
     document.getElementById('drawer-company-name').innerHTML = `
       <strong>${escapeHtml(lead.company || 'Personal / Household')}</strong> 
-      <a href="https://www.google.com/search?q=${webSearchQ}" target="_blank" class="btn-web-search" style="margin-left: 10px;" title="Search web to verify address, phone, and menu">🔍 Web Search Operator Info ↗</a>
-      ${lead.company ? `<a href="${escapeHtml(lead.menu_search_url)}" target="_blank" class="text-link" style="margin-left: 8px;">🍽️ Menu</a>` : ''}
+      <a href="https://www.google.com/search?q=${webSearchQ}" target="_blank" class="btn-web-search" style="margin-left: 10px;" title="Search web to verify address, phone, and menu">Web Search Operator Info -></a>
+      ${lead.company ? `<a href="${escapeHtml(lead.menu_search_url)}" target="_blank" class="text-link" style="margin-left: 8px;">Menu -></a>` : ''}
       <div style="font-size: 0.72rem; color: #64748b; margin-top: 4px; font-weight: 500;">
         Audit: <span style="color: #0f172a; font-weight: 700;">${escapeHtml(lead.verification_source || 'Standard Contact')}</span>
       </div>
@@ -3563,7 +3563,7 @@
     document.getElementById('drawer-products').textContent = lead.products || '—';
     document.getElementById('drawer-crm-id').innerHTML = lead.crm_id ? `<a href="${getCrmUrl(lead.crm_id)}" target="_blank" class="text-link">${escapeHtml(lead.crm_id)}</a>` : '—';
     const depEl = document.getElementById('drawer-tactic-deployment-date');
-    if (depEl) depEl.textContent = `📅 ${depDateStr}`;
+    if (depEl) depEl.textContent = `${depDateStr}`;
     const adUnitEl = document.getElementById('drawer-ad-unit-name');
     if (adUnitEl) adUnitEl.textContent = lead.tactic_name || '—';
 
@@ -3687,12 +3687,12 @@
 
       const thumbHtml = touch.img ? `
         <div class="pathway-thumb-col" title="Click to open full creative image">
-          <img src="${escapeHtml(touch.img)}" alt="${escapeHtml(touch.name)}" class="tactic-thumb-img" onclick="window.open('${escapeHtml(touch.img)}', '_blank')" onerror="this.parentElement.innerHTML='<div class=\'creative-thumb-fallback\'><span>📷</span><small>Image not available</small></div>';">
+          <img src="${escapeHtml(touch.img)}" alt="${escapeHtml(touch.name)}" class="tactic-thumb-img" onclick="window.open('${escapeHtml(touch.img)}', '_blank')" onerror="this.parentElement.innerHTML='<div class=\'creative-thumb-fallback\'><span>[ Image ]</span><small>Image not available</small></div>';">
         </div>
       ` : `
         <div class="pathway-thumb-col">
           <div class="creative-thumb-fallback" title="Creative visual not found in media deck">
-            <span>📷</span>
+            <span>[ Image ]</span>
             <small>Image not available</small>
           </div>
         </div>
@@ -3704,7 +3704,7 @@
           <div class="pathway-details-col">
             <div class="pathway-step-header">
               <span>${touchTitle}</span>
-              <span class="attr-clickable drawer-isolate-tactic" data-isolate-tactic="${touch.tactic ? touch.tactic.id : lead.tactic_id}" style="color: #0284c7; text-decoration: underline; font-size: 0.6875rem;" title="Isolate leads for this placement">Isolate Tactic ➔</span>
+              <span class="attr-clickable drawer-isolate-tactic" data-isolate-tactic="${touch.tactic ? touch.tactic.id : lead.tactic_id}" style="color: #0284c7; text-decoration: underline; font-size: 0.6875rem;" title="Isolate leads for this placement">Isolate Tactic &rarr;</span>
             </div>
             
             <div style="font-weight: 700; font-size: 0.8125rem; color: var(--jtm-petrol); margin-bottom: 3px;">
@@ -3712,7 +3712,7 @@
             </div>
 
             <div class="pathway-date-badge">
-              📅 Run Date: <strong>${escapeHtml(touch.dateStr)}</strong>
+              Run Date: <strong>${escapeHtml(touch.dateStr)}</strong>
             </div>
 
             <div style="font-size: 0.6875rem; color: var(--text-muted); margin-bottom: 6px;">
@@ -3763,13 +3763,13 @@
         <div class="conversion-thumb-col" title="Click to view live conversion page: ${escapeHtml(pageInfo.rawUrl)}" onclick="window.open('${escapeHtml(pageInfo.rawUrl)}', '_blank')">
           <img src="${escapeHtml(pageInfo.thumbImg)}" alt="${escapeHtml(pageInfo.pageTitle)}" class="conversion-thumb-img" onerror="this.src='assets/landing_pages/real_hfs_home.png'">
           <div class="thumb-hover-overlay">
-            <span>🔍 Open Live Page ↗</span>
+            <span>Open Live Page -></span>
           </div>
         </div>
 
         <div class="pathway-details-col">
           <div class="pathway-step-header">
-            <span style="color: #047857; font-weight: 800;">📍 Landing Page Viewed</span>
+            <span style="color: #047857; font-weight: 800;">Landing Page Viewed</span>
             <a href="${escapeHtml(pageInfo.rawUrl)}" target="_blank" class="conversion-external-btn" title="Open page in new tab">
               Open Page ↗
             </a>
@@ -3780,13 +3780,13 @@
           </div>
 
           <div class="pathway-date-badge" style="background: #f0fdf4; color: #166534; border-color: #bbf7d0; margin-bottom: 6px;">
-            📅 Conversion Date: <strong>${escapeHtml(lead.date)}</strong>
+            Conversion Date: <strong>${escapeHtml(lead.date)}</strong>
           </div>
 
           <div class="conversion-url-container">
             <span class="conversion-url-label">Destination URL:</span>
             <a href="${escapeHtml(pageInfo.rawUrl)}" target="_blank" class="conversion-clickable-url" title="Click to open conversion page in new browser tab">
-              🔗 ${escapeHtml(pageInfo.rawUrl)}
+              ${escapeHtml(pageInfo.rawUrl)}
             </a>
           </div>
         </div>
@@ -3849,11 +3849,11 @@
     const actCrm = document.getElementById('action-crm');
     if (lead.crm_id) {
       actCrm.style.display = 'inline-flex';
-      actCrm.innerHTML = '☁️ Salesforce CRM';
+      actCrm.innerHTML = 'Salesforce CRM';
       actCrm.onclick = () => window.open(getCrmUrl(lead.crm_id), '_blank');
     } else if (lead.company || lead.full_name) {
       actCrm.style.display = 'inline-flex';
-      actCrm.innerHTML = '🔍 Search CRM';
+      actCrm.innerHTML = 'Search CRM';
       actCrm.onclick = () => window.open(`https://hormel.lightning.force.com/lightning/globalSearch/results?q=${encodeURIComponent(lead.company || lead.full_name)}`, '_blank');
     } else {
       actCrm.style.display = 'none';
@@ -4154,18 +4154,18 @@ Hormel Foodservice`;
     let html = '';
     topTargets.forEach(lead => {
       let tierClass = 'tier-3';
-      let tierLabel = '🚀 Tier 3: High-Volume Flag';
+      let tierLabel = 'Tier 3: High-Volume Flag';
       let revenueEst = '$35,000 - $75,000 ARR';
       let caseEst = '750+ cases/yr';
 
       if (lead.is_enterprise || lead.lead_score >= 95) {
         tierClass = 'tier-1';
-        tierLabel = '⭐ Tier 1: Mega-Chain / Feeder';
+        let tierLabel = 'Tier 1: Mega-Chain / Feeder';
         revenueEst = '$175,000 - $350,000 ARR';
         caseEst = '3,500+ cases/yr';
       } else if (lead.lead_score >= 80) {
         tierClass = 'tier-2';
-        tierLabel = '💎 Tier 2: Regional Group (10-50 units)';
+        let tierLabel = 'Tier 2: Regional Group (10-50 units)';
         revenueEst = '$85,000 - $160,000 ARR';
         caseEst = '1,800+ cases/yr';
       }
@@ -4198,7 +4198,7 @@ Hormel Foodservice`;
           <div class="target-card-top">
             <div>
               <h4 class="target-comp-name">${escapeHtml(lead.company)}</h4>
-              <div class="target-contact-role">👤 ${escapeHtml(lead.full_name || 'Key Contact')} • ${escapeHtml(lead.job_title || 'Decision Maker')}</div>
+              <div class="target-contact-role">${escapeHtml(lead.full_name || 'Key Contact')} • ${escapeHtml(lead.job_title || 'Decision Maker')}</div>
             </div>
             <span class="target-revenue-badge" title="Estimated annual potential based on segment and scale">${revenueEst}</span>
           </div>
@@ -4207,8 +4207,8 @@ Hormel Foodservice`;
             <span class="tier-chip ${tierClass}">${tierLabel}</span>
             <span class="badge badge-segment">${escapeHtml(lead.subsegment || lead.segment || 'Foodservice')}</span>
             <span class="badge badge-brand">${escapeHtml(lead.brand)}</span>
-            <span class="badge" style="background: #f1f5f9; color: #475569;">📍 ${escapeHtml(lead.city || 'Metro')}, ${escapeHtml(lead.state || 'US')}</span>
-            <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 800;">⚡ Score ${lead.lead_score}/100</span>
+            <span class="badge" style="background: #f1f5f9; color: #475569;">${escapeHtml(lead.city || 'Metro')}, ${escapeHtml(lead.state || 'US')}</span>
+            <span class="badge" style="background: #ecfdf5; color: #065f46; font-weight: 800;">Score: ${lead.lead_score}/100</span>
           </div>
 
           <div class="target-sales-hook">
@@ -4217,10 +4217,10 @@ Hormel Foodservice`;
 
           <div class="target-actions-row">
             <button class="btn-target-isolate" data-comp="${escapeHtml(lead.company)}" title="Isolate this operator in Sales Leads Explorer">
-              📋 Isolate in Leads Table
+              Isolate in Leads Table ->
             </button>
             <a href="https://www.google.com/search?q=${webSearchQ}" target="_blank" class="btn-target-web" title="Search Google for operator location and menu">
-              🔍 Web Search & Verify ↗
+              Web Search & Verify ->
             </a>
           </div>
         </div>
@@ -4290,7 +4290,7 @@ Hormel Foodservice`;
       html += `
         <div class="aud-item-row">
           <div class="aud-item-header">
-            <span class="aud-item-label" title="${role}">👔 ${role}</span>
+            <span class="aud-item-label" title="${role}">${role}</span>
             <span class="aud-item-stat">${count.toLocaleString()} <span style="font-weight: 500; color: #64748b;">(${pct}%)</span></span>
           </div>
           <div class="aud-item-bar">
@@ -4352,7 +4352,7 @@ Hormel Foodservice`;
       html += `
         <div class="aud-item-row">
           <div class="aud-item-header">
-            <span class="aud-item-label" title="${seg}">🍽️ ${seg}</span>
+            <span class="aud-item-label" title="${seg}">${seg}</span>
             <span class="aud-item-stat">${count.toLocaleString()} <span style="font-weight: 500; color: #64748b;">(${pct}%)</span></span>
           </div>
           <div class="aud-item-bar">
@@ -4383,7 +4383,7 @@ Hormel Foodservice`;
       html += `
         <div class="aud-item-row">
           <div class="aud-item-header">
-            <span class="aud-item-label" title="${state}">📍 ${state}</span>
+            <span class="aud-item-label" title="${state}">${state}</span>
             <span class="aud-item-stat">${count.toLocaleString()} <span style="font-weight: 500; color: #64748b;">(${pct}%)</span></span>
           </div>
           <div class="aud-item-bar">
@@ -4414,7 +4414,7 @@ Hormel Foodservice`;
       html += `
         <div class="aud-item-row">
           <div class="aud-item-header">
-            <span class="aud-item-label" title="${name}">🎯 ${name}</span>
+            <span class="aud-item-label" title="${name}">${name}</span>
             <span class="aud-item-stat">${count.toLocaleString()} <span style="font-weight: 500; color: #64748b;">(${pct}%)</span></span>
           </div>
           <div class="aud-item-bar">
@@ -4445,7 +4445,7 @@ Hormel Foodservice`;
       html += `
         <div class="aud-item-row">
           <div class="aud-item-header">
-            <span class="aud-item-label" title="${hook}">💡 ${hook}</span>
+            <span class="aud-item-label" title="${hook}">${hook}</span>
             <span class="aud-item-stat">${count.toLocaleString()} <span style="font-weight: 500; color: #64748b;">(${pct}%)</span></span>
           </div>
           <div class="aud-item-bar">
@@ -4479,7 +4479,7 @@ Hormel Foodservice`;
       html += `
         <div class="aud-item-row">
           <div class="aud-item-header">
-            <span class="aud-item-label" title="${pub}">📰 ${pub}</span>
+            <span class="aud-item-label" title="${pub}">${pub}</span>
             <span class="aud-item-stat">${data.count.toLocaleString()} <span style="font-weight: 500; color: #64748b;">(${pct}% • <strong style="color: var(--jtm-emerald);">${intentRate}% High Intent</strong>)</span></span>
           </div>
           <div class="aud-item-bar">
@@ -5267,7 +5267,7 @@ Hormel Foodservice`;
           <span class="whale-lead-count-badge">${badgeLabel}</span>
         </div>
         <div class="whale-meta-row">
-          <span>📍 ${escapeHtml(w.loc)}</span>
+          <span>${escapeHtml(w.loc)}</span>
           <span>•</span>
           <span>${escapeHtml(w.segLabel)}</span>
         </div>
@@ -5282,7 +5282,7 @@ Hormel Foodservice`;
           </div>
         </div>
         <button class="btn-inspect-whale" data-company="${escapeHtml(w.name)}">
-          Inspect ${displayCount} Leads in Table ➔
+          Inspect ${displayCount} Leads in Table &rarr;
         </button>
       </div>
     `;
@@ -5408,24 +5408,24 @@ Hormel Foodservice`;
 
     let skusHtml = pkg.primary_skus.map(sku => `
       <div class="matcher-sku-tag">
-        <span>📦 ${escapeHtml(sku)}</span>
+        <span>${escapeHtml(sku)}</span>
       </div>
     `).join('');
 
     container.innerHTML = `
       <div class="matcher-card-main">
         <div class="matcher-headline-row">
-          <span class="matcher-segment-tag">🎯 Segment: ${escapeHtml(pkg.segment_name)}</span>
+          <span class="matcher-segment-tag">Segment: ${escapeHtml(pkg.segment_name)}</span>
           <h4 class="matcher-package-title">${escapeHtml(pkg.headline)}</h4>
         </div>
 
         <div class="matcher-section-block">
-          <div class="matcher-block-title">📢 Tailored Sales Rep Elevator Pitch:</div>
+          <div class="matcher-block-title">// TAILORED SALES REP ELEVATOR PITCH //</div>
           <p class="matcher-pitch-text">"${escapeHtml(pkg.elevator_pitch)}"</p>
         </div>
 
         <div class="matcher-section-block">
-          <div class="matcher-block-title">⚡ Back-of-House Labor & Profit Advantage:</div>
+          <div class="matcher-block-title">// BACK-OF-HOUSE LABOR & PROFIT ADVANTAGE //</div>
           <div class="matcher-advantage-box">${escapeHtml(pkg.labor_advantage)}</div>
         </div>
 
@@ -5442,10 +5442,10 @@ Hormel Foodservice`;
 
         <div class="matcher-actions-row">
           <button class="btn btn-primary btn-copy-pitch" id="btn-copy-solution-pitch">
-            📋 Copy Elevator Pitch to Clipboard
+            Copy Elevator Pitch to Clipboard
           </button>
           <a href="https://www.hormelfoodservice.com/contact/" target="_blank" class="btn btn-secondary">
-            📦 Request Segment Sample Kit ↗
+            Request Segment Sample Kit ->
           </a>
         </div>
       </div>
@@ -5492,15 +5492,15 @@ Hormel Foodservice`;
 
             <div class="brand-specs-grid">
               <div class="brand-spec-box">
-                <span class="spec-label">⏱️ Cooking / Pickup:</span>
+                <span class="spec-label">Cooking / Pickup:</span>
                 <span class="spec-val">${escapeHtml(b.prep_specs.convection_oven || b.prep_specs.deep_fryer || b.prep_specs.oven_bake || b.prep_specs.steamer_or_oven || 'Heat & Serve')}</span>
               </div>
               <div class="brand-spec-box">
-                <span class="spec-label">⚡ BOH Labor Savings:</span>
+                <span class="spec-label">BOH Labor Savings:</span>
                 <span class="spec-val">${escapeHtml(b.prep_specs.labor_savings)}</span>
               </div>
               <div class="brand-spec-box">
-                <span class="spec-label">📈 Yield Advantage:</span>
+                <span class="spec-label">Yield Advantage:</span>
                 <span class="spec-val">${escapeHtml(b.prep_specs.yield_advantage)}</span>
               </div>
             </div>
@@ -5518,13 +5518,13 @@ Hormel Foodservice`;
 
           <div class="brand-card-footer">
             <a href="${escapeHtml(b.site_url)}" target="_blank" class="btn btn-secondary btn-sm" title="Open official brand portal on hormelfoodservice.com">
-              🌐 Visit Brand Page ↗
+              Visit Brand Page ->
             </a>
             <a href="${escapeHtml(b.sample_url)}" target="_blank" class="btn btn-primary btn-sm" style="background: var(--jtm-petrol); border-color: var(--jtm-petrol);" title="Request operator product samples">
-              📦 Order Samples ↗
+              Order Samples ->
             </a>
             <button class="btn btn-outline btn-sm btn-filter-leads-brand" data-brand="${escapeHtml(b.brand_line)}">
-              🔍 Inspect Leads
+              Inspect Leads ->
             </button>
           </div>
         </div>
@@ -5648,7 +5648,7 @@ Hormel Foodservice`;
 
     // Concept detection
     if (sub.includes('pizz') || sub.includes('italian') || name.includes('pizza') || name.includes('pizzeria') || name.includes('pie') || name.includes('crust') || name.includes('trattoria') || name.includes('napoletana') || brand.includes('fontanini')) {
-      archetype = '🍕 Artisanal Craft Pizzeria & Italian Kitchen';
+      archetype = 'Artisanal Craft Pizzeria & Italian Kitchen';
       knownFor = `Known for hand-stretched crispy pies, wood-fired or Detroit-style deep dish crusts, fresh mozzarella, savory garlic knots, and craft Italian sandwiches. High emphasis on artisan visual blistering, cup-and-char oil retention, and premium toppings that command $4-$6 menu price upsells.`;
       opsChallenge = `BOH Focus: Eliminating raw meat prep, reducing grease pooling on dough, and speeding up oven turnaround times during peak dinner rush.`;
       ideas = [
@@ -5657,25 +5657,25 @@ Hormel Foodservice`;
           sku: 'Fontanini® Hot Calabrian Chili Sausage Crumbles (#204515)',
           placement: 'Signature Specialty Pizza ($24–$28)',
           desc: 'Hand-stretched dough with San Marzano tomato sauce, fresh mozzarella, Fontanini spicy Calabrian crumbles, fresh basil, and a post-bake drizzle of spicy hot honey.',
-          advantage: '⏱️ Prep: 0 min (fully cooked crumbles) • 100% usable yield • Zero grease-soak on dough.'
+          advantage: 'Prep: 0 min (fully cooked crumbles) • 100% usable yield • Zero grease-soak on dough.'
         },
         {
           name: 'Detroit-Style Cup & Char Crispy Pepperoni & Sausage',
           sku: 'Fontanini® Cup & Char Pepperoni & Sausage (#204510)',
           placement: 'Deep Dish Feature ($26.99)',
           desc: 'Thick focaccia-style crust with caramelized cheddar frico edges, topped with Fontanini cup & char pepperoni that crisps into savory oil-holding chalices.',
-          advantage: '⚡ Advantage: High-visual social media appeal; drives premium $4 topping upgrades.'
+          advantage: 'Advantage: High-visual social media appeal; drives premium $4 topping upgrades.'
         },
         {
           name: 'Smoky Bacon Jam & Whipped Ricotta White Flatbread',
           sku: 'HORMEL® BACON 1™ Fully Cooked Thick Cut (#102341)',
           placement: 'Shareable Starter / LTO ($16.50)',
           desc: 'Garlic-infused olive oil, whole-milk ricotta, shredded fontina, caramelized balsamic red onions, and chopped crispy Bacon 1 thick-cut lardons.',
-          advantage: '⏱️ Prep: 3 min convection bake • Saves 30 min of messy morning bacon sheet-pan frying.'
+          advantage: 'Prep: 3 min convection bake • Saves 30 min of messy morning bacon sheet-pan frying.'
         }
       ];
     } else if (sub.includes('breakfast') || sub.includes('brunch') || sub.includes('cafe') || sub.includes('diner') || name.includes('diner') || name.includes('cafe') || name.includes('pancake') || name.includes('waffle') || name.includes('biscuit') || name.includes('roasters') || name.includes('bagel') || name.includes('coffee')) {
-      archetype = '🍳 High-Volume Morning Breakfast & Brunch Cafe';
+      archetype = 'High-Volume Morning Breakfast & Brunch Cafe';
       knownFor = `Known for high-volume morning table turns, scratch-baked buttermilk biscuits, fluffy pancakes, signature Benedicts, sizzling morning meat platters, and loaded breakfast skillets. Guests prioritize thick, crispy, aromatic bacon and quick plate delivery.`;
       opsChallenge = `BOH Focus: Massive morning bacon grease cleanup, uneven flat-top grill heat, and raw bacon shrinkage (over 65% weight lost with raw).`;
       ideas = [
@@ -5684,25 +5684,25 @@ Hormel Foodservice`;
           sku: 'HORMEL® BACON 1™ Pecanwood Thick Cut (#102341)',
           placement: 'Brunch Starter Flight ($12.99)',
           desc: '4-strip vertical flight of thick-cut Bacon 1 glazed with brown sugar, cracked black peppercorns, smoked paprika, and pure hot maple syrup drizzle.',
-          advantage: '⚡ Advantage: 82% food margin appetizer • Ready in 3 min in oven • Zero grease splatter.'
+          advantage: 'Advantage: 82% food margin appetizer • Ready in 3 min in oven • Zero grease splatter.'
         },
         {
           name: 'Crispy Hot Honey Chicken & Buttermilk Waffle Benny',
           sku: 'FLASH 180™ Sous Vide Battered Chicken Breast (#306110)',
           placement: 'Weekend Feature Entree ($18.50)',
           desc: 'Scratch Belgian waffle topped with a crispy fried Flash 180 chicken breast, poached farm egg, Hollandaise, and spicy hot honey drizzle.',
-          advantage: '⏱️ Prep: Drops from frozen to golden-crisp in 3 min • Zero raw poultry cross-contamination.'
+          advantage: 'Prep: Drops from frozen to golden-crisp in 3 min • Zero raw poultry cross-contamination.'
         },
         {
           name: 'Loaded Fire-Braised Carnitas Breakfast Hash Skillet',
           sku: 'HORMEL® FIRE BRAISED™ Pork Shoulder / Cafe H (#408210)',
           placement: 'Signature Morning Skillet ($15.99)',
           desc: 'Crispy seasoned hash browns topped with tender flame-seared carnitas, two sunny eggs, pickled red onions, cotija cheese, and cilantro crema.',
-          advantage: '⏱️ Prep: Heat & serve in 4 min • Eliminates 4 hours of overnight pork braising.'
+          advantage: 'Prep: Heat & serve in 4 min • Eliminates 4 hours of overnight pork braising.'
         }
       ];
     } else if (sub.includes('bbq') || sub.includes('smoke') || name.includes('bbq') || name.includes('barbeque') || name.includes('smokehouse') || name.includes('pit') || name.includes('ribs') || name.includes('brisket') || brand.includes('austin-blues')) {
-      archetype = '🍖 Hardwood Pit Smokehouse & Southern Kitchen';
+      archetype = 'Hardwood Pit Smokehouse & Southern Kitchen';
       knownFor = `Known for low-and-slow hardwood pit barbecue, tender sliced brisket, pulled pork platters, St. Louis ribs, house-made sauces, and hearty southern comfort sides. Operators face 12-16 hour smoke times and volatile meat shrinkage.`;
       opsChallenge = `BOH Focus: Running out of fresh-pit brisket during unexpected weekend rush, smoker capacity limits, and overnight labor costs.`;
       ideas = [
@@ -5711,25 +5711,25 @@ Hormel Foodservice`;
           sku: 'AUSTIN BLUES® Hardwood Smoked Burnt Ends (#501115)',
           placement: 'Premium Comfort Entree ($17.50)',
           desc: 'Cavatappi pasta tossed in four-cheese mornay, topped with Austin Blues hardwood pit-smoked brisket burnt ends, crispy fried onions, and BBQ drizzle.',
-          advantage: '⏱️ Prep: 4 min assemble & bake • Consistent smokehouse flavor with zero pit shrinkage.'
+          advantage: 'Prep: 4 min assemble & bake • Consistent smokehouse flavor with zero pit shrinkage.'
         },
         {
           name: 'Pitmaster Hardwood Brisket & Cheddar Melt',
           sku: 'AUSTIN BLUES® Smoked Beef Brisket (#501115)',
           placement: 'Signature Lunch Sandwich ($16.95)',
           desc: 'Toasted buttery Texas toast loaded with tender sliced Austin Blues brisket, melted sharp cheddar, caramelized onions, and smoky chipotle BBQ sauce.',
-          advantage: '⚡ Advantage: Perfect emergency backup protein when pit brisket sells out on busy nights.'
+          advantage: 'Advantage: Perfect emergency backup protein when pit brisket sells out on busy nights.'
         },
         {
           name: 'Flame-Seared Rib Tips & Southern Fried Okra Basket',
           sku: 'HORMEL® FIRE BRAISED™ St. Louis Pork Ribs (#408210)',
           placement: 'Smokehouse Appetizer ($14.99)',
           desc: 'Flame-seared tender pork rib tips glazed in honey bourbon BBQ, served with crispy fried okra and house dill ranch dipping sauce.',
-          advantage: '⏱️ Prep: 6 min convection retherm • High perceived artisan value with 100% yield.'
+          advantage: 'Prep: 6 min convection retherm • High perceived artisan value with 100% yield.'
         }
       ];
     } else if (name.includes('taco') || name.includes('taqueria') || name.includes('mexican') || name.includes('cantina') || name.includes('burrito') || name.includes('latin') || brand.includes('cafe-h')) {
-      archetype = '🌮 Fast Casual Mexican Taqueria & Cantina';
+      archetype = 'Fast Casual Mexican Taqueria & Cantina';
       knownFor = `Known for vibrant street tacos, slow-braised carnitas, tender barbacoa, loaded quesadillas, fresh salsas, and margaritas. High demand for authentic charred meat edges and speed-of-service on the taco line.`;
       opsChallenge = `BOH Focus: Inconsistent pork braising, high lard fat rendering waste, and slow shredded meat prep during lunch rushes.`;
       ideas = [
@@ -5738,25 +5738,25 @@ Hormel Foodservice`;
           sku: 'CAFÉ H® Flame-Seared Carnitas (#602110)',
           placement: 'Street Taco Trio ($14.95)',
           desc: 'Double warm corn tortillas loaded with crispy seared Cafe H carnitas, diced charred pineapple salsa, chopped white onion, cilantro, and lime wedges.',
-          advantage: '⏱️ Prep: Flat-top sear in 90 seconds • Saves 4 hours of slow braising and lard rendering.'
+          advantage: 'Prep: Flat-top sear in 90 seconds • Saves 4 hours of slow braising and lard rendering.'
         },
         {
           name: 'Quesabirria-Style Fontanini Sausage & Cheese Crisp',
           sku: 'Fontanini® Hot Calabrian Chili Sausage Crumbles (#204515)',
           placement: 'Cantina Shareable ($13.50)',
           desc: 'Griddled flour tortilla dipped in chili oil, stuffed with melted Oaxaca cheese and savory Calabrian sausage, served with spicy dipping consommé.',
-          advantage: '⚡ Advantage: Leverages the viral birria trend with spicy Italian sausage flair • 2 min ticket time.'
+          advantage: 'Advantage: Leverages the viral birria trend with spicy Italian sausage flair • 2 min ticket time.'
         },
         {
           name: 'Loaded Flame-Seared Carnitas Nachos Supremos',
           sku: 'HORMEL® FIRE BRAISED™ Pork Carnitas (#408210)',
           placement: 'Bar Daypart Shareable ($16.00)',
           desc: 'House-fried corn tortilla chips layered with queso blanco, fire-braised carnitas, black beans, pickled jalapeños, guacamole, and lime crema.',
-          advantage: '⏱️ Prep: Fast assembly on line • Massive check-average booster for bar dayparts.'
+          advantage: 'Prep: Fast assembly on line • Massive check-average booster for bar dayparts.'
         }
       ];
     } else if (sub.includes('college') || sub.includes('c&u') || sub.includes('univers') || sub.includes('campus') || name.includes('university') || name.includes('college') || brand.includes('halal')) {
-      archetype = '🎓 Higher Education Residential Dining & Food Hall';
+      archetype = 'Higher Education Residential Dining & Food Hall';
       knownFor = `Known for multi-station dining halls, rotating global street food fare, late-night student retail grabs, and surging demand for Halal-certified, clean-label, and allergen-friendly proteins. Need scalable, high-volume batch-cooking solutions that hold well on steam lines.`;
       opsChallenge = `BOH Focus: High turnover student labor, cross-contamination concerns with specialized diets (Halal), and keeping proteins moist during 90-minute lunch rushes.`;
       ideas = [
@@ -5765,25 +5765,25 @@ Hormel Foodservice`;
           sku: 'Hormel® Certified Halal Pepperoni (#137666)',
           placement: 'Global Campus Dining Station ($11.50)',
           desc: 'Hand-tossed flatbread with plum tomato sauce, whole milk mozzarella, certified Halal beef/lamb pepperoni, and a drizzle of spicy hot honey.',
-          advantage: '⚡ Advantage: Provides certified Halal inclusivity without requiring a separate prep line.'
+          advantage: 'Advantage: Provides certified Halal inclusivity without requiring a separate prep line.'
         },
         {
           name: 'Baja Street Taco Station (Flash 180 Chicken & Carnitas)',
           sku: 'FLASH 180™ Chicken Cutlets & Cafe H® Carnitas (#602110)',
           placement: 'World Fare Action Station ($12.00)',
           desc: 'Warm tortillas with sliced crispy Flash 180 chicken or slow-braised carnitas, topped with pickled red onions, cilantro, and chipotle crema.',
-          advantage: '⏱️ Prep: 3 min fryer retherm • High student visual excitement with zero raw poultry risks.'
+          advantage: 'Prep: 3 min fryer retherm • High student visual excitement with zero raw poultry risks.'
         },
         {
           name: 'Smoked Turkey & Avocado Club Grab-and-Go Wrap',
           sku: 'JENNIE-O® Grand Champion Turkey & Bacon 1 (#703110)',
           placement: 'Campus Micro-Market ($9.95)',
           desc: 'Sliced tender turkey breast, crispy Bacon 1, sliced avocado, romaine, and herb aioli wrapped in a spinach tortilla.',
-          advantage: '⏱️ Prep: Fast cold assembly • Holds peak freshness and crispness for 48 hours in coolers.'
+          advantage: 'Prep: Fast cold assembly • Holds peak freshness and crispness for 48 hours in coolers.'
         }
       ];
     } else if (sub.includes('health') || sub.includes('hospital') || sub.includes('senior') || sub.includes('living') || sub.includes('care') || name.includes('hospital') || name.includes('health') || name.includes('senior')) {
-      archetype = '🏥 Healthcare Nutrition & Senior Living Dining';
+      archetype = 'Healthcare Nutrition & Senior Living Dining';
       knownFor = `Known for balanced, low-sodium dietary compliant meals, patient tray lines, cafeteria dining, and resident dining rooms. High focus on fork-tender proteins, clean-label nutrition, allergen safety, and moisture retention under steam table holding.`;
       opsChallenge = `BOH Focus: Strict dietary guidelines (low sodium/fat), eliminating tough or dry meats, and lack of trained culinary cooks on tray assembly lines.`;
       ideas = [
@@ -5792,25 +5792,25 @@ Hormel Foodservice`;
           sku: 'JENNIE-O® Grand Champion Turkey Roast (#703110)',
           placement: 'Patient Tray & Dining Room Entree',
           desc: 'Tender sliced Jennie-O turkey breast served with roasted root vegetables, mashed sweet potatoes, and low-sodium poultry au jus.',
-          advantage: '⚡ Advantage: Low-sodium dietary compliance with zero back-of-house raw poultry contamination.'
+          advantage: 'Advantage: Low-sodium dietary compliance with zero back-of-house raw poultry contamination.'
         },
         {
           name: 'Flame-Seared Pork Loin with Roasted Apple Chutney',
           sku: 'HORMEL® FIRE BRAISED™ Boneless Pork Loin (#408210)',
           placement: 'Resident Signature Dining Feature',
           desc: 'Seared boneless pork loin medallions with braised cinnamon apples, steamed green beans, and wild rice pilaf.',
-          advantage: '⏱️ Prep: Superior moisture retention under heat lamps • Eliminates tough, dry pork complaints.'
+          advantage: 'Prep: Superior moisture retention under heat lamps • Eliminates tough, dry pork complaints.'
         },
         {
           name: 'Fork-Tender Braised Beef & Vegetable Ragout',
           sku: 'HORMEL® FIRE BRAISED™ Beef Chuck Roast (#408210)',
           placement: 'Therapeutic Comfort Entree',
           desc: 'Slow flame-seared chuck roast shredded over buttered egg noodles with savory herb brown gravy.',
-          advantage: '⏱️ Prep: Compatible with mechanical soft / IDDSI texture-modified senior diets.'
+          advantage: 'Prep: Compatible with mechanical soft / IDDSI texture-modified senior diets.'
         }
       ];
     } else if (sub.includes('sports') || sub.includes('bar') || sub.includes('pub') || sub.includes('brew') || name.includes('pub') || name.includes('brewery') || name.includes('tavern') || name.includes('taproom') || name.includes('grill')) {
-      archetype = '🍺 Neighborhood Sports Bar & Craft Brewpub';
+      archetype = 'Neighborhood Sports Bar & Craft Brewpub';
       knownFor = `Known for shareable finger foods, double smash burgers, loaded tots and fries, craft draft beer pairings, and elevated late-night bar bites. Kitchens prioritize lightning-fast execution that can be handled by a single fry cook during big game days.`;
       opsChallenge = `BOH Focus: Fryer bottleneck during game times, slow burger prep times, and food waste from unsold perishable meats.`;
       ideas = [
@@ -5819,26 +5819,26 @@ Hormel Foodservice`;
           sku: 'FLASH 180™ 3 oz Chicken Sliders / Breast (#306110)',
           placement: 'Game-Day Shareable Platter ($15.99)',
           desc: 'Golden-crispy chicken cutlets dipped in fiery Nashville hot oil, sweet bread & butter pickles, and house slaw on toasted brioche slider buns.',
-          advantage: '⏱️ Prep: 3 min in deep fryer • Zero waste, drops directly from frozen.'
+          advantage: 'Prep: 3 min in deep fryer • Zero waste, drops directly from frozen.'
         },
         {
           name: 'The Ultimate Double Bacon Jam Smash Burger',
           sku: 'HORMEL® BACON 1™ Traditional Cut (#102342)',
           placement: 'Signature Brewpub Burger ($17.50)',
           desc: 'Twin smashed patties, American cheese, grilled onions, house burger sauce, and 4 criss-crossed strips of perfectly flat Bacon 1.',
-          advantage: '⚡ Advantage: Bacon 1 stays flat and crispy, cutting 40 seconds off burger assembly time.'
+          advantage: 'Advantage: Bacon 1 stays flat and crispy, cutting 40 seconds off burger assembly time.'
         },
         {
           name: 'Smoked Pork Belly Burnt End Loaded Queso Tots',
           sku: 'AUSTIN BLUES® Hardwood Smoked Burnt Ends (#501115)',
           placement: 'Craft Beer Pairing Starter ($16.50)',
           desc: 'Crispy potato tots smothered in warm craft beer cheese queso, Austin Blues hardwood-smoked burnt ends, pickled jalapeños, and BBQ drizzle.',
-          advantage: '⏱️ Prep: Ready in 4 min • Transforms a $4 side of tots into a $16 premium appetizer.'
+          advantage: 'Prep: Ready in 4 min • Transforms a $4 side of tots into a $16 premium appetizer.'
         }
       ];
     } else {
       // Default: Casual American Dining & Family Grill
-      archetype = '🍽️ Casual American Dining & Neighborhood Grill';
+      archetype = 'Casual American Dining & Neighborhood Grill';
       knownFor = `Known for family-friendly comfort entrees, classic burgers, club sandwiches, hearty pasta, and signature appetizers. Menus emphasize quality ingredients, generous portions, and familiar favorites with modern flavor twists.`;
       opsChallenge = `BOH Focus: Short-staffed line cooks, rising raw protein food costs, and maintaining consistent plate presentation across all shifts.`;
       ideas = [
@@ -5847,21 +5847,21 @@ Hormel Foodservice`;
           sku: 'HORMEL® BACON 1™ Fully Cooked Bacon (#102342)',
           placement: 'Signature Lunch Classic ($15.50)',
           desc: 'Toasted sourdough stacked with sliced turkey breast, crisp lettuce, ripe tomatoes, garlic aioli, and 4 strips of thick-cut Bacon 1.',
-          advantage: '⏱️ Prep: Ready in 90 seconds • 100% pre-cooked with zero shrink or raw bacon hassle.'
+          advantage: 'Prep: Ready in 90 seconds • 100% pre-cooked with zero shrink or raw bacon hassle.'
         },
         {
           name: 'Fontanini Sausage & Rigatoni Bolognese',
           sku: 'Fontanini® Artisan Sausage Crumbles (#204510)',
           placement: 'Dinner Pasta Entree ($19.99)',
           desc: 'Al dente rigatoni tossed in rich slow-simmered tomato cream sauce with savory Fontanini Italian sausage crumbles, finished with shaved parmesan.',
-          advantage: '⏱️ Prep: 4 min saute retherm • Delivers authentic Italian trattoria flavor with zero raw meat prep.'
+          advantage: 'Prep: 4 min saute retherm • Delivers authentic Italian trattoria flavor with zero raw meat prep.'
         },
         {
           name: 'Flash 180 Crispy Chicken Tenderloin Basket',
           sku: 'FLASH 180™ Sous Vide Battered Chicken (#306110)',
           placement: 'All-Day Favorite ($14.99)',
           desc: 'Crispy battered chicken cutlets served with seasoned shoestring fries, creamy coleslaw, and house honey mustard.',
-          advantage: '⏱️ Prep: 3 min fryer drop • Juicy sous vide interior with ultra-crisp crunch.'
+          advantage: 'Prep: 3 min fryer drop • Juicy sous vide interior with ultra-crisp crunch.'
         }
       ];
     }
@@ -5933,7 +5933,7 @@ Hormel Foodservice`;
             <span class="menu-idea-title">${escapeHtml(item.name)}</span>
             <span class="menu-idea-placement">${escapeHtml(item.placement)}</span>
           </div>
-          <div class="menu-idea-sku-tag">📦 ${escapeHtml(item.sku)}</div>
+          <div class="menu-idea-sku-tag">SKU: ${escapeHtml(item.sku)}</div>
           <div class="menu-idea-desc">${escapeHtml(item.desc)}</div>
           <div class="menu-idea-advantage">${escapeHtml(item.advantage)}</div>
         </div>
@@ -5943,7 +5943,7 @@ Hormel Foodservice`;
     container.innerHTML = `
       <div class="drawer-culinary-intel-card">
         <div class="concept-intel-header">
-          <span class="concept-intel-badge">🍴 RESTAURANT CONCEPT NOTES & MENU IDEATION</span>
+          <span class="concept-intel-badge">// RESTAURANT CONCEPT NOTES & MENU IDEATION //</span>
           <span class="concept-intel-source">Sourced from Menu Trend & Culinary Research</span>
         </div>
 
@@ -5952,10 +5952,10 @@ Hormel Foodservice`;
             <span class="concept-archetype-tag">${escapeHtml(intel.archetype)}</span>
             <div class="concept-research-links">
               <a href="${intel.gSearchUrl}" target="_blank" class="concept-link-btn" title="Search this restaurant's menu on Google">
-                🔍 Google Menu ↗
+                Google Menu ->
               </a>
               <a href="${intel.yelpSearchUrl}" target="_blank" class="concept-link-btn" title="Search reviews and dish photos on Yelp">
-                ⭐ Yelp Profile ↗
+                Yelp Profile ->
               </a>
             </div>
           </div>
@@ -5978,10 +5978,10 @@ Hormel Foodservice`;
 
         <div class="menu-ideation-actions">
           <button class="btn-copy-menu-ideas" id="btn-copy-menu-pitches">
-            📋 Copy Menu Concepts to Pitch
+            Copy Menu Concepts to Pitch
           </button>
           <a href="https://www.hormelfoodservice.com/recipes/" target="_blank" class="btn-recipes-link">
-            🍽️ Hormel Recipe Inspiration ↗
+            Hormel Recipe Inspiration ↗
           </a>
         </div>
       </div>
@@ -5998,7 +5998,7 @@ Hormel Foodservice`;
         const knownTopic = (intel.knownFor || 'scratch-quality food and guest hospitality').replace(/\.$/, '');
 
         let conceptsText = intel.ideas.map((idea, idx) => {
-          const cleanAdv = idea.advantage.replace(/^⏱️\s*/, '').replace(/^Prep:\s*/, '').trim();
+          const cleanAdv = idea.advantage.replace(/^\s*/, '').replace(/^Prep:\s*/, '').trim();
           return `${idx + 1}. ${idea.name} (${idea.placement})\n` +
                  `   • The Dish: ${idea.desc}\n` +
                  `   • BOH Advantage: Featuring ${idea.sku}. ${cleanAdv}\n`;
@@ -6090,15 +6090,15 @@ Culinary Specialist | Hormel Foodservice`;
 
         <div class="drawer-pitch-specs-row">
           <div class="drawer-spec-pill">
-            <span>⏱️ Prep:</span> <strong>${escapeHtml(prepSummary)}</strong>
+            <span>Prep:</span> <strong>${escapeHtml(prepSummary)}</strong>
           </div>
           <div class="drawer-spec-pill">
-            <span>⚡ Advantage:</span> <strong>${escapeHtml(matchedBrand.prep_specs.labor_savings)}</strong>
+            <span>Advantage:</span> <strong>${escapeHtml(matchedBrand.prep_specs.labor_savings)}</strong>
           </div>
         </div>
 
         <div class="drawer-pitch-sku-box">
-          <div class="pitch-sku-title">📦 Featured SKU:</div>
+          <div class="pitch-sku-title">Featured SKU:</div>
           <div class="pitch-sku-detail">
             <strong>${escapeHtml(topSku.item_code)}:</strong> ${escapeHtml(topSku.name)} (${escapeHtml(topSku.pack)})
           </div>
@@ -6108,12 +6108,12 @@ Culinary Specialist | Hormel Foodservice`;
         <!-- Distributor Location Guess & Ordering Codes Card -->
         <div class="drawer-distributor-intel-card">
           <div class="dist-intel-header">
-            <span class="dist-intel-badge">🚚 DISTRIBUTOR LOGISTICS & ORDERING</span>
+            <span class="dist-intel-badge">// DISTRIBUTOR LOGISTICS & ORDERING //</span>
             <span class="dist-intel-source">Hormel Directory Reference</span>
           </div>
 
           <div class="dist-branch-row">
-            <div class="dist-branch-icon">🏢</div>
+            <div class="dist-branch-icon">[ HUB ]</div>
             <div>
               <div class="dist-branch-title">Predicted Local Branch (OpCo):</div>
               <div class="dist-branch-name">${escapeHtml(distIntel.branchName)}</div>
@@ -6160,7 +6160,7 @@ Culinary Specialist | Hormel Foodservice`;
 
         <div class="drawer-pitch-actions">
           <button class="btn btn-primary btn-sm btn-drawer-copy-script" id="btn-copy-lead-pitch">
-            📋 Copy Rep Pitch
+            Copy Rep Pitch
           </button>
           <a href="${escapeHtml(matchedBrand.site_url)}" target="_blank" class="btn btn-secondary btn-sm">
             Specs ↗

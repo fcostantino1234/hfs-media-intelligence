@@ -30,25 +30,25 @@
       <!-- Navigation Tabs -->
       <nav class="header-nav">
         <button class="nav-tab active" id="tab-sales-leads" data-view="leads">
-          <span class="tab-icon">📋</span> Sales Leads (<span id="header-leads-count">25,326</span>)
+          Sales Leads (<span id="header-leads-count">25,326</span>)
         </button>
         <button class="nav-tab" id="tab-audience" data-view="audience">
-          <span class="tab-icon">👥</span> Audience Profile
+          Audience Profile
         </button>
         <button class="nav-tab" id="tab-brand-catalog" data-view="brand-catalog">
-          <span class="tab-icon">🍽️</span> Brands & Products
+          Brands & Products
         </button>
         <button class="nav-tab" id="tab-tactic-isolator" data-view="isolator">
-          <span class="tab-icon">🎯</span> Tactic Performance
+          Tactic Performance
         </button>
         <button class="nav-tab" id="tab-media-timeline" data-view="timeline">
-          <span class="tab-icon">⏱️</span> Media Timeline
+          Media Timeline
         </button>
         <button class="nav-tab" id="tab-trends" data-view="trends">
-          <span class="tab-icon">📈</span> Trends & Analytics
+          Trends & Analytics
         </button>
         <button class="nav-tab" id="tab-roi-simulator" data-view="roi">
-          <span class="tab-icon">💰</span> ROI & Big Bets
+          ROI & Big Bets
         </button>
       </nav>
     </div>
@@ -71,7 +71,7 @@
           
           <div class="custom-date-inputs" id="custom-date-container" style="display: none;">
             <input type="date" id="global-start-date" class="date-input">
-            <span class="date-sep">➔</span>
+            <span class="date-sep">&rarr;</span>
             <input type="date" id="global-end-date" class="date-input">
           </div>
         </div>
@@ -146,7 +146,7 @@
               <!-- Dynamically populated from TACTICS_DATA with 'All Tactics' option & year filtering -->
             </select>
             <button id="btn-bypass-tactic" class="btn btn-bypass-tactic" title="Bypass single tactic isolation to see full portfolio rollups">
-              🌟 Full Portfolio Rollup
+              // FULL PORTFOLIO ROLLUP //
             </button>
           </div>
         </div>
@@ -164,13 +164,13 @@
           <!-- Macro Dimension Toggle Buttons -->
           <div class="macro-dimension-tabs">
             <button class="btn-dim-tab active" id="dim-tab-hook" data-dim="hook">
-              🎯 By Key Hook
+              By Key Hook
             </button>
             <button class="btn-dim-tab" id="dim-tab-pub" data-dim="pub">
-              🏢 By Publisher
+              By Publisher
             </button>
             <button class="btn-dim-tab" id="dim-tab-type" data-dim="type">
-              🎨 By Format
+              By Format
             </button>
           </div>
         </div>
@@ -185,11 +185,11 @@
       <div class="tactic-chips-row">
         <span class="chip-label">Filter Tactics:</span>
         <button class="tactic-chip active" data-filter="all">All Channels</button>
-        <button class="tactic-chip" data-filter="Paid Trade Media">📰 Trade Publications</button>
-        <button class="tactic-chip" data-filter="Integrated Campaign">🚀 Brand Campaigns</button>
-        <button class="tactic-chip" data-filter="Events & Exhibitions">🎪 Trade Shows & Events</button>
-        <button class="tactic-chip" data-filter="Paid SEM & Social">🔍 Paid Search & Halal</button>
-        <button class="tactic-chip" data-filter="Owned Database Marketing">📬 Owned Email Nurture</button>
+        <button class="tactic-chip" data-filter="Paid Trade Media">Trade Publications</button>
+        <button class="tactic-chip" data-filter="Integrated Campaign">Brand Campaigns</button>
+        <button class="tactic-chip" data-filter="Events & Exhibitions">Trade Shows & Events</button>
+        <button class="tactic-chip" data-filter="Paid SEM & Social">Paid Search & Halal</button>
+        <button class="tactic-chip" data-filter="Owned Database Marketing">Owned Email Nurture</button>
       </div>
 
       <!-- ISOLATED TACTIC SCORECARD (Hero Card) -->
@@ -198,8 +198,8 @@
           <div class="scorecard-title-area">
             <div class="scorecard-badges">
               <span class="badge badge-job" id="sc-job" style="background: #0E313D; color: var(--jtm-chartreuse); border: 1.5px solid var(--jtm-chartreuse); font-weight: 800; letter-spacing: 0.05em;">Job # HFS0925-266</span>
-              <span class="badge badge-rundate" id="sc-run-date">📅 Run Date: 2/1/26 - 2/28/26</span>
-              <span class="badge badge-hook" id="sc-key-hook">🎯 Labor-Saving & Prep-Free Execution</span>
+              <span class="badge badge-rundate" id="sc-run-date">Run Date: 2/1/26 - 2/28/26</span>
+              <span class="badge badge-hook" id="sc-key-hook">Labor-Saving & Prep-Free Execution</span>
               <span class="badge badge-channel" id="sc-channel">Paid Trade Media</span>
               <span class="badge badge-brand" id="sc-brand">Hormel Bacon 1</span>
               <span class="badge badge-publisher attr-clickable" id="sc-publisher" title="Click to isolate leads from this publisher">QSR Magazine</span>
@@ -219,7 +219,7 @@
           
           <div class="scorecard-cta-area">
             <button class="btn btn-chartreuse btn-large" id="btn-drill-leads">
-              🔍 Inspect <span id="sc-leads-btn-count">389</span> Leads from this Tactic ➔
+              Inspect <span id="sc-leads-btn-count">389</span> Leads from this Tactic ->
             </button>
           </div>
         </div>
@@ -228,7 +228,7 @@
         <div class="scorecard-kpi-grid">
           <!-- 1. Media Spend -->
           <div class="kpi-card">
-            <div class="kpi-icon">💰</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Media Investment</div>
               <div class="kpi-value" id="sc-spend">$20,161.92</div>
@@ -238,7 +238,7 @@
 
           <!-- 2. Impressions -->
           <div class="kpi-card">
-            <div class="kpi-icon">👁️</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Target Impressions</div>
               <div class="kpi-value" id="sc-impressions">322,621</div>
@@ -248,7 +248,7 @@
 
           <!-- 3. Clicks -->
           <div class="kpi-card">
-            <div class="kpi-icon">🖱️</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Engagement Clicks</div>
               <div class="kpi-value" id="sc-clicks">2,106</div>
@@ -258,7 +258,7 @@
 
           <!-- 4. Web Sessions -->
           <div class="kpi-card">
-            <div class="kpi-icon">🌐</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">HFS Website Sessions</div>
               <div class="kpi-value" id="sc-sessions">1,980</div>
@@ -268,7 +268,7 @@
 
           <!-- 5. Distributor Lookups -->
           <div class="kpi-card">
-            <div class="kpi-icon">🧭</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Distributor Lookups</div>
               <div class="kpi-value" id="sc-lookups">84</div>
@@ -278,7 +278,7 @@
 
           <!-- 6. Sales Leads -->
           <div class="kpi-card highlight-card">
-            <div class="kpi-icon">👥</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Verified Sales Leads</div>
               <div class="kpi-value highlight-val" id="sc-leads">389</div>
@@ -288,7 +288,7 @@
 
           <!-- 7. Cost Per Lead (CPL) -->
           <div class="kpi-card highlight-card">
-            <div class="kpi-icon">🏷️</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Cost Per Lead (CPL)</div>
               <div class="kpi-value highlight-val" id="sc-cpl">$51.83</div>
@@ -298,7 +298,7 @@
 
           <!-- 8. Conversion Rate -->
           <div class="kpi-card">
-            <div class="kpi-icon">🎯</div>
+            
             <div class="kpi-content">
               <div class="kpi-label">Click-to-Lead Conv.</div>
               <div class="kpi-value" id="sc-conv-rate">18.47%</div>
@@ -311,10 +311,10 @@
         <div class="scorecard-notes-box">
           <div class="notes-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 6px;">
-              <span class="notes-icon">💡</span>
+              <span class="notes-icon">//</span>
               <strong>Ground-Truth Media Intelligence & HFSDATA Triangulation:</strong>
             </div>
-            <span id="sc-source-deck" style="font-size: 0.75rem; color: var(--jtm-chartreuse); background: rgba(204, 215, 0, 0.15); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(204, 215, 0, 0.3); font-weight: 700;">📁 Source Deck</span>
+            <span id="sc-source-deck" style="font-size: 0.75rem; color: var(--jtm-chartreuse); background: rgba(204, 215, 0, 0.15); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(204, 215, 0, 0.3); font-weight: 700;">Source Deck</span>
           </div>
           <p id="sc-notes" class="notes-body">High engagement among Quick-Service and Fast-Casual operators seeking labor-saving, fully cooked bacon.</p>
         </div>
@@ -329,7 +329,7 @@
           </div>
           <div class="matrix-sort-controls">
             <button id="btn-matrix-all-tactics" class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; border: 1.5px solid var(--jtm-chartreuse); color: var(--jtm-chartreuse); font-weight: 700; background: rgba(204, 215, 0, 0.1); cursor: pointer; border-radius: var(--radius-sm);">
-              🌟 Full Portfolio Rollup
+              // FULL PORTFOLIO ROLLUP //
             </button>
             <label>Sort Matrix by:</label>
             <select id="matrix-sort-select" class="form-select">
@@ -350,7 +350,7 @@
                 <th class="th-sortable" data-matrix-sort="key_hook" title="Click to sort by Strategic Key Hook">Strategic Key Hook<span class="sort-icon"> ⇅</span></th>
                 <th class="th-sortable" data-matrix-sort="publication_group" title="Click to sort by Publisher / Network">Publisher / Network<span class="sort-icon"> ⇅</span></th>
                 <th class="th-sortable" data-matrix-sort="brand" title="Click to sort by Brand Focus">Brand Focus<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="run_date" title="Click to sort by Run Date">📅 Run Date<span class="sort-icon"> ⇅</span></th>
+                <th class="th-sortable" data-matrix-sort="run_date" title="Click to sort by Run Date">Run Date<span class="sort-icon"> ⇅</span></th>
                 <th class="th-sortable" data-matrix-sort="spend" style="text-align: right;" title="Click to sort by Media Spend">Media Spend<span class="sort-icon"> ⇅</span></th>
                 <th class="th-sortable" data-matrix-sort="impressions" style="text-align: right;" title="Click to sort by Target Impressions">Impressions<span class="sort-icon"> ⇅</span></th>
                 <th class="th-sortable" data-matrix-sort="clicks" style="text-align: right;" title="Click to sort by Clicks">Clicks<span class="sort-icon"> ⇅</span></th>
@@ -434,10 +434,10 @@
             <div class="chart-scale-toggle-group" id="flight-scale-toggle-group">
               <span class="scale-label">Y-Axis Scale:</span>
               <button type="button" class="btn-scale-toggle active" data-flight-scale="smart" id="btn-flight-scale-smart">
-                🔍 Organic Scale
+                Organic Scale
               </button>
               <button type="button" class="btn-scale-toggle" data-flight-scale="full" id="btn-flight-scale-full">
-                🌐 Full Scale (w/ 11/24 Spike)
+                Full Scale (w/ 11/24 Spike)
               </button>
             </div>
             <span class="chart-tag" id="flight-chart-tag">Flighting & Inbound Convergence</span>
@@ -447,7 +447,7 @@
           <canvas id="chart-flight-convergence"></canvas>
         </div>
         <div id="flight-outlier-callout" class="timeseries-outlier-banner" style="margin-top: 8px;">
-          <span class="outlier-icon">⚡</span>
+          
           <span><strong>Organic Scale Active:</strong> The right Y-axis is calibrated to steady-state campaign acquisition (0–1,200 leads/qtr) to reveal the true correlation between media flight bursts and operator inquiry volume. The one-time <strong>11/24 database consolidation</strong> (17,199 legacy CRM records in FY25 Q1) is clamped at the ceiling with an indicator.</span>
         </div>
       </div>
@@ -464,7 +464,7 @@
       <!-- Time Series Controls -->
       <div class="trends-header-card">
         <div class="trends-header-left">
-          <h3>📈 Performance Trends & Web Analytics Over Time</h3>
+          <h3>// PERFORMANCE TRENDS & WEB ANALYTICS //</h3>
           <p>Analyze how media flights, search queries, and content marketing drive inbound leads and website traffic.</p>
         </div>
         <div class="trends-controls">
@@ -481,7 +481,7 @@
       <div class="correlation-definition-card">
         <div class="corr-def-header">
           <div class="corr-def-title">
-            <span class="corr-def-icon">📐</span>
+            
             <h4>Understanding the Correlation Factor (Pearson's r = +0.892)</h4>
           </div>
           <span class="badge badge-emerald" style="font-weight: 800; font-size: 0.75rem;">STATISTICALLY SIGNIFICANT (p &lt; 0.001)</span>
@@ -637,13 +637,13 @@
             <div class="chart-scale-toggle-group" title="Adjust Y-Axis zoom scale to reveal baseline monthly trends">
               <span class="scale-label">Y-Axis:</span>
               <button type="button" class="btn-scale-toggle active" data-scale="zoom" id="btn-scale-zoom" title="Capped at peak organic baseline to zoom in on monthly nuances">
-                🔍 Smart Zoom
+                Smart Zoom
               </button>
               <button type="button" class="btn-scale-toggle" data-scale="log" id="btn-scale-log" title="Logarithmic scale proportionally displays all data points from 10 to 20,000">
-                📈 Log Scale
+                Log Scale
               </button>
               <button type="button" class="btn-scale-toggle" data-scale="full" id="btn-scale-full" title="Full uncapped scale (0 to 18,000)">
-                🌐 Full Scale
+                Full Scale
               </button>
             </div>
 
@@ -654,7 +654,7 @@
           <canvas id="chart-leads-timeseries"></canvas>
         </div>
         <div id="timeseries-outlier-banner" class="timeseries-outlier-banner">
-          <span class="outlier-icon">⚡</span>
+          
           <span><strong>Smart Zoom Active:</strong> The <strong>11/24</strong> consolidation spike (<strong>17,199 leads</strong>) is clamped at the ceiling to reveal organic monthly trends (0–1,200 leads/mo).</span>
         </div>
       </div>
@@ -721,9 +721,9 @@
           
           <!-- Search Box -->
           <div class="search-box-wrapper">
-            <span class="search-icon">🔍</span>
+            
             <input type="text" id="lead-search-input" class="search-input" placeholder="Search by name, company, title, city, distributor, or CRM ID...">
-            <button id="btn-clear-search" class="btn-clear-search">✕</button>
+            <button id="btn-clear-search" class="btn-clear-search">&times;</button>
           </div>
 
           <!-- Action Buttons -->
@@ -736,7 +736,7 @@
             <!-- Columns Customizer -->
             <div class="dropdown-wrapper col-customizer-wrapper">
               <button id="btn-toggle-columns" class="btn btn-outline btn-columns-toggle" title="Customize visible table columns">
-                <span class="col-btn-icon">⚙️</span>
+                
                 <span class="col-btn-text">Columns</span>
                 <span id="active-cols-count" class="col-active-badge">12</span>
               </button>
@@ -745,7 +745,7 @@
                 <div class="col-popover-header">
                   <div class="col-popover-title-row">
                     <div class="col-popover-title">
-                      <span class="col-title-icon">⚙️</span> Table Column Customizer
+                       Table Column Customizer
                     </div>
                     <span id="cols-summary-pill" class="cols-summary-pill">12 of 34 visible</span>
                   </div>
@@ -762,8 +762,8 @@
 
                   <!-- Column Search Bar -->
                   <div class="col-search-wrapper">
-                    <input type="text" id="col-search-input" class="col-search-input" placeholder="🔍 Search columns (e.g. date, utm, distributor, rep)...">
-                    <button id="btn-clear-col-search" class="col-search-clear" style="display: none;" type="button">✕</button>
+                    <input type="text" id="col-search-input" class="col-search-input" placeholder="Search columns (e.g. date, utm, distributor, rep)...">
+                    <button id="btn-clear-col-search" class="col-search-clear" style="display: none;" type="button">&times;</button>
                   </div>
                 </div>
 
@@ -774,15 +774,15 @@
 
                 <!-- Footer with Done Button -->
                 <div class="col-popover-footer">
-                  <span class="col-footer-hint">✨ Changes apply instantly & persist across browser sessions</span>
-                  <button id="btn-close-columns" class="btn btn-primary btn-sm btn-done-cols" type="button">Done ✓</button>
+                  <span class="col-footer-hint">Changes apply instantly & persist across browser sessions</span>
+                  <button id="btn-close-columns" class="btn btn-primary btn-sm btn-done-cols" type="button">Done</button>
                 </div>
               </div>
             </div>
 
             <!-- Export CSV -->
             <button id="btn-export-csv" class="btn btn-primary">
-              📥 Export CSV
+              Export CSV
             </button>
           </div>
         </div>
@@ -791,12 +791,12 @@
         <div id="isolation-banner" class="isolation-banner" style="display: none;">
           <div class="isolation-header-row">
             <div class="isolation-banner-content">
-              <span class="isolation-icon">⚡</span>
+              
               <span class="isolation-label">Highlighted Parameter:</span>
               <span id="isolation-badge" class="isolation-badge"></span>
               <span id="isolation-count" class="isolation-count"></span>
             </div>
-            <button id="btn-clear-isolation" class="btn-clear-isolation" title="Clear this isolation filter">✕ Clear Highlight / Reset View</button>
+            <button id="btn-clear-isolation" class="btn-clear-isolation" title="Clear this isolation filter">Clear Highlight / Reset View</button>
           </div>
 
           <!-- Real-Time Highlighted Parameter KPI Stat Strip -->
@@ -889,11 +889,11 @@
             <label>Qualification (MQL):</label>
             <select id="filter-operator-type" class="form-select">
               <option value="">All Leads & Contacts (25,326)</option>
-              <option value="certified_mql">🛡️ Certified Foodservice Outlets (MQL) — 15,306</option>
-              <option value="distributor">🤝 Distributor & Broker Partners — 5,678</option>
-              <option value="prospective">🟡 Prospective Operators (Pending Match) — 803</option>
-              <option value="consumer">🏠 Home Cooks / Consumers — 2,376</option>
-              <option value="internal">🏢 Internal Accounts & Agency — 1,163</option>
+              <option value="certified_mql">[ CERTIFIED MQL ] Foodservice Outlets — 15,306</option>
+              <option value="distributor">[ DISTRIBUTOR ] Broker Partners — 5,678</option>
+              <option value="prospective">[ PROSPECTIVE ] Operators (Pending Match) — 803</option>
+              <option value="consumer">[ CONSUMER ] Home Cooks — 2,376</option>
+              <option value="internal">[ INTERNAL ] Accounts & Agency — 1,163</option>
             </select>
           </div>
 
@@ -927,11 +927,11 @@
             <label>Status:</label>
             <select id="filter-status" class="form-select">
               <option value="">All Follow-up Statuses</option>
-              <option value="New">🟢 New Inquiries</option>
-              <option value="Attempted Contact">🟡 Attempted Contact</option>
-              <option value="Contacted">🔵 Contacted</option>
-              <option value="Qualified">⭐ Qualified Opportunity</option>
-              <option value="Unqualified">⚪ Unqualified</option>
+              <option value="New">[NEW] Inquiries</option>
+              <option value="Attempted Contact">[ATTEMPTED] Attempted Contact</option>
+              <option value="Contacted">[CONTACTED] Contacted</option>
+              <option value="Qualified">[QUALIFIED] Qualified Opportunity</option>
+              <option value="Unqualified">[UNQUALIFIED] Unqualified</option>
             </select>
           </div>
 
@@ -939,9 +939,9 @@
             <label>Lead Score:</label>
             <select id="filter-score" class="form-select">
               <option value="">All Lead Scores</option>
-              <option value="80">🔥 High Priority (80-100 pts)</option>
-              <option value="60">⚡ Medium Priority (60-79 pts)</option>
-              <option value="low">🌱 Base Priority (&lt;60 pts)</option>
+              <option value="80">High Priority (80-100 pts)</option>
+              <option value="60">Medium Priority (60-79 pts)</option>
+              <option value="low">Base Priority (&lt;60 pts)</option>
             </select>
           </div>
 
@@ -988,7 +988,7 @@
           <!-- Breakdown 1: IFMA Segment & Key Sub-segments -->
           <div class="summary-breakdown-card">
             <div class="breakdown-card-header">
-              <span class="breakdown-icon">🍽️</span>
+              
               <h4>Operator Segments</h4>
             </div>
             <div class="breakdown-list" id="sum-segment-breakdown">
@@ -999,7 +999,7 @@
           <!-- Breakdown 2: Geographic Distribution (Top States & Regions) -->
           <div class="summary-breakdown-card">
             <div class="breakdown-card-header">
-              <span class="breakdown-icon">🗺️</span>
+              
               <h4>Top States & Regions</h4>
             </div>
             <div class="breakdown-list" id="sum-geo-breakdown">
@@ -1010,7 +1010,7 @@
           <!-- Breakdown 3: Distributors Listed -->
           <div class="summary-breakdown-card">
             <div class="breakdown-card-header">
-              <span class="breakdown-icon">🚛</span>
+              
               <h4>Distributor Footprint</h4>
             </div>
             <div class="breakdown-list" id="sum-dist-breakdown">
@@ -1052,7 +1052,7 @@
 
       <!-- Empty State -->
       <div id="leads-empty-state" class="empty-state" style="display: none;">
-        <div class="empty-icon">🔍</div>
+        
         <h3>No Leads Found</h3>
         <p>No sales leads match your active search and filter combinations.</p>
         <button id="btn-empty-reset" class="btn btn-chartreuse">Clear All Filters</button>
@@ -1131,7 +1131,7 @@
         </div>
       </div>
 
-      <!-- Section 7: 🎯 Likely Highest-Value Operator Targets (Enterprise & Growth Whales) -->
+      <!-- Section 7: Enterprise & Growth Whales -->
       <div class="audience-section-card high-value-targets-card">
         <div class="audience-section-header">
           <div class="section-title-group">
@@ -1140,9 +1140,9 @@
             <p>Accounts ranked by scale, decision-maker seniority, and estimated case adoption.</p>
           </div>
           <div class="target-tier-chips">
-            <span class="tier-chip tier-1">⭐ Tier 1 ($250k+)</span>
-            <span class="tier-chip tier-2">💎 Tier 2 ($75k-$250k)</span>
-            <span class="tier-chip tier-3">🚀 Tier 3 ($25k-$75k)</span>
+            <span class="tier-chip tier-1">Tier 1 ($250k+)</span>
+            <span class="tier-chip tier-2">Tier 2 ($75k-$250k)</span>
+            <span class="tier-chip tier-3">Tier 3 ($25k-$75k)</span>
           </div>
         </div>
         <div class="high-value-targets-grid" id="aud-high-value-targets">
@@ -1316,7 +1316,7 @@
       <section class="roi-section-container">
         <div class="section-header-flex">
           <div>
-            <h3 class="section-title">🧮 Pipeline & ROAS Simulator</h3>
+            <h3 class="section-title">// PIPELINE & ROAS SIMULATOR //</h3>
             <p class="section-desc">
               Model annual case volume and return on ad spend (ROAS) from qualified inquiries.
             </p>
@@ -1462,7 +1462,7 @@
       <section class="roi-section-container">
         <div class="section-header-flex">
           <div>
-            <h3 class="section-title">🐳 Enterprise Accounts</h3>
+            <h3 class="section-title">// ENTERPRISE OPERATOR ACCOUNTS //</h3>
             <p class="section-desc">
               High-volume accounts captured across non-commercial dining, lodging, and contract management.
             </p>
@@ -1475,11 +1475,11 @@
         <!-- Segment Filter Chips for Whales -->
         <div class="whale-filter-chips" id="whale-segment-chips">
           <button class="chip-whale active" data-whale-seg="all">All Institutional Accounts (2,305)</button>
-          <button class="chip-whale" data-whale-seg="higher-ed">🎓 Higher Education Dining (1,240)</button>
-          <button class="chip-whale" data-whale-seg="hospitality">🏨 Lodging & Hospitality (310)</button>
-          <button class="chip-whale" data-whale-seg="contract">🏢 Contract Management (175)</button>
-          <button class="chip-whale" data-whale-seg="healthcare">🏥 Healthcare & Hospitals (480)</button>
-          <button class="chip-whale" data-whale-seg="k12">🏫 K-12 Mega Districts (100)</button>
+          <button class="chip-whale" data-whale-seg="higher-ed">Higher Education Dining (1,240)</button>
+          <button class="chip-whale" data-whale-seg="hospitality">Lodging & Hospitality (310)</button>
+          <button class="chip-whale" data-whale-seg="contract">Contract Management (175)</button>
+          <button class="chip-whale" data-whale-seg="healthcare">Healthcare & Hospitals (480)</button>
+          <button class="chip-whale" data-whale-seg="k12">K-12 Mega Districts (100)</button>
         </div>
 
         <!-- Whale Cards Grid -->
@@ -1492,21 +1492,21 @@
       <section class="roi-section-container">
         <div class="section-header-flex">
           <div>
-            <h3 class="section-title">🎯 2027 Big Bets & Budget Strategy</h3>
+            <h3 class="section-title">// 2027 BIG BETS & BUDGET STRATEGY //</h3>
             <p class="section-desc">
               Reallocating spend from static banners into labor-saving solutions, pizzeria differentiation, and institutional volume.
             </p>
           </div>
           <div class="scenario-toggle-group">
-            <button class="btn-scenario active" data-scenario="recommended">✨ 2027 Big Bets Recommended Plan</button>
-            <button class="btn-scenario" data-scenario="status-quo">📊 Status Quo (FY25/26 Baseline)</button>
+            <button class="btn-scenario active" data-scenario="recommended">2027 Big Bets Recommended Plan</button>
+            <button class="btn-scenario" data-scenario="status-quo">Status Quo (FY25/26 Baseline)</button>
           </div>
         </div>
 
         <div class="bigbets-layout">
           <!-- The 4 Big Bets Cards -->
           <div class="bigbets-cards-column">
-            <h4 class="column-heading green-heading">🚀 The 4 Big Bets (Budget Increases)</h4>
+            <h4 class="column-heading green-heading">// THE 4 BIG BETS // BUDGET INCREASES //</h4>
 
             <div class="bigbet-card bet-1">
               <div class="bet-header">
@@ -1571,7 +1571,7 @@
 
           <!-- Pruning & Cuts Column -->
           <div class="pruning-cards-column">
-            <h4 class="column-heading red-heading">✂️ Pruned & Reallocated Spend (Self-Funding)</h4>
+            <h4 class="column-heading red-heading">// PRUNED & REALLOCATED SPEND // SELF-FUNDING //</h4>
 
             <div class="prune-card">
               <div class="prune-header">
@@ -1688,12 +1688,12 @@
           <div class="matcher-control-box">
             <label for="matcher-segment-select"><strong>Target Operator Segment:</strong></label>
             <select id="matcher-segment-select" class="form-select matcher-select">
-              <option value="pizzerias">🍕 Pizzerias & Italian Dining</option>
-              <option value="college_university">🎓 College & University Dining (C&U)</option>
-              <option value="healthcare_senior">🏥 Healthcare & Senior Living</option>
-              <option value="sports_bar_casual">🍔 Sports Bars, Brewpubs & Casual Grills</option>
-              <option value="k12_schools">🏫 K-12 School Nutrition</option>
-              <option value="c_store_grab_go">🏪 Convenience Stores & Fast Grab & Go</option>
+              <option value="pizzerias">Pizzerias & Italian Dining</option>
+              <option value="college_university">College & University Dining (C&U)</option>
+              <option value="healthcare_senior">Healthcare & Senior Living</option>
+              <option value="sports_bar_casual">Sports Bars, Brewpubs & Casual Grills</option>
+              <option value="k12_schools">K-12 School Nutrition</option>
+              <option value="c_store_grab_go">Convenience Stores & Fast Grab & Go</option>
             </select>
           </div>
         </div>
@@ -1736,7 +1736,7 @@
             <p class="section-subtext">Search across all flagship Hormel Foodservice items, pack sizes, preparation methods, and distributor item codes.</p>
           </div>
           <div class="sku-search-box">
-            <input type="text" id="sku-search-input" class="form-input" placeholder="🔍 Search SKUs (e.g., #137666, Bacon, Calabrian, Halal, 5 oz)...">
+            <input type="text" id="sku-search-input" class="form-input" placeholder="Search SKUs (e.g., #137666, Bacon, Calabrian, Halal, 5 oz)...">
           </div>
         </div>
 
@@ -1773,18 +1773,18 @@
         <div id="drawer-lead-company" class="drawer-company-line">Company Name • City, State</div>
         <div id="drawer-badges" class="drawer-badges"></div>
       </div>
-      <button id="btn-close-drawer" class="btn-close-drawer">✕</button>
+      <button id="btn-close-drawer" class="btn-close-drawer">&times;</button>
     </div>
 
     <div class="drawer-body">
       
       <!-- Action Toolbar -->
       <div class="drawer-action-toolbar">
-        <button id="action-email" class="btn-action btn-action-email">📧 Quick Email</button>
-        <button id="action-call" class="btn-action btn-action-call">📞 Call Operator</button>
-        <button id="action-website" class="btn-action btn-action-web">🌐 Company Website</button>
-        <button id="action-maps" class="btn-action btn-action-map">🗺️ Google Maps</button>
-        <button id="action-crm" class="btn-action btn-action-crm">☁️ Salesforce CRM</button>
+        <button id="action-email" class="btn-action btn-action-email">Quick Email</button>
+        <button id="action-call" class="btn-action btn-action-call">Call Operator</button>
+        <button id="action-website" class="btn-action btn-action-web">Company Website</button>
+        <button id="action-maps" class="btn-action btn-action-map">Google Maps</button>
+        <button id="action-crm" class="btn-action btn-action-crm">Salesforce CRM</button>
       </div>
 
       <!-- Priority & Status Section -->
@@ -1793,11 +1793,11 @@
           <div class="priority-item">
             <label>Status:</label>
             <select id="drawer-lead-status" class="form-select form-select-status">
-              <option value="New">🟢 New Lead</option>
-              <option value="Attempted Contact">🟡 Attempted Contact</option>
-              <option value="Contacted">🔵 Contacted</option>
-              <option value="Qualified">⭐ Qualified Opportunity</option>
-              <option value="Unqualified">⚪ Unqualified</option>
+              <option value="New">[NEW] New Lead</option>
+              <option value="Attempted Contact">[ATTEMPTED] Attempted Contact</option>
+              <option value="Contacted">[CONTACTED] Contacted</option>
+              <option value="Qualified">[QUALIFIED] Qualified Opportunity</option>
+              <option value="Unqualified">[UNQUALIFIED] Unqualified</option>
             </select>
           </div>
           <div class="priority-item">
@@ -1820,7 +1820,7 @@
 
       <!-- Marketing Pathway -->
       <div class="drawer-section">
-        <h4 class="drawer-section-title">🎯 Marketing Pathway</h4>
+        <h4 class="drawer-section-title">// SEQUENTIAL MARKETING PATHWAY //</h4>
         <div class="attribution-pathway" id="drawer-attribution-pathway">
           <!-- Pathway nodes rendered via JS -->
         </div>
@@ -1828,7 +1828,7 @@
 
       <!-- Hormel Brand Pitch & Culinary Playbook Section -->
       <div class="drawer-section" id="drawer-culinary-playbook-section">
-        <h4 class="drawer-section-title">🍽️ Brand Pitch & Distributor Intel</h4>
+        <h4 class="drawer-section-title">// BRAND PITCH & DISTRIBUTOR INTEL //</h4>
         <div id="drawer-brand-pitch-container">
           <!-- Dynamically populated via JS from BRAND_CATALOG_DATA -->
         </div>
@@ -1837,7 +1837,7 @@
 
       <!-- Restaurant Concept Intelligence & Menu Ideation Section -->
       <div class="drawer-section" id="drawer-restaurant-culinary-intel-section">
-        <h4 class="drawer-section-title">🍴 Restaurant Concept Notes & Menu Ideation</h4>
+        <h4 class="drawer-section-title">// RESTAURANT CONCEPT NOTES & MENU IDEATION //</h4>
         <div id="drawer-menu-ideation-container">
           <!-- Dynamically populated via JS -->
         </div>
@@ -1845,7 +1845,7 @@
 
       <!-- Operator Contact & Details -->
       <div class="drawer-section">
-        <h4 class="drawer-section-title">👤 Operator Details</h4>
+        <h4 class="drawer-section-title">// OPERATOR DETAILS //</h4>
         <div class="drawer-grid">
           <div class="drawer-grid-item">
             <label>Email Address</label>
@@ -1900,7 +1900,7 @@
 
       <!-- Customer Comments -->
       <div class="drawer-section">
-        <h4 class="drawer-section-title">💬 Inbound Inquiry</h4>
+        <h4 class="drawer-section-title">// INBOUND INQUIRY //</h4>
         <div id="drawer-comments-box" class="comments-box"></div>
       </div>
 
@@ -1913,15 +1913,15 @@
   <div id="email-modal-overlay" class="modal-overlay"></div>
   <div id="email-modal" class="modal-container">
     <div class="modal-header">
-      <h3>📧 Email Outreach</h3>
-      <button id="btn-close-email-modal" class="btn-close-modal">✕</button>
+      <h3>// EMAIL OUTREACH //</h3>
+      <button id="btn-close-email-modal" class="btn-close-modal">&times;</button>
     </div>
     <div class="modal-body">
       <div class="form-group">
         <label>Template:</label>
         <select id="email-template-select" class="form-select">
           <option value="follow_up_sample">Sample Request Follow-up (Distributor & Menu logistics)</option>
-          <option value="brand_pitch">🍽️ Official Hormel Brand Pitch (Site Copy, BOH Labor Savings & SKUs)</option>
+          <option value="brand_pitch">Official Hormel Brand Pitch (Site Copy, BOH Labor Savings & SKUs)</option>
           <option value="general_intro">General Introductory Meeting (Hormel Portfolio)</option>
           <option value="brand_interest">Brand Culinary Innovation & Labor-Saving Solutions</option>
         </select>
@@ -1939,7 +1939,7 @@
     </div>
     <div class="modal-footer">
       <button id="btn-cancel-email" class="btn btn-outline">Cancel</button>
-      <button id="btn-launch-mailto" class="btn btn-chartreuse">Launch in Email Client ➔</button>
+      <button id="btn-launch-mailto" class="btn btn-chartreuse">Launch in Email Client &rarr;</button>
     </div>
   </div>
 

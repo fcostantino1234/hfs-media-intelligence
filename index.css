@@ -4000,7 +4000,7 @@ body {
 }
 
 .brand-hero-section::after {
-  content: "🍽️";
+  content: "";
   position: absolute;
   right: 24px;
   bottom: -20px;
@@ -5240,4 +5240,24 @@ body {
   font-size: 0.8125rem;
   font-weight: 700;
   border-radius: 6px;
+}
+
+
+/* ==========================================================================
+   JT MEGA EDITORIAL SLASH TREATMENT (// PEOPLE // PLACES // THINGS //)
+   ========================================================================== */
+.slash-heading,
+.section-title,
+.drawer-section-title,
+.col-category-header,
+.menu-ideation-heading {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.slash-divider {
+  color: var(--jtm-chartreuse, #B4D334);
+  font-weight: 900;
+  margin: 0 4px;
+  letter-spacing: -0.05em;
 }
