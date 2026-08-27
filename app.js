@@ -6100,6 +6100,10 @@ Hormel Foodservice Culinary Team`;
 
     let hasGreeted = false;
 
+    if (window.location.hash === '#delores') {
+      openDeloresPanel();
+    }
+
     // Show speech bubble after 3.5 seconds on first visit
     setTimeout(() => {
       if (!sessionStorage.getItem('hfs_delores_peeked') && chatPanel.style.display !== 'flex') {
@@ -6140,7 +6144,7 @@ Hormel Foodservice Culinary Team`;
       chatPanel.setAttribute('aria-hidden', 'false');
       if (floatingBtn) floatingBtn.style.display = 'none';
 
-      if (!hasGreeted) {
+      if (!hasGreeted || (chatStream && chatStream.children.length === 0)) {
         hasGreeted = true;
         renderDeloresInitialGreeting();
       }
