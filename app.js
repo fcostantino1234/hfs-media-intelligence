@@ -2338,14 +2338,7 @@
     } else {
       activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
     }
-    if (!activeColumns.includes('tactic_run_date')) {
-      const tIdx = activeColumns.indexOf('tactic_name');
-      if (tIdx !== -1) {
-        activeColumns.splice(tIdx + 1, 0, 'tactic_run_date');
-      } else {
-        activeColumns.push('tactic_run_date');
-      }
-    }
+
     renderColumnChecklist();
   }
 
