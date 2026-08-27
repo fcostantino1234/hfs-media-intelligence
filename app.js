@@ -42,7 +42,7 @@
 
     // Media, Placement & Flight Timing
     { key: 'tactic_name', label: 'Ad Tactic / Placement', default: true, category: 'media' },
-    { key: 'tactic_run_date', label: 'Ad Deployment Date', default: true, category: 'media' },
+    { key: 'tactic_run_date', label: 'Ad Deployment Date', default: false, category: 'media' },
     { key: 'publication_group', label: 'Media Partner Network', default: false, category: 'media' },
     { key: 'tactic_publisher', label: 'Publisher', default: false, category: 'media' },
     { key: 'tactic_channel', label: 'Channel', default: false, category: 'media' },
@@ -2325,7 +2325,7 @@
   // 10. VIEW 4: MASTER SALES LEADS ACTION TOOL (ALL FIELDS + FILTERABLE)
   // ===========================================================================
   function initColumns() {
-    const saved = localStorage.getItem('hfs_ground_columns');
+    const saved = localStorage.getItem('hfs_ground_columns_v3');
     if (saved) {
       try {
         activeColumns = JSON.parse(saved);
@@ -2400,7 +2400,7 @@
             activeColumns = activeColumns.filter(k => k !== col.key);
             card.classList.remove('selected');
           }
-          localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+          localStorage.setItem('hfs_ground_columns_v3', JSON.stringify(activeColumns));
           updateColumnSummaryUI();
           renderTableHeader();
           renderTable();
@@ -4527,7 +4527,7 @@ Hormel Foodservice`;
     if (presetDefaultBtn) {
       presetDefaultBtn.addEventListener('click', () => {
         activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
-        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        localStorage.setItem('hfs_ground_columns_v3', JSON.stringify(activeColumns));
         renderColumnChecklist();
         renderTableHeader();
         renderTable();
@@ -4544,7 +4544,7 @@ Hormel Foodservice`;
           'key_hook', 'tactic_type', 'utm_source', 'utm_medium', 
           'utm_campaign', 'utm_content', 'page_url'
         ];
-        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        localStorage.setItem('hfs_ground_columns_v3', JSON.stringify(activeColumns));
         renderColumnChecklist();
         renderTableHeader();
         renderTable();
@@ -4560,7 +4560,7 @@ Hormel Foodservice`;
           'job_title', 'phone', 'email', 'distributor', 'distributor_rep', 
           'sales_rep', 'crm_id', 'lead_score', 'status', 'comments'
         ];
-        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        localStorage.setItem('hfs_ground_columns_v3', JSON.stringify(activeColumns));
         renderColumnChecklist();
         renderTableHeader();
         renderTable();
@@ -4572,7 +4572,7 @@ Hormel Foodservice`;
     if (selectAllColsBtn) {
       selectAllColsBtn.addEventListener('click', () => {
         activeColumns = ALL_COLUMNS.map(c => c.key);
-        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        localStorage.setItem('hfs_ground_columns_v3', JSON.stringify(activeColumns));
         renderColumnChecklist();
         renderTableHeader();
         renderTable();
@@ -4584,7 +4584,7 @@ Hormel Foodservice`;
     if (resetColsBtn) {
       resetColsBtn.addEventListener('click', () => {
         activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
-        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        localStorage.setItem('hfs_ground_columns_v3', JSON.stringify(activeColumns));
         renderColumnChecklist();
         renderTableHeader();
         renderTable();
