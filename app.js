@@ -2595,13 +2595,13 @@
             rowHtml += `<td><div style="max-width: 220px; line-height: 1.3;">${cText}${hasNotes}</div></td>`;
           } else if (col.key === 'verification_badge') {
             if (lead.mql_tier === 'certified_mql' || lead.is_verified_operator) {
-              rowHtml += `<td><span class="badge-operator-certified" title="Certified Foodservice Outlet (MQL): ${escapeHtml(lead.verification_source || 'Foodservice Facility')}"> Certified MQL</span></td>`;
+              rowHtml += `<td><span class="badge-operator-certified" title="Certified Foodservice Outlet (MQL): ${escapeHtml(lead.verification_source || 'Foodservice Facility')}">🛡️ Certified MQL</span></td>`;
             } else if (lead.mql_tier === 'distributor') {
-              rowHtml += `<td><span class="badge-distributor-partner" title="Distributor / Broker Channel Partner: ${escapeHtml(lead.verification_source || 'Distributor Channel')}"> Distributor Partner</span></td>`;
+              rowHtml += `<td><span class="badge-distributor-partner" title="Distributor / Broker Channel Partner: ${escapeHtml(lead.verification_source || 'Distributor Channel')}">🤝 Distributor Partner</span></td>`;
             } else if (lead.mql_tier === 'prospective') {
-              rowHtml += `<td><span class="badge-operator-prospective" title="Prospective Operator (Unverified): ${escapeHtml(lead.verification_source || 'Pending Facility Verification')}"> Prospective</span></td>`;
+              rowHtml += `<td><span class="badge-operator-prospective" title="Prospective Operator (Unverified): ${escapeHtml(lead.verification_source || 'Pending Facility Verification')}">🟡 Prospective</span></td>`;
             } else if (lead.mql_tier === 'internal') {
-              rowHtml += `<td><span class="badge-internal" title="Internal Account: ${escapeHtml(lead.verification_source || 'Internal')}"> Internal</span></td>`;
+              rowHtml += `<td><span class="badge-internal" title="Internal Account: ${escapeHtml(lead.verification_source || 'Internal')}">🏢 Internal</span></td>`;
             } else {
               rowHtml += `<td><span class="badge-consumer" title="Consumer / Home Cook Profile: ${escapeHtml(lead.verification_source || 'Consumer Profile')}"> Home Cook</span></td>`;
             }
