@@ -280,6 +280,14 @@
 
     // Support URL hash routing (e.g. #timeline, #trends)
     const hash = window.location.hash.replace('#', '');
+    if (hash === 'minimized') {
+      const leadsTab = document.getElementById('tab-sales-leads');
+      if (leadsTab) leadsTab.click();
+      if (filteredLeads && filteredLeads.length > 0) {
+        currentDrawerLead = filteredLeads[0];
+        minimizeLeadDrawer();
+      }
+    }
     if (hash === 'drawer') {
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
