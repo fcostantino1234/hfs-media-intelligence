@@ -560,6 +560,7 @@
   // 5. MASTER FILTER DISPATCHER (SYNCS ALL VIEWS)
   // ===========================================================================
   function applyGlobalFilters() {
+    updateActiveFilterBadgeCount();
     const q = leadFilters.search.toLowerCase().trim();
 
     filteredLeads = allLeads.filter(lead => {
@@ -4592,6 +4593,60 @@ Hormel Foodservice`;
     }
 
     const searchInput = document.getElementById('lead-search-input');
+    
+    // Collapsible Advanced Search / Filters Toggle
+    const btnToggleFilters = document.getElementById('btn-toggle-filters');
+    const advancedFiltersRow = document.getElementById('advanced-filters-row');
+    const filtersArrow = document.getElementById('filters-toggle-arrow');
+    const activeFiltersBadge = document.getElementById('active-filters-count-badge');
+
+    if (btnToggleFilters && advancedFiltersRow) {
+      btnToggleFilters.addEventListener('click', () => {
+        const isHidden = advancedFiltersRow.style.display === 'none' || !advancedFiltersRow.style.display;
+        advancedFiltersRow.style.display = isHidden ? 'flex' : 'none';
+        btnToggleFilters.classList.toggle('active', isHidden);
+        if (filtersArrow) filtersArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    }
+
+    // Collapsible Summary Breakdowns (Segment, State, Distributor)
+    const btnToggleBreakdown = document.getElementById('btn-toggle-breakdown');
+    const breakdownsGrid = document.getElementById('summary-breakdowns-grid');
+    const breakdownText = document.getElementById('breakdown-toggle-text');
+    const breakdownArrow = document.getElementById('breakdown-toggle-arrow');
+
+    if (btnToggleBreakdown && breakdownsGrid) {
+      btnToggleBreakdown.addEventListener('click', () => {
+        const isHidden = breakdownsGrid.style.display === 'none' || !breakdownsGrid.style.display;
+        breakdownsGrid.style.display = isHidden ? 'grid' : 'none';
+        btnToggleBreakdown.classList.toggle('active', isHidden);
+        if (breakdownText) breakdownText.textContent = isHidden ? 'Hide Breakdowns' : 'Show Breakdowns';
+        if (breakdownArrow) breakdownArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    }
+
+    function updateActiveFilterBadgeCount() {
+      if (!activeFiltersBadge) return;
+      let count = 0;
+      if (document.getElementById('filter-hook')?.value) count++;
+      if (document.getElementById('filter-pub-group')?.value) count++;
+      if (document.getElementById('filter-brand')?.value) count++;
+      if (document.getElementById('filter-tactic')?.value) count++;
+      if (document.getElementById('filter-operator-type')?.value) count++;
+      if (document.getElementById('filter-segment')?.value) count++;
+      if (document.getElementById('filter-subsegment')?.value) count++;
+      if (document.getElementById('filter-status')?.value) count++;
+      if (document.getElementById('filter-score')?.value) count++;
+      if (document.getElementById('filter-comments')?.checked) count++;
+
+      if (count > 0) {
+        activeFiltersBadge.textContent = count;
+        activeFiltersBadge.style.display = 'inline-flex';
+      } else {
+        activeFiltersBadge.style.display = 'none';
+      }
+    }
+
     const clearSearchBtn = document.getElementById('btn-clear-search');
 
     searchInput.addEventListener('input', (e) => {

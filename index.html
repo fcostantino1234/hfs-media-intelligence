@@ -728,6 +728,12 @@
 
           <!-- Action Buttons -->
           <div class="toolbar-actions">
+            <!-- Advanced Filters Toggle Button -->
+            <button id="btn-toggle-filters" class="btn btn-outline btn-filters-toggle" type="button" title="Toggle advanced search filter parameters">
+              <span id="filters-toggle-arrow" class="filter-toggle-arrow">▾</span>
+              <span>Filters</span>
+              <span id="active-filters-count-badge" class="filter-active-badge" style="display: none;">0</span>
+            </button>
             <!-- Go Back Button -->
             <button id="btn-leads-back" class="btn btn-outline btn-leads-back" disabled title="Return to previous state">
               ⬅ Back
@@ -830,7 +836,7 @@
         </div>
 
         <!-- Filter Controls Row -->
-        <div class="filters-row">
+        <div class="filters-row" id="advanced-filters-row" style="display: none;">
           <!-- Strategic Key Hook Filter -->
           <div class="filter-group">
             <label>Key Hook:</label>
@@ -974,17 +980,23 @@
             </div>
             <div class="quick-kpi-item">
               <span class="kpi-label">Distributor Partners:</span>
-              <strong id="sum-dist-partners" style="color: #2563eb;">5,099 (20.1%)</strong>
+              <strong id="sum-dist-partners" style="color: #2563eb;">5,678 (22.4%)</strong>
             </div>
             <div class="quick-kpi-item">
               <span class="kpi-label">Avg MQL Score:</span>
-              <strong id="sum-avg-score">76 / 100</strong>
+              <strong id="sum-avg-score">72 / 100</strong>
             </div>
           </div>
+
+          <!-- Breakdown Toggle Button -->
+          <button id="btn-toggle-breakdown" class="btn btn-outline btn-sm btn-breakdown-toggle" type="button" title="Toggle detailed segment, state, and distributor breakdown cards">
+            <span id="breakdown-toggle-text">Show Breakdowns</span>
+            <span id="breakdown-toggle-arrow">▾</span>
+          </button>
         </div>
 
         <!-- 3 Dimensional Breakdown Grid: Segments, Geography, Distributors -->
-        <div class="summary-breakdowns-grid">
+        <div class="summary-breakdowns-grid" id="summary-breakdowns-grid" style="display: none;">
           <!-- Breakdown 1: IFMA Segment & Key Sub-segments -->
           <div class="summary-breakdown-card">
             <div class="breakdown-card-header">
