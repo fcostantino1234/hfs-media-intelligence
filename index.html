@@ -1884,7 +1884,12 @@
           </div>
         </div>
       </div>
-      <button id="btn-close-drawer" class="btn-close-drawer">&times;</button>
+      <div class="drawer-header-controls">
+        <button type="button" class="btn-drawer-minimize" id="btn-minimize-drawer-header" title="Minimize drawer to bottom dock">
+          <span class="min-icon">&minus;</span> Minimize
+        </button>
+        <button id="btn-close-drawer" class="btn-close-drawer" title="Close drawer">&times;</button>
+      </div>
     </div>
 
     <div class="drawer-body">
@@ -1982,8 +1987,49 @@
         <div id="drawer-comments-box" class="comments-box"></div>
       </div>
 
+      <!-- Sticky Drawer Bottom Bar with Minimize & Close Options -->
+      <div class="drawer-bottom-sticky-bar">
+        <div class="drawer-bottom-info">
+          Finished reviewing this operator?
+        </div>
+        <div class="drawer-bottom-actions">
+          <button type="button" class="btn btn-drawer-min-action" id="btn-minimize-drawer-bottom">
+            <span>&minus;</span> Minimize Drawer
+          </button>
+          <button type="button" class="btn btn-chartreuse btn-drawer-close-action" id="btn-close-drawer-bottom">
+            <span>&check;</span> Done / Back to Table &rarr;
+          </button>
+        </div>
+      </div>
+
     </div>
   </aside>
+
+  <!-- ========================================================================= -->
+  <!-- MINIMIZED ACTIVE LEAD DOCK STRIP                                          -->
+  <!-- ========================================================================= -->
+  <div id="minimized-lead-dock" class="minimized-lead-dock" style="display: none;">
+    <div class="minimized-lead-content">
+      <div class="minimized-lead-badge">
+        <span class="pulse-indicator"></span>
+        <span class="min-lead-tag">// ACTIVE LEAD //</span>
+      </div>
+      <div class="minimized-lead-text">
+        <strong id="min-dock-name">Jennifer Grenfell</strong>
+        <span class="min-dock-sep">&bull;</span>
+        <span id="min-dock-company">The Children's Center of Hamden</span>
+        <span class="min-dock-meta" id="min-dock-meta">(Hamden, CT)</span>
+      </div>
+    </div>
+    <div class="minimized-lead-buttons">
+      <button type="button" class="btn btn-min-expand" id="btn-expand-minimized-lead" title="Expand lead detail drawer">
+        <span>&blacktriangle;</span> Expand Lead
+      </button>
+      <button type="button" class="btn btn-min-dismiss" id="btn-dismiss-minimized-lead" title="Close and clear active lead">
+        &times;
+      </button>
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- EMAIL OUTREACH MODAL                                                      -->

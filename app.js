@@ -80,6 +80,7 @@
   // ===========================================================================
   let allLeads = [];
   let filteredLeads = [];
+  let currentDrawerLead = null;
   let allTactics = [];
 
   let currentView = 'leads'; // 'leads' (default) | 'isolator' | 'timeline' | 'trends' | 'roi'
@@ -4214,6 +4215,9 @@
   }
 
   function openLeadDrawer(lead) {
+    currentDrawerLead = lead;
+    const dockEl = document.getElementById('minimized-lead-dock');
+    if (dockEl) dockEl.style.display = 'none';
     const intel = getRestaurantConceptProfile(lead);
 
     const nameEl = document.getElementById('drawer-lead-name');
@@ -4406,10 +4410,43 @@
     document.getElementById('lead-drawer').setAttribute('aria-hidden', 'false');
   }
 
+  function minimizeLeadDrawer() {
+    const overlay = document.getElementById('drawer-overlay');
+    const drawer = document.getElementById('lead-drawer');
+    if (overlay) overlay.classList.remove('open');
+    if (drawer) {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+
+    if (currentDrawerLead) {
+      const dockEl = document.getElementById('minimized-lead-dock');
+      const nameEl = document.getElementById('min-dock-name');
+      const compEl = document.getElementById('min-dock-company');
+      const metaEl = document.getElementById('min-dock-meta');
+
+      if (nameEl) nameEl.textContent = currentDrawerLead.full_name || 'Active Lead';
+      if (compEl) compEl.textContent = currentDrawerLead.company || 'Personal Contact';
+      if (metaEl) {
+        const loc = [currentDrawerLead.city, currentDrawerLead.state].filter(Boolean).join(', ');
+        metaEl.textContent = loc ? `(${loc})` : '';
+      }
+      if (dockEl) dockEl.style.display = 'flex';
+      showToast('Lead minimized to dock — click Expand to resume');
+    }
+  }
+
   function closeLeadDrawer() {
-    document.getElementById('drawer-overlay').classList.remove('open');
-    document.getElementById('lead-drawer').classList.remove('open');
-    document.getElementById('lead-drawer').setAttribute('aria-hidden', 'true');
+    const overlay = document.getElementById('drawer-overlay');
+    const drawer = document.getElementById('lead-drawer');
+    if (overlay) overlay.classList.remove('open');
+    if (drawer) {
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+    }
+    const dockEl = document.getElementById('minimized-lead-dock');
+    if (dockEl) dockEl.style.display = 'none';
+    currentDrawerLead = null;
   }
 
   function getScoreExplanation(lead) {
@@ -5490,6 +5527,42 @@ Hormel Foodservice`;
         }
       });
     }
+
+    // Drawer minimize & close actions
+    const btnMinHeader = document.getElementById('btn-minimize-drawer-header');
+    if (btnMinHeader) btnMinHeader.addEventListener('click', minimizeLeadDrawer);
+
+    const btnMinBottom = document.getElementById('btn-minimize-drawer-bottom');
+    if (btnMinBottom) btnMinBottom.addEventListener('click', minimizeLeadDrawer);
+
+    const btnCloseBottom = document.getElementById('btn-close-drawer-bottom');
+    if (btnCloseBottom) btnCloseBottom.addEventListener('click', closeLeadDrawer);
+
+    const btnExpandMin = document.getElementById('btn-expand-minimized-lead');
+    if (btnExpandMin) {
+      btnExpandMin.addEventListener('click', () => {
+        if (currentDrawerLead) openLeadDrawer(currentDrawerLead);
+      });
+    }
+
+    const btnDismissMin = document.getElementById('btn-dismiss-minimized-lead');
+    if (btnDismissMin) {
+      btnDismissMin.addEventListener('click', () => {
+        const dockEl = document.getElementById('minimized-lead-dock');
+        if (dockEl) dockEl.style.display = 'none';
+        currentDrawerLead = null;
+      });
+    }
+
+    // Keyboard ESC listener to minimize drawer
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const drawer = document.getElementById('lead-drawer');
+        if (drawer && drawer.classList.contains('open')) {
+          minimizeLeadDrawer();
+        }
+      }
+    });
 
     document.getElementById('btn-close-drawer').addEventListener('click', closeLeadDrawer);
     document.getElementById('drawer-overlay').addEventListener('click', closeLeadDrawer);
