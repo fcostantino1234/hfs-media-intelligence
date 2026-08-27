@@ -3762,47 +3762,57 @@
     if (!currentEmailLead) return;
     const l = currentEmailLead;
     const type = document.getElementById('email-template-select').value;
-    const firstName = l.first_name || l.full_name.split(' ')[0] || 'there';
-    const repName = l.sales_rep || 'your Hormel Foodservice Representative';
+    const firstName = getCleanRecipientName(l);
+    const comp = getCleanCompanyDisplay(l);
+    const companyPhrase = comp ? `at ${comp}` : 'in your kitchen';
+    const repName = l.sales_rep || 'Your Dedicated Hormel Foodservice Representative';
     const brand = l.brand || 'Hormel Foodservice';
-    const company = l.company || 'your restaurant';
-    const distributor = l.distributor || 'your regional distributor';
+    const distributor = getCleanDistributorDisplay(l);
+    const subseg = l.subsegment || l.segment || 'foodservice';
 
     let subject = '';
     let body = '';
 
     if (type === 'follow_up_sample') {
-      subject = `Follow-up on your Hormel Foodservice Sample Request`;
+      subject = comp ? `Checking in on your ${brand} sample request — ${comp}` : `Checking in on your ${brand} sample request — Hormel Foodservice`;
       body = `Hi ${firstName},
 
-I saw that you recently submitted a sample inquiry for ${brand} products on our website through our ${l.tactic_name} placement (${l.key_hook}). 
+I hope you're having a great week!
 
-I wanted to follow up and see if you have had a chance to connect with ${distributor} to coordinate, or if I can assist with sample logistics directly.
+I saw that you recently checked out our ${brand} lineup and requested some product samples. I wanted to follow up personally to make sure you have everything you need to test them out with your culinary team ${companyPhrase}.
 
-Are you looking to add these items to your menu at ${company} in the near future?
+Have you had a chance to connect with ${distributor} on sample logistics yet, or would you like me to coordinate having a chef evaluation kit shipped directly to your kitchen?
+
+Curious—is there a specific dish, upcoming seasonal feature, or labor bottleneck you're looking to address with these items? I'd love to hear what you're working on and share recipe specs or food cost breakdowns if helpful.
+
+Warm regards,
+
+${repName}
+Culinary Specialist | Hormel Foodservice`;
+    } else if (type === 'general_intro') {
+      subject = comp ? `Culinary ideas & labor-saving thoughts for ${comp}` : `Quick hello & culinary thoughts — Hormel Foodservice`;
+      body = `Hi ${firstName},
+
+I'm ${repName} with Hormel Foodservice here in your region. I've been following what you're doing ${companyPhrase}, and with all the shifts happening across back-of-house kitchen operations lately, I wanted to introduce myself.
+
+Every chef and culinary director I speak with right now is balancing the same challenge: keeping plate presentation and flavor memorable while protecting their line cooks from grueling prep hours and runaway food waste.
+
+Our culinary team has developed scratch-quality protein solutions—from hardwood pit-smoked meats and artisan cup-and-char pepperoni to 100% usable yield bacon that bakes in one-third the time—specifically designed to fire in minutes with zero raw meat trimming or grease rendering.
+
+Curious—how is your kitchen currently holding up with prep labor during your busiest rushes?
+
+I'd love to drop off or ship a few complimentary chef samples for you and your team to taste whenever you have a free moment. Would you be open to a quick 5-minute chat next week?
 
 Best regards,
 
 ${repName}
 Hormel Foodservice Team`;
-    } else if (type === 'general_intro') {
-      subject = `Foodservice Protein Solutions - Hormel Foodservice`;
-      body = `Hi ${firstName},
-
-My name is ${repName}, and I am your dedicated Hormel Foodservice representative. I noticed your interest in our ${brand} portfolio page recently.
-
-I would love to learn more about the menu concepts at ${company} and share how our labor-saving proteins can support your kitchen. Do you have a few minutes for a brief introductory call this week?
-
-Best,
-
-${repName}
-Hormel Foodservice`;
     } else if (type === 'brand_pitch') {
       const brands = window.BRAND_CATALOG_DATA || [];
       const bName = (brand || '').toLowerCase();
       let matchedBrand = brands.find(b => bName.includes(b.brand_line.toLowerCase()) || b.brand_line.toLowerCase().includes(bName));
       if (!matchedBrand) {
-        const sub = (l.subsegment || l.segment || '').toLowerCase();
+        const sub = (subseg || '').toLowerCase();
         if (sub.includes('pizz') || sub.includes('italian')) matchedBrand = brands.find(b => b.id === 'fontanini');
         else if (sub.includes('college') || sub.includes('c&u')) matchedBrand = brands.find(b => b.id === 'hormel-halal');
         else if (sub.includes('school') || sub.includes('k-12')) matchedBrand = brands.find(b => b.id === 'jennie-o');
@@ -3811,38 +3821,39 @@ Hormel Foodservice`;
         else matchedBrand = brands[0]; // Bacon 1
       }
       const topSku = (matchedBrand && matchedBrand.flagship_skus && matchedBrand.flagship_skus[0]) || { item_code: '#102342', name: 'Flagship SKU' };
-      const prep = (matchedBrand && (matchedBrand.prep_specs.convection_oven || matchedBrand.prep_specs.deep_fryer || matchedBrand.prep_specs.oven_bake || matchedBrand.prep_specs.steamer_or_oven)) || 'Heat & Serve';
+      const prep = (matchedBrand && (matchedBrand.prep_specs.convection_oven || matchedBrand.prep_specs.deep_fryer || matchedBrand.prep_specs.oven_bake || matchedBrand.prep_specs.steamer_or_oven)) || 'under 5 minutes';
+      const bTitle = matchedBrand ? matchedBrand.brand_name : brand;
 
-      subject = `Culinary Labor-Saving Solutions with ${matchedBrand ? matchedBrand.brand_name : brand} for ${company}`;
+      subject = comp ? `Labor-saving culinary solutions with ${bTitle} for ${comp}` : `Labor-saving culinary solutions with ${bTitle} — Hormel Foodservice`;
       body = `Hi ${firstName},
 
-I noticed your inquiry regarding ${brand} on our website. As your dedicated Hormel Foodservice representative, I wanted to share how our culinary solutions can solve back-of-house labor challenges at ${company}:
+I noticed your recent interest in ${bTitle} on our website, and I wanted to reach out with a few practical back-of-house thoughts ${companyPhrase}.
 
-"${matchedBrand ? matchedBrand.official_copy : ''}"
+One of the biggest pain points kitchen operators share with us is the trade-off between from-scratch flavor and prep time. With ${bTitle}, you get ${matchedBrand ? matchedBrand.prep_specs.labor_savings.toLowerCase() : 'significant back-of-house labor savings'}, delivering ${matchedBrand ? matchedBrand.prep_specs.yield_advantage.toLowerCase() : '100% usable billable yield'} with an active prep or heat time of just ${prep}.
 
-Operational & Speed Highlights:
-• BOH Prep Benchmark: ${prep}
-• Kitchen Labor Savings: ${matchedBrand ? matchedBrand.prep_specs.labor_savings : 'Eliminates skilled prep labor'}
-• Yield Advantage: ${matchedBrand ? matchedBrand.prep_specs.yield_advantage : '100% usable billable yield'}
+Our kitchen's top recommendation for your menu is ${topSku.name} (${topSku.item_code}). It delivers consistent from-scratch flavor and texture on every single order, giving your line cooks speed and consistency during high-volume rushes.
 
-Our top recommended product for your kitchen is ${topSku.name} (${topSku.item_code}).
+Curious—how is your team currently handling prep for this part of your menu? Are you prepping from raw in-house, or exploring ways to reduce kitchen prep hours?
 
-Would you be open to receiving a chef sample kit or coordinating a cut-and-wrap demonstration with ${distributor}?
+I'd love to arrange a complimentary chef evaluation kit or set up a cut-and-wrap demonstration through ${distributor} so you and your team can taste the difference on your own line. Would you be open to receiving a sample box next week?
 
-Best regards,
+Warm regards,
 
 ${repName}
-Hormel Foodservice Team
-https://www.hormelfoodservice.com/`;
+Hormel Foodservice Team`;
     } else if (type === 'brand_interest') {
-      subject = `Menu Innovation with ${brand} - Hormel Foodservice`;
+      subject = comp ? `Fresh menu inspiration & recipe builds with ${brand} for ${comp}` : `Fresh menu inspiration & recipe builds with ${brand}`;
       body = `Hi ${firstName},
 
-Thank you for your interest in our ${brand} product line. Our culinary team has put together some menu inspiration and recipe suggestions specifically tailored for ${l.subsegment || l.segment} operators around ${l.key_hook}.
+Thanks for checking out our ${brand} lineup! Our culinary team recently put together some fresh recipe builds tailored for ${subseg} operations, and a few immediately brought your kitchen to mind.
 
-I've prepared some product details and specs for ${company}. Let me know if you would like to schedule a brief consultation to explore how we can help save on back-of-house labor while driving guest traffic.
+Guests today are craving bold, authentic flavors, but kitchen teams need items that can be executed flawlessly even when working with a lean crew. We've seen operators drive great margin by featuring ${brand} across appetizers, handhelds, and specialty entrees—cutting prep time dramatically while delivering 100% usable yield.
 
-Best,
+Curious—are you thinking about refreshing any parts of your menu or testing seasonal features in the coming months?
+
+I'd love to share our latest culinary lookbook and send a chef sample kit your way so you can put it through its paces on your own line. Let me know if you'd be open to tasting a few items!
+
+Best regards,
 
 ${repName}
 Hormel Foodservice`;
@@ -5634,6 +5645,43 @@ Hormel Foodservice`;
     };
   }
 
+
+  // ===========================================================================
+  // CONVERSATIONAL SCRIPT & RECIPIENT SANITIZERS
+  // ===========================================================================
+  function getCleanRecipientName(lead) {
+    if (lead.first_name && lead.first_name.trim()) {
+      const fn = lead.first_name.trim();
+      return fn.charAt(0).toUpperCase() + fn.slice(1).toLowerCase();
+    }
+    if (lead.full_name && lead.full_name.trim() && !lead.full_name.includes('@')) {
+      const parts = lead.full_name.trim().split(/[\s,]+/);
+      if (parts.length > 0 && parts[0].length > 1) {
+        return parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+      }
+    }
+    return 'Chef';
+  }
+
+  function getCleanCompanyDisplay(lead) {
+    const raw = (lead.company || '').trim();
+    if (!raw) return '';
+    const lower = raw.toLowerCase();
+    const junkTokens = ['household', 'orphan contact', 'account -', 'not specified', 'none', 'n/a', 'na', 'self', 'home', 'consumer', 'my house', 'house', 'student'];
+    if (junkTokens.some(tok => lower.includes(tok))) return '';
+    return raw;
+  }
+
+  function getCleanDistributorDisplay(lead) {
+    const raw = (lead.distributor || '').trim();
+    if (!raw) return 'your primary broadline distributor';
+    const lower = raw.toLowerCase();
+    if (lower === 'none' || lower === 'n/a' || lower === 'no' || lower.includes('unspecified') || lower === 'direct') {
+      return 'your primary broadline distributor';
+    }
+    return raw;
+  }
+
   function renderDrawerRestaurantMenuIdeation(lead) {
     const container = document.getElementById('drawer-menu-ideation-container');
     if (!container) return;
@@ -5706,29 +5754,39 @@ Hormel Foodservice`;
     const copyMenuBtn = document.getElementById('btn-copy-menu-pitches');
     if (copyMenuBtn) {
       copyMenuBtn.onclick = () => {
-        const text = `Hi ${lead.full_name || 'Chef / Foodservice Operator'},
+        const recipient = getCleanRecipientName(lead);
+        const comp = getCleanCompanyDisplay(lead);
+        const venuePhrase = comp ? `at ${comp}` : 'for your kitchen';
+        const repName = lead.sales_rep || 'Your Hormel Foodservice Culinary Specialist';
+        const knownTopic = (intel.knownFor || 'scratch-quality food and guest hospitality').replace(/\.$/, '');
 
-Based on your menu at ${intel.compDisplay}, here are 3 high-margin culinary concepts designed to solve kitchen prep labor using Hormel Foodservice products:
+        let conceptsText = intel.ideas.map((idea, idx) => {
+          const cleanAdv = idea.advantage.replace(/^⏱️\s*/, '').replace(/^Prep:\s*/, '').trim();
+          return `${idx + 1}. ${idea.name} (${idea.placement})\n` +
+                 `   • The Dish: ${idea.desc}\n` +
+                 `   • BOH Advantage: Featuring ${idea.sku}. ${cleanAdv}\n`;
+        }).join('\n');
 
-` +
-          intel.ideas.map((idea, idx) => 
-            `Concept ${idx + 1}: ${idea.name} (${idea.placement})
-` +
-            `• Featured Ingredient: ${idea.sku}
-` +
-            `• Culinary Execution: ${idea.desc}
-` +
-            `• Kitchen Advantage: ${idea.advantage}
-`
-          ).join('\n') +
-          `
-Let me know if you would like me to ship commercial samples of these items for your culinary team to test!
+        const pitchText = `Hi ${recipient},
 
-Best regards,
-Hormel Foodservice Culinary Team`;
+I hope service is running smoothly this week! I was looking over what you're doing ${venuePhrase}—especially your focus on ${knownTopic.toLowerCase()}—and a few creative menu thoughts came to mind that could fit right into your lineup without adding prep strain to your line cooks.
 
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(`Copied 3 tailored menu concepts for ${intel.compDisplay} to clipboard!`);
+Here are 3 chef-crafted dish concepts I put together specifically with your kitchen in mind:
+
+${conceptsText}
+Curious—how is your kitchen currently holding up with prep hours during your busiest rushes? Are you experimenting with any new seasonal features or looking to streamline high-labor prep stations?
+
+I would love to drop off or ship a complimentary chef evaluation kit for you and your culinary crew to taste-test on your own equipment—no strings attached. Just wanted to share some culinary inspiration and see if any of these spark an idea for your menu.
+
+Would you be open to tasting a few samples next week?
+
+Warm regards,
+
+${repName}
+Culinary Specialist | Hormel Foodservice`;
+
+        navigator.clipboard.writeText(pitchText).then(() => {
+          showToast(`Copied conversational menu pitch for ${comp || 'Chef'} to clipboard!`);
         });
       };
     }
@@ -5889,33 +5947,34 @@ Hormel Foodservice Culinary Team`;
     const copyBtn = document.getElementById('btn-copy-lead-pitch');
     if (copyBtn) {
       copyBtn.onclick = () => {
-        const opName = lead.full_name || 'Chef / Foodservice Operator';
-        const venue = lead.company || 'your dining operation';
+        const recipient = getCleanRecipientName(lead);
+        const comp = getCleanCompanyDisplay(lead);
+        const venuePhrase = comp ? `for ${comp}` : 'for your kitchen';
         const primeCode = isSysco ? `Sysco SUPC #${codes.sysco_supc}` : (isUSFoods ? `US Foods Item #${codes.us_foods}` : (isGFS ? `GFS #${codes.gfs_item}` : (isPFG ? `PFG #${codes.pfg_item}` : `Sysco SUPC #${codes.sysco_supc} / US Foods #${codes.us_foods}`)));
-        
-        const script = `Hi ${opName},
+        const repName = lead.sales_rep || 'Hormel Foodservice Culinary Team';
 
-I noticed your inquiry regarding ${lead.brand || matchedBrand.brand_name} for ${venue}. At Hormel Foodservice, we designed ${matchedBrand.brand_name} specifically to solve back-of-house labor challenges: "${matchedBrand.tagline}"
+        const script = `Hi ${recipient},
 
-Key Operational Highlights:
-• Prep Efficiency: ${prepSummary}
-• Labor Savings: ${matchedBrand.prep_specs.labor_savings}
-• Usable Yield: ${matchedBrand.prep_specs.yield_advantage}
+I saw that you were looking into our ${lead.brand || matchedBrand.brand_name} lineup ${venuePhrase}. With everything that goes into running a high-volume kitchen, I wanted to share a quick culinary thought.
 
-Our top recommended item for your menu is ${topSku.name} (${topSku.item_code}).
+One of the biggest challenges operators talk to us about is balancing authentic scratch flavor with back-of-house speed. Our culinary team designed ${topSku.name} (${topSku.item_code}) specifically for that: it delivers ${matchedBrand.prep_specs.yield_advantage.toLowerCase()} with a prep time of just ${prepSummary}, eliminating raw meat trimming and reducing line pressure during peak rushes.
 
-Distributor Order Details:
-• Primary Location: ${distIntel.branchName} (${distIntel.branchLocation})
-• Ordering Code: ${primeCode} (Dot Item #${codes.dot_foods})
-• Verify Availability: https://www.hormelfoodservice.com/find-distributor/ (SKU: ${cleanSkuDigits}, ZIP: ${distIntel.zipUsed})
+Curious—how is your kitchen currently handling prep for this part of your menu? Are you exploring ways to take pressure off your line cooks?
 
-I would love to arrange an operator sample or connect with your distributor rep at ${distIntel.primaryDistributor}.
+If you'd like to test a case on your next order, your local distributor rep at ${distIntel.branchName} (${distIntel.branchLocation}) already has this in stock:
+• Featured Item: ${topSku.name} (Hormel SKU: ${cleanSkuDigits})
+• Primary Ordering Code: ${primeCode} (Dot Foods Item #${codes.dot_foods})
+• Instant Stock Check: https://www.hormelfoodservice.com/find-distributor/ (ZIP: ${distIntel.zipUsed})
 
-Best regards,
+I'd be glad to coordinate a complimentary chef sample kit or connect with your rep at ${distIntel.primaryDistributor} so you can taste it on your own line. Would you be open to tasting a sample next week?
+
+Warm regards,
+
+${repName}
 Hormel Foodservice Culinary Team`;
-        
+
         navigator.clipboard.writeText(script).then(() => {
-          showToast(`Copied personalized pitch & distributor script for ${lead.company || lead.full_name} to clipboard!`);
+          showToast(`Copied conversational distributor pitch for ${comp || 'Chef'} to clipboard!`);
         });
       };
     }
