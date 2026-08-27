@@ -1766,38 +1766,93 @@
   <!-- LEAD DETAIL DRAWER                                                        -->
   <!-- ========================================================================= -->
   <div id="drawer-overlay" class="drawer-overlay"></div>
-  <aside id="lead-drawer" class="lead-drawer" aria-hidden="true">
+    <aside id="lead-drawer" class="lead-drawer" aria-hidden="true">
+    <!-- Primary Top Operator Card (Contact Name, Restaurant, Address, What They Are Known For) -->
     <div class="drawer-header">
-      <div class="drawer-header-left">
-        <h2 id="drawer-lead-name">Operator Name</h2>
-        <div id="drawer-lead-company" class="drawer-company-line">Company Name • City, State</div>
-        <div id="drawer-badges" class="drawer-badges"></div>
+      <div class="drawer-header-primary">
+        <div class="drawer-name-badge-row">
+          <h2 id="drawer-lead-name" class="drawer-primary-contact-name">Operator Name</h2>
+          <div id="drawer-badges" class="drawer-badges"></div>
+        </div>
+
+        <!-- Venue / Restaurant Card -->
+        <div class="drawer-venue-card">
+          <div class="drawer-venue-main">
+            <span id="drawer-company-name" class="drawer-venue-name">Restaurant / Operation Name</span>
+            <span id="drawer-job-title" class="drawer-venue-role">Executive Chef</span>
+          </div>
+          <div class="drawer-venue-address">
+            <span id="drawer-address-full">Address Not Listed</span>
+            <a id="action-maps" href="#" target="_blank" class="address-link-btn" title="View on Google Maps">Maps &rarr;</a>
+            <a id="drawer-menu-link" href="#" target="_blank" class="address-link-btn" title="Search Restaurant Menu">Menu &rarr;</a>
+          </div>
+        </div>
+
+        <!-- What They Are Known For (High-Priority Primary Sourced Intel) -->
+        <div class="drawer-known-for-card" id="drawer-primary-known-for-card">
+          <div class="known-for-label">// CULINARY IDENTITY // WHAT THEY ARE KNOWN FOR //</div>
+          <div id="drawer-known-for-text" class="known-for-text">
+            Sourced culinary specialty and kitchen focus...
+          </div>
+        </div>
+
+        <!-- Direct Contact Reach & Actions Toolbar -->
+        <div class="drawer-contact-reach-bar">
+          <div class="drawer-contact-pills">
+            <a id="drawer-email-link" href="#" class="contact-reach-pill" title="Email Operator">operator@email.com</a>
+            <span id="drawer-phone" class="contact-reach-pill phone-pill">Phone not listed</span>
+            <span id="drawer-distributor-pill" class="contact-reach-pill dist-pill">Distributor: —</span>
+          </div>
+
+          <div class="drawer-action-toolbar">
+            <button id="action-email" class="btn-action btn-action-email">Email Lead</button>
+            <button id="action-call" class="btn-action btn-action-call">Call Operator</button>
+            <button id="action-website" class="btn-action btn-action-web">Website</button>
+            <button id="action-crm" class="btn-action btn-action-crm">Salesforce CRM</button>
+          </div>
+        </div>
       </div>
       <button id="btn-close-drawer" class="btn-close-drawer">&times;</button>
     </div>
 
     <div class="drawer-body">
       
-      <!-- Action Toolbar -->
-      <div class="drawer-action-toolbar">
-        <button id="action-email" class="btn-action btn-action-email">Quick Email</button>
-        <button id="action-call" class="btn-action btn-action-call">Call Operator</button>
-        <button id="action-website" class="btn-action btn-action-web">Company Website</button>
-        <button id="action-maps" class="btn-action btn-action-map">Google Maps</button>
-        <button id="action-crm" class="btn-action btn-action-crm">Salesforce CRM</button>
+      <!-- 1. The Attribution & Marketing Pathway (Second in hierarchy) -->
+      <div class="drawer-section">
+        <h4 class="drawer-section-title">// SEQUENTIAL MARKETING PATHWAY //</h4>
+        <div class="attribution-pathway" id="drawer-attribution-pathway">
+          <!-- Pathway nodes rendered via JS -->
+        </div>
       </div>
 
-      <!-- Priority & Status Section -->
+      <!-- 2. Restaurant Concept Notes & Menu Ideation (Third in hierarchy) -->
+      <div class="drawer-section" id="drawer-restaurant-culinary-intel-section">
+        <h4 class="drawer-section-title">// RESTAURANT CONCEPT NOTES & MENU IDEATION //</h4>
+        <div id="drawer-menu-ideation-container">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+
+      <!-- 3. Hormel Brand Pitch & Distributor Intel (Fourth in hierarchy) -->
+      <div class="drawer-section" id="drawer-culinary-playbook-section">
+        <h4 class="drawer-section-title">// BRAND PITCH & DISTRIBUTOR INTEL //</h4>
+        <div id="drawer-brand-pitch-container">
+          <!-- Dynamically populated via JS from BRAND_CATALOG_DATA -->
+        </div>
+      </div>
+
+      <!-- 4. Follow-up Priority & Status Section -->
       <div class="drawer-section drawer-priority-section">
+        <h4 class="drawer-section-title">// LEAD QUALIFICATION & REP FOLLOW-UP //</h4>
         <div class="priority-row">
           <div class="priority-item">
             <label>Status:</label>
             <select id="drawer-lead-status" class="form-select form-select-status">
-              <option value="New">[NEW] New Lead</option>
-              <option value="Attempted Contact">[ATTEMPTED] Attempted Contact</option>
-              <option value="Contacted">[CONTACTED] Contacted</option>
-              <option value="Qualified">[QUALIFIED] Qualified Opportunity</option>
-              <option value="Unqualified">[UNQUALIFIED] Unqualified</option>
+              <option value="New">🟢 New Lead</option>
+              <option value="Attempted Contact">🟡 Attempted Contact</option>
+              <option value="Contacted">🔵 Contacted</option>
+              <option value="Qualified">⭐ Qualified Opportunity</option>
+              <option value="Unqualified">⚪ Unqualified</option>
             </select>
           </div>
           <div class="priority-item">
@@ -1818,59 +1873,10 @@
         </div>
       </div>
 
-      <!-- Marketing Pathway -->
+      <!-- 5. Extended Operational Attributes -->
       <div class="drawer-section">
-        <h4 class="drawer-section-title">// SEQUENTIAL MARKETING PATHWAY //</h4>
-        <div class="attribution-pathway" id="drawer-attribution-pathway">
-          <!-- Pathway nodes rendered via JS -->
-        </div>
-      </div>
-
-      <!-- Hormel Brand Pitch & Culinary Playbook Section -->
-      <div class="drawer-section" id="drawer-culinary-playbook-section">
-        <h4 class="drawer-section-title">// BRAND PITCH & DISTRIBUTOR INTEL //</h4>
-        <div id="drawer-brand-pitch-container">
-          <!-- Dynamically populated via JS from BRAND_CATALOG_DATA -->
-        </div>
-      </div>
-
-
-      <!-- Restaurant Concept Intelligence & Menu Ideation Section -->
-      <div class="drawer-section" id="drawer-restaurant-culinary-intel-section">
-        <h4 class="drawer-section-title">// RESTAURANT CONCEPT NOTES & MENU IDEATION //</h4>
-        <div id="drawer-menu-ideation-container">
-          <!-- Dynamically populated via JS -->
-        </div>
-      </div>
-
-      <!-- Operator Contact & Details -->
-      <div class="drawer-section">
-        <h4 class="drawer-section-title">// OPERATOR DETAILS //</h4>
+        <h4 class="drawer-section-title">// EXTENDED OPERATIONAL ATTRIBUTES //</h4>
         <div class="drawer-grid">
-          <div class="drawer-grid-item">
-            <label>Email Address</label>
-            <a id="drawer-email-link" href="#" class="text-link">operator@email.com</a>
-          </div>
-          <div class="drawer-grid-item">
-            <label>Phone Number</label>
-            <span id="drawer-phone">—</span>
-          </div>
-          <div class="drawer-grid-item">
-            <label>Job Title</label>
-            <span id="drawer-job-title">—</span>
-          </div>
-          <div class="drawer-grid-item">
-            <label>Restaurant / Company</label>
-            <span id="drawer-company-name">—</span>
-          </div>
-          <div class="drawer-grid-item">
-            <label>Street Address</label>
-            <span id="drawer-address">—</span>
-          </div>
-          <div class="drawer-grid-item">
-            <label>City, State, Zip</label>
-            <span id="drawer-city-state-zip">—</span>
-          </div>
           <div class="drawer-grid-item">
             <label>Primary Distributor</label>
             <span id="drawer-distributor">—</span>
@@ -1898,7 +1904,7 @@
         </div>
       </div>
 
-      <!-- Customer Comments -->
+      <!-- 6. Customer Comments -->
       <div class="drawer-section">
         <h4 class="drawer-section-title">// INBOUND INQUIRY //</h4>
         <div id="drawer-comments-box" class="comments-box"></div>

@@ -3131,11 +3131,11 @@
   function getStatusBadgeHtml(lead) {
     const status = getLeadStatus(lead);
     let css = 'status-new';
-    let icon = '[NEW]';
-    if (status === 'Attempted Contact') { css = 'status-attempted'; icon = '[ATTEMPTED]'; }
-    if (status === 'Contacted') { css = 'status-contacted'; icon = '[CONTACTED]'; }
+    let icon = '🟢';
+    if (status === 'Attempted Contact') { css = 'status-attempted'; icon = '🟡'; }
+    if (status === 'Contacted') { css = 'status-contacted'; icon = '🔵'; }
     if (status === 'Qualified') { css = 'status-qualified'; icon = '[ENT]'; }
-    if (status === 'Unqualified') { css = 'status-unqualified'; icon = '[UNQUALIFIED]'; }
+    if (status === 'Unqualified') { css = 'status-unqualified'; icon = '⚪'; }
     return `<span class="status-badge ${css}">${icon} ${status}</span>`;
   }
 
@@ -3507,32 +3507,66 @@
   }
 
   function openLeadDrawer(lead) {
-    document.getElementById('drawer-lead-name').textContent = lead.full_name || 'Anonymous Lead';
-    document.getElementById('drawer-lead-company').textContent = `${lead.company || 'Private Operator'} • ${lead.city || ''}, ${lead.state || ''}`;
+    const intel = getRestaurantConceptProfile(lead);
+
+    document.getElementById('drawer-lead-name').textContent = lead.full_name || 'Anonymous Contact';
+    
+    // Populate Top Venue Card
+    const venueNameEl = document.getElementById('drawer-company-name');
+    if (venueNameEl) venueNameEl.textContent = lead.company || 'Private Dining Operation';
+
+    const jobTitleEl = document.getElementById('drawer-job-title');
+    if (jobTitleEl) jobTitleEl.textContent = lead.job_title || 'Foodservice Decision Maker';
+
+    // Populate Address & Map Links
+    const addrFullEl = document.getElementById('drawer-address-full');
+    const fullAddrStr = [lead.address, lead.city, lead.state, lead.zip].filter(Boolean).join(', ') || 'Address not listed';
+    if (addrFullEl) addrFullEl.textContent = fullAddrStr;
+
+    const mapsBtn = document.getElementById('action-maps');
+    if (mapsBtn) {
+      const mapsQ = encodeURIComponent([lead.company, lead.address, lead.city, lead.state, lead.zip].filter(Boolean).join(' '));
+      mapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${mapsQ}`;
+    }
+
+    const menuBtn = document.getElementById('drawer-menu-link');
+    if (menuBtn) {
+      menuBtn.href = lead.menu_search_url || `https://www.google.com/search?q=${encodeURIComponent((lead.company || '') + ' menu')}`;
+    }
+
+    // Populate What They Are Known For in Top Primary Card
+    const knownForEl = document.getElementById('drawer-known-for-text');
+    if (knownForEl) {
+      knownForEl.innerHTML = `<strong>${escapeHtml(intel.knownFor)}</strong> — ${escapeHtml(intel.opsChallenge)}`;
+    }
+
+    // Populate Contact Reach Pills
+    const distPill = document.getElementById('drawer-distributor-pill');
+    if (distPill) {
+      distPill.textContent = lead.distributor ? `Distributor: ${lead.distributor}` : 'Distributor: Unspecified';
+    }
 
     const badges = document.getElementById('drawer-badges');
     let opBadgeHtml = '';
     if (lead.mql_tier === 'certified_mql' || lead.is_verified_operator) {
-      opBadgeHtml = `<span class="badge-operator-certified" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ CERTIFIED MQL ]</span>`;
+      opBadgeHtml = `<span class="badge-operator-certified" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🛡️ Certified Foodservice Outlet (MQL)</span>`;
     } else if (lead.mql_tier === 'distributor') {
-      opBadgeHtml = `<span class="badge-distributor-partner" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ DISTRIBUTOR PARTNER ]</span>`;
+      opBadgeHtml = `<span class="badge-distributor-partner" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🤝 Foodservice Distributor Partner</span>`;
     } else if (lead.mql_tier === 'prospective') {
-      opBadgeHtml = `<span class="badge-operator-prospective" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ PROSPECTIVE OPERATOR ]</span>`;
+      opBadgeHtml = `<span class="badge-operator-prospective" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🟡 Prospective Operator (Pending Match)</span>`;
     } else if (lead.mql_tier === 'internal') {
-      opBadgeHtml = `<span class="badge-internal" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ INTERNAL RECORD ]</span>`;
+      opBadgeHtml = `<span class="badge-internal" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏢 Internal Corporate Record</span>`;
     } else {
-      opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">[ CONSUMER PROFILE ]</span>`;
+      opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏠 Home Cook / Consumer Profile</span>`;
     }
 
     const depDateStr = lead.tactic_run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
     badges.innerHTML = `
       ${opBadgeHtml}
-      <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">Flight Deployed: ${escapeHtml(depDateStr)}</span>
-      <span class="badge badge-hook">${escapeHtml(lead.key_hook)}</span>
+      <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">Flight: ${escapeHtml(depDateStr)}</span>
       <span class="badge badge-brand">${escapeHtml(lead.brand)}</span>
       <span class="badge badge-segment">${escapeHtml(lead.subsegment || lead.segment)}</span>
-      <span class="badge badge-type">${escapeHtml(lead.tactic_type)}</span>
-      ${lead.is_enterprise ? '<span class="badge badge-brand" style="background-color: #fef08a; color: #854d0e;">[ ENTERPRISE ACCOUNT ]</span>' : ''}
+      ${lead.is_enterprise ? '<span class="badge badge-brand" style="background-color: #fef08a; color: #854d0e;">[ ENTERPRISE ]</span>' : ''}
     `;
 
     const emailLink = document.getElementById('drawer-email-link');
