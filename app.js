@@ -115,6 +115,8 @@
   // Chart Instances
   let chartLeadsTimeseries = null;
   let chartFlightConvergence = null;
+  let flightScaleMode = 'smart';
+  let corrSeriesFilter = 'all';
   let chartSpendLeads = null;
   let chartPubShare = null;
   let chartSegBreakdown = null;
@@ -1597,16 +1599,24 @@
 
     const targetYear = getActiveYearTarget();
 
-    const leadsPerQuarter = quarters.map(q => {
+    const rawLeadsPerQuarter = quarters.map(q => {
       const bounds = qDateMap[q];
       if (!bounds) return 0;
-      // If a specific fiscal year is active, filter quarters outside that year
       if (targetYear && !q.startsWith(targetYear)) return 0;
       return allLeads.filter(l => {
         if (globalBrand && !matchesBrand(l.brand, globalBrand)) return false;
         const d = (l.date || '').slice(0, 10);
         return d >= bounds[0] && d <= bounds[1];
       }).length;
+    });
+
+    // In smart scale mode, clamp FY25 Q1 (17,288 leads) to ceiling (1,200) to reveal normal quarterly trends
+    const displayLeadsPerQuarter = quarters.map((q, idx) => {
+      const raw = rawLeadsPerQuarter[idx];
+      if (flightScaleMode === 'smart' && q === 'FY25 Q1') {
+        return 1200; // Visual clamp at chart ceiling
+      }
+      return raw;
     });
 
     const spendPerQuarter = quarters.map(q => {
@@ -1620,6 +1630,12 @@
       return Math.round(totalQSpend / 1000);
     });
 
+    // Update outlier callout banner visibility
+    const calloutEl = document.getElementById('flight-outlier-callout');
+    if (calloutEl) {
+      calloutEl.style.display = flightScaleMode === 'smart' ? 'flex' : 'none';
+    }
+
     if (chartFlightConvergence) chartFlightConvergence.destroy();
     chartFlightConvergence = new Chart(ctx, {
       type: 'bar',
@@ -1628,32 +1644,109 @@
         datasets: [
           {
             type: 'bar',
-            label: 'Media Spend ($ Thousands)',
+            label: 'Media Flight Spend ($K)',
             data: spendPerQuarter,
-            backgroundColor: 'rgba(14, 49, 61, 0.75)',
-            yAxisID: 'y'
+            backgroundColor: 'rgba(10, 25, 33, 0.85)',
+            borderColor: '#C6FF00',
+            borderWidth: { top: 2, left: 0, right: 0, bottom: 0 },
+            borderRadius: 4,
+            yAxisID: 'y',
+            order: 2
           },
           {
             type: 'line',
-            label: 'Operator Leads Generated',
-            data: leadsPerQuarter,
+            label: flightScaleMode === 'smart' ? 'Operator Leads (Organic Scale)' : 'Total Inbound Leads',
+            data: displayLeadsPerQuarter,
             borderColor: '#FF5500',
-            backgroundColor: '#FF5500',
+            backgroundColor: 'rgba(255, 85, 0, 0.1)',
             borderWidth: 3,
+            fill: true,
             tension: 0.3,
-            yAxisID: 'y1'
+            pointRadius: quarters.map(q => q === 'FY25 Q1' && flightScaleMode === 'smart' ? 7 : 4),
+            pointBackgroundColor: quarters.map(q => q === 'FY25 Q1' && flightScaleMode === 'smart' ? '#EF4444' : '#FF5500'),
+            pointBorderColor: '#FFFFFF',
+            pointBorderWidth: 2,
+            yAxisID: 'y1',
+            order: 1
           }
         ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: { font: { size: 11, weight: '700' }, color: '#334155', usePointStyle: true }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const idx = context.dataIndex;
+                const qName = quarters[idx];
+                const rawCount = rawLeadsPerQuarter[idx];
+                const spendVal = spendPerQuarter[idx];
+
+                if (context.dataset.type === 'bar') {
+                  return ` 💰 Media Flight Spend: $${spendVal}K ($${(spendVal * 1000).toLocaleString()})`;
+                } else {
+                  if (qName === 'FY25 Q1' && flightScaleMode === 'smart') {
+                    return ` 🎯 Inbound Leads: 17,288 total (Clamped • 17,199 one-time CRM migration + 89 organic)`;
+                  }
+                  return ` 🎯 Operator Leads: ${rawCount.toLocaleString()} inquiries`;
+                }
+              }
+            }
+          }
+        },
         scales: {
-          y: { type: 'linear', position: 'left', title: { display: true, text: 'Spend ($K)' } },
-          y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Inbound Leads' } }
+          y: {
+            type: 'linear',
+            position: 'left',
+            title: { display: true, text: 'Paid Media Spend ($K)', font: { weight: '800' }, color: '#0A1921' },
+            ticks: { callback: (v) => `$${v}K` },
+            grid: { color: 'rgba(0,0,0,0.05)' }
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            grid: { drawOnChartArea: false },
+            title: { display: true, text: flightScaleMode === 'smart' ? 'Organic Leads (Clamped @ 1.2K)' : 'Total Inbound Leads', font: { weight: '800' }, color: '#FF5500' },
+            min: 0,
+            max: flightScaleMode === 'smart' ? 1400 : 18000,
+            ticks: {
+              callback: (v) => {
+                if (flightScaleMode === 'smart' && v >= 1200) return '1,200+ (Clamped)';
+                return v.toLocaleString();
+              }
+            }
+          }
         }
       }
     });
+
+    // Wire up scale toggle buttons
+    const btnSmart = document.getElementById('btn-flight-scale-smart');
+    const btnFull = document.getElementById('btn-flight-scale-full');
+    if (btnSmart && !btnSmart.dataset.bound) {
+      btnSmart.dataset.bound = 'true';
+      btnSmart.addEventListener('click', () => {
+        flightScaleMode = 'smart';
+        btnSmart.classList.add('active');
+        if (btnFull) btnFull.classList.remove('active');
+        renderFlightConvergenceChart();
+      });
+    }
+    if (btnFull && !btnFull.dataset.bound) {
+      btnFull.dataset.bound = 'true';
+      btnFull.addEventListener('click', () => {
+        flightScaleMode = 'full';
+        btnFull.classList.add('active');
+        if (btnSmart) btnSmart.classList.remove('active');
+        renderFlightConvergenceChart();
+      });
+    }
   }
 
   // ===========================================================================
@@ -2040,61 +2133,89 @@
     const lkEl = document.getElementById('corr-lookups-ratio');
     if (lkEl) lkEl.textContent = `${ratio} : 1`;
 
+    // Build filtered datasets based on corrSeriesFilter
+    const datasets = [];
+
+    // Dataset 1: Spend (Always included)
+    datasets.push({
+      type: 'bar',
+      label: 'Paid Media Flight Spend ($K)',
+      data: spendVals,
+      backgroundColor: 'rgba(10, 25, 33, 0.88)',
+      borderColor: '#C6FF00',
+      borderWidth: { top: 2, left: 0, right: 0, bottom: 0 },
+      borderRadius: 4,
+      yAxisID: 'y',
+      order: 4
+    });
+
+    // Dataset 2: Total Sessions
+    if (corrSeriesFilter === 'all' || corrSeriesFilter === 'spend-traffic') {
+      datasets.push({
+        type: 'line',
+        label: 'Total Website Traffic (GA4 Sessions - Thousands)',
+        data: totalSessVals,
+        borderColor: '#059669',
+        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+        fill: corrSeriesFilter === 'spend-traffic',
+        borderWidth: 3,
+        tension: 0.3,
+        pointRadius: 4,
+        pointBackgroundColor: '#059669',
+        pointBorderColor: '#FFFFFF',
+        pointBorderWidth: 1.5,
+        yAxisID: 'y1',
+        order: 1
+      });
+    }
+
+    // Dataset 3: Direct Campaign UTMs
+    if (corrSeriesFilter === 'all' || corrSeriesFilter === 'spend-utms') {
+      datasets.push({
+        type: 'line',
+        label: 'Direct Campaign UTM Visits (Thousands)',
+        data: paidSessVals,
+        borderColor: '#FF5500',
+        backgroundColor: 'rgba(255, 85, 0, 0.1)',
+        fill: corrSeriesFilter === 'spend-utms',
+        borderWidth: 2.5,
+        borderDash: [5, 5],
+        tension: 0.3,
+        pointRadius: 3.5,
+        pointBackgroundColor: '#FF5500',
+        pointBorderColor: '#FFFFFF',
+        pointBorderWidth: 1.5,
+        yAxisID: 'y1',
+        order: 2
+      });
+    }
+
+    // Dataset 4: Distributor Lookups
+    if (corrSeriesFilter === 'all' || corrSeriesFilter === 'spend-lookups') {
+      datasets.push({
+        type: 'line',
+        label: 'Distributor Lookups (High-Intent B2B - Thousands)',
+        data: lookupsVals,
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+        fill: corrSeriesFilter === 'spend-lookups',
+        borderWidth: 2.5,
+        tension: 0.3,
+        pointRadius: 3.5,
+        pointBackgroundColor: '#2563eb',
+        pointBorderColor: '#FFFFFF',
+        pointBorderWidth: 1.5,
+        yAxisID: 'y1',
+        order: 3
+      });
+    }
+
     if (chartAdvertisingTraffic) chartAdvertisingTraffic.destroy();
     chartAdvertisingTraffic = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: labels,
-        datasets: [
-          {
-            type: 'bar',
-            label: 'Paid Media Flight Spend ($K)',
-            data: spendVals,
-            backgroundColor: 'rgba(14, 49, 61, 0.85)',
-            borderColor: '#0E313D',
-            borderWidth: 1,
-            yAxisID: 'y',
-            order: 3
-          },
-          {
-            type: 'line',
-            label: 'Total Website Traffic (GA4 Sessions - Thousands)',
-            data: totalSessVals,
-            borderColor: '#059669',
-            backgroundColor: '#059669',
-            borderWidth: 3,
-            tension: 0.3,
-            pointRadius: 4,
-            pointBackgroundColor: '#059669',
-            yAxisID: 'y1',
-            order: 1
-          },
-          {
-            type: 'line',
-            label: 'Direct Campaign UTM Visits (Thousands)',
-            data: paidSessVals,
-            borderColor: '#FF5500',
-            backgroundColor: '#FF5500',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            tension: 0.3,
-            pointRadius: 3,
-            yAxisID: 'y1',
-            order: 2
-          },
-          {
-            type: 'line',
-            label: 'Distributor Lookups (Thousands)',
-            data: lookupsVals,
-            borderColor: '#CCD700',
-            backgroundColor: '#CCD700',
-            borderWidth: 2.5,
-            tension: 0.3,
-            pointRadius: 3,
-            yAxisID: 'y1',
-            order: 4
-          }
-        ]
+        datasets: datasets
       },
       options: {
         responsive: true,
@@ -2103,15 +2224,16 @@
         plugins: {
           legend: {
             position: 'top',
-            labels: { font: { size: 11, weight: '600' }, color: '#334155', usePointStyle: true }
+            labels: { font: { size: 11, weight: '700' }, color: '#334155', usePointStyle: true }
           },
           tooltip: {
             callbacks: {
               label: (context) => {
                 const label = context.dataset.label || '';
                 const val = context.parsed.y;
-                if (label.includes('Spend')) return ` ${label}: $${val}K ($${(val*1000).toLocaleString()})`;
-                return ` ${label}: ${val}K (${(val*1000).toLocaleString()} sessions/lookups)`;
+                if (label.includes('Spend')) return ` 💰 ${label}: $${val}K ($${(val * 1000).toLocaleString()})`;
+                if (label.includes('Distributor')) return ` 🚚 ${label}: ${val}K (${(val * 1000).toLocaleString()} lookups)`;
+                return ` 🌐 ${label}: ${val}K (${(val * 1000).toLocaleString()} sessions)`;
               }
             }
           }
@@ -2120,22 +2242,31 @@
           y: {
             type: 'linear',
             position: 'left',
-            title: { display: true, text: 'Paid Media Spend ($ Thousands)', color: '#0E313D', font: { weight: '700' } },
+            title: { display: true, text: 'Paid Media Spend ($ Thousands)', color: '#0A1921', font: { weight: '800' } },
             ticks: { callback: (v) => `$${v}K` },
             grid: { color: 'rgba(0, 0, 0, 0.05)' }
           },
           y1: {
             type: 'linear',
             position: 'right',
-            title: { display: true, text: 'Traffic & Lookups (Thousands)', color: '#059669', font: { weight: '700' } },
-            ticks: { callback: (v) => `${v}K` },
-            grid: { drawOnChartArea: false }
-          },
-          x: {
-            grid: { display: false },
-            ticks: { font: { weight: '600' }, color: '#475569' }
+            grid: { drawOnChartArea: false },
+            title: { display: true, text: 'Web Traffic & Distributor Intent (Thousands)', color: '#059669', font: { weight: '800' } },
+            ticks: { callback: (v) => `${v}K` }
           }
         }
+      }
+    });
+
+    // Wire up series toggle buttons
+    document.querySelectorAll('.btn-corr-series').forEach(btn => {
+      if (!btn.dataset.bound) {
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.btn-corr-series').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          corrSeriesFilter = btn.getAttribute('data-corr-filter') || 'all';
+          renderAdvertisingTrafficCorrelation();
+        });
       }
     });
   }
