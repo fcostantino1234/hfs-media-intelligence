@@ -281,11 +281,9 @@
     if (hash === 'drawer') {
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
-      setTimeout(() => {
-        if (filteredLeads && filteredLeads.length > 0) {
-          openLeadDrawer(filteredLeads[0]);
-        }
-      }, 100);
+      if (filteredLeads && filteredLeads.length > 0) {
+        openLeadDrawer(filteredLeads[0]);
+      }
     }
     if (hash === 'columns') {
       const leadsTab = document.getElementById('tab-sales-leads');
