@@ -278,6 +278,14 @@
 
     // Support URL hash routing (e.g. #timeline, #trends)
     const hash = window.location.hash.replace('#', '');
+    if (hash === 'columns') {
+      const leadsTab = document.getElementById('tab-sales-leads');
+      if (leadsTab) leadsTab.click();
+      setTimeout(() => {
+        const toggle = document.getElementById('btn-toggle-columns');
+        if (toggle) toggle.click();
+      }, 100);
+    }
     if (hash) {
       const targetTab = document.querySelector(`.nav-tab[data-view="${hash}"]`);
       if (targetTab) targetTab.click();
