@@ -568,6 +568,39 @@
   // ===========================================================================
   // 5. MASTER FILTER DISPATCHER (SYNCS ALL VIEWS)
   // ===========================================================================
+  function updateActiveFilterBadgeCount() {
+    const activeFiltersBadge = document.getElementById('active-filters-count-badge');
+    if (!activeFiltersBadge) return;
+    let count = 0;
+    const fHook = document.getElementById('filter-hook');
+    if (fHook && fHook.value) count++;
+    const fPub = document.getElementById('filter-pub-group');
+    if (fPub && fPub.value) count++;
+    const fBrand = document.getElementById('filter-brand');
+    if (fBrand && fBrand.value) count++;
+    const fTactic = document.getElementById('filter-tactic');
+    if (fTactic && fTactic.value) count++;
+    const fOp = document.getElementById('filter-operator-type');
+    if (fOp && fOp.value) count++;
+    const fSeg = document.getElementById('filter-segment');
+    if (fSeg && fSeg.value) count++;
+    const fSub = document.getElementById('filter-subsegment');
+    if (fSub && fSub.value) count++;
+    const fStat = document.getElementById('filter-status');
+    if (fStat && fStat.value) count++;
+    const fScore = document.getElementById('filter-score');
+    if (fScore && fScore.value) count++;
+    const fComm = document.getElementById('filter-comments');
+    if (fComm && fComm.checked) count++;
+
+    if (count > 0) {
+      activeFiltersBadge.textContent = count;
+      activeFiltersBadge.style.display = 'inline-flex';
+    } else {
+      activeFiltersBadge.style.display = 'none';
+    }
+  }
+
   function applyGlobalFilters() {
     updateActiveFilterBadgeCount();
     const q = leadFilters.search.toLowerCase().trim();
@@ -3242,6 +3275,26 @@
     renderFilteredSummaryDashboard();
   }
 
+  function updateActiveFilterIndicators() {
+    const el = document.getElementById('active-filter-indicator');
+    if (!el) return;
+    const parts = [];
+    if (leadFilters.search) {
+      parts.push(`matching "<strong>${escapeHtml(leadFilters.search)}</strong>"`);
+    }
+    if (leadFilters.brand) parts.push(`brand: <strong>${escapeHtml(leadFilters.brand)}</strong>`);
+    if (leadFilters.tactic) parts.push(`tactic: <strong>${escapeHtml(leadFilters.tactic)}</strong>`);
+    if (leadFilters.segment) parts.push(`segment: <strong>${escapeHtml(leadFilters.segment)}</strong>`);
+    if (leadFilters.status) parts.push(`status: <strong>${escapeHtml(leadFilters.status)}</strong>`);
+    if (leadFilters.operator_type) parts.push(`qualification: <strong>${escapeHtml(leadFilters.operator_type)}</strong>`);
+
+    if (parts.length > 0) {
+      el.innerHTML = ` (filtered by ${parts.join(', ')})`;
+    } else {
+      el.innerHTML = '';
+    }
+  }
+
   function updateResultsStats() {
     const rc = document.getElementById('results-count');
     const tc = document.getElementById('total-count');
@@ -5189,28 +5242,6 @@ Hormel Foodservice`;
         if (breakdownText) breakdownText.textContent = isHidden ? 'Hide Breakdowns' : 'Show Breakdowns';
         if (breakdownArrow) breakdownArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
       });
-    }
-
-    function updateActiveFilterBadgeCount() {
-      if (!activeFiltersBadge) return;
-      let count = 0;
-      if (document.getElementById('filter-hook')?.value) count++;
-      if (document.getElementById('filter-pub-group')?.value) count++;
-      if (document.getElementById('filter-brand')?.value) count++;
-      if (document.getElementById('filter-tactic')?.value) count++;
-      if (document.getElementById('filter-operator-type')?.value) count++;
-      if (document.getElementById('filter-segment')?.value) count++;
-      if (document.getElementById('filter-subsegment')?.value) count++;
-      if (document.getElementById('filter-status')?.value) count++;
-      if (document.getElementById('filter-score')?.value) count++;
-      if (document.getElementById('filter-comments')?.checked) count++;
-
-      if (count > 0) {
-        activeFiltersBadge.textContent = count;
-        activeFiltersBadge.style.display = 'inline-flex';
-      } else {
-        activeFiltersBadge.style.display = 'none';
-      }
     }
 
     const clearSearchBtn = document.getElementById('btn-clear-search');
