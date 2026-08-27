@@ -286,6 +286,12 @@
         openLeadDrawer(filteredLeads[0]);
       }
     }
+    if (hash === 'delores') {
+      setTimeout(() => {
+        const btn = document.getElementById('delores-floating-btn');
+        if (btn) btn.click();
+      }, 100);
+    }
     if (hash === 'columns') {
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
