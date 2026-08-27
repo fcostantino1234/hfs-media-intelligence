@@ -4521,3 +4521,248 @@ body {
 
 
 
+
+
+/* ==========================================================================
+   RESTAURANT CONCEPT NOTES & MENU IDEATION STYLING
+   ========================================================================== */
+.drawer-culinary-intel-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.concept-intel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 8px;
+}
+
+.concept-intel-badge {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0A1921;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.concept-intel-source {
+  font-size: 0.625rem;
+  color: #64748b;
+  font-style: italic;
+}
+
+.concept-profile-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.concept-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.concept-archetype-tag {
+  background: #0A1921;
+  color: #C6FF00;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+
+.concept-research-links {
+  display: flex;
+  gap: 6px;
+}
+
+.concept-link-btn {
+  font-size: 0.6875rem;
+  color: #0284c7;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.concept-link-btn:hover {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.concept-known-for-text {
+  font-size: 0.75rem;
+  color: #334155;
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+
+.concept-ops-text {
+  font-size: 0.6875rem;
+  color: #64748b;
+  line-height: 1.4;
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 6px;
+  margin-top: 4px;
+}
+
+.menu-ideation-heading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #0A1921;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-ideation-heading span.count-tag {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 0.625rem;
+}
+
+.menu-ideas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.menu-idea-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #059669;
+  border-radius: 6px;
+  padding: 8px 10px;
+  transition: all 0.15s ease;
+}
+
+.menu-idea-card:hover {
+  border-color: #cbd5e1;
+  border-left-color: #C6FF00;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.menu-idea-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  gap: 6px;
+}
+
+.menu-idea-title {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #0A1921;
+}
+
+.menu-idea-placement {
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.menu-idea-sku-tag {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #047857;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.menu-idea-desc {
+  font-size: 0.75rem;
+  color: #475569;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.menu-idea-advantage {
+  font-size: 0.6875rem;
+  color: #059669;
+  font-weight: 600;
+  background: #f0fdf4;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.menu-ideation-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-copy-menu-ideas {
+  background: #0A1921;
+  color: #C6FF00;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+}
+
+.btn-copy-menu-ideas:hover {
+  background: #1e293b;
+  box-shadow: 0 0 8px rgba(198, 255, 0, 0.4);
+}
+
+.btn-recipes-link {
+  font-size: 0.75rem;
+  color: #475569;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 5px 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-recipes-link:hover {
+  background: #f8fafc;
+  color: #0A1921;
+}

@@ -3541,6 +3541,7 @@
     }
 
     renderDrawerCulinaryPlaybook(lead);
+    renderDrawerRestaurantMenuIdeation(lead);
 
     document.getElementById('drawer-overlay').classList.add('open');
     document.getElementById('lead-drawer').classList.add('open');
@@ -5179,6 +5180,361 @@ Hormel Foodservice`;
         skuSearchQuery = e.target.value;
         renderSkuDirectoryTable(skuSearchQuery);
       });
+    }
+  }
+
+
+  // ===========================================================================
+  // RESTAURANT CONCEPT INTELLIGENCE & HORMEL MENU IDEATION ENGINE
+  // ===========================================================================
+  function getRestaurantConceptProfile(lead) {
+    const name = (lead.company || lead.full_name || '').toLowerCase();
+    const sub = (lead.subsegment || '').toLowerCase();
+    const seg = (lead.segment || '').toLowerCase();
+    const hook = (lead.key_hook || '').toLowerCase();
+    const brand = (lead.brand || '').toLowerCase();
+    const city = lead.city || 'Local Market';
+    const state = lead.state || '';
+    const compDisplay = lead.company || lead.full_name || 'Foodservice Operation';
+
+    let archetype = 'Casual Dining & American Grill';
+    let knownFor = 'Known for a varied menu of American comfort favorites, burgers, sandwiches, shareable appetizers, and rotating daily features. Kitchens focus on approachable crowd-pleasers with consistent daypart turnover.';
+    let opsChallenge = 'BOH Focus: Controlling kitchen labor and eliminating raw protein shrink while keeping prep times under 10 minutes per ticket.';
+    let ideas = [];
+
+    // Concept detection
+    if (sub.includes('pizz') || sub.includes('italian') || name.includes('pizza') || name.includes('pizzeria') || name.includes('pie') || name.includes('crust') || name.includes('trattoria') || name.includes('napoletana') || brand.includes('fontanini')) {
+      archetype = '🍕 Artisanal Craft Pizzeria & Italian Kitchen';
+      knownFor = `Known for hand-stretched crispy pies, wood-fired or Detroit-style deep dish crusts, fresh mozzarella, savory garlic knots, and craft Italian sandwiches. High emphasis on artisan visual blistering, cup-and-char oil retention, and premium toppings that command $4-$6 menu price upsells.`;
+      opsChallenge = `BOH Focus: Eliminating raw meat prep, reducing grease pooling on dough, and speeding up oven turnaround times during peak dinner rush.`;
+      ideas = [
+        {
+          name: 'Hot Calabrian Chili & Hot-Honey Artisan Pie',
+          sku: 'Fontanini® Hot Calabrian Chili Sausage Crumbles (#204515)',
+          placement: 'Signature Specialty Pizza ($24–$28)',
+          desc: 'Hand-stretched dough with San Marzano tomato sauce, fresh mozzarella, Fontanini spicy Calabrian crumbles, fresh basil, and a post-bake drizzle of spicy hot honey.',
+          advantage: '⏱️ Prep: 0 min (fully cooked crumbles) • 100% usable yield • Zero grease-soak on dough.'
+        },
+        {
+          name: 'Detroit-Style Cup & Char Crispy Pepperoni & Sausage',
+          sku: 'Fontanini® Cup & Char Pepperoni & Sausage (#204510)',
+          placement: 'Deep Dish Feature ($26.99)',
+          desc: 'Thick focaccia-style crust with caramelized cheddar frico edges, topped with Fontanini cup & char pepperoni that crisps into savory oil-holding chalices.',
+          advantage: '⚡ Advantage: High-visual social media appeal; drives premium $4 topping upgrades.'
+        },
+        {
+          name: 'Smoky Bacon Jam & Whipped Ricotta White Flatbread',
+          sku: 'HORMEL® BACON 1™ Fully Cooked Thick Cut (#102341)',
+          placement: 'Shareable Starter / LTO ($16.50)',
+          desc: 'Garlic-infused olive oil, whole-milk ricotta, shredded fontina, caramelized balsamic red onions, and chopped crispy Bacon 1 thick-cut lardons.',
+          advantage: '⏱️ Prep: 3 min convection bake • Saves 30 min of messy morning bacon sheet-pan frying.'
+        }
+      ];
+    } else if (sub.includes('breakfast') || sub.includes('brunch') || sub.includes('cafe') || sub.includes('diner') || name.includes('diner') || name.includes('cafe') || name.includes('pancake') || name.includes('waffle') || name.includes('biscuit') || name.includes('roasters') || name.includes('bagel') || name.includes('coffee')) {
+      archetype = '🍳 High-Volume Morning Breakfast & Brunch Cafe';
+      knownFor = `Known for high-volume morning table turns, scratch-baked buttermilk biscuits, fluffy pancakes, signature Benedicts, sizzling morning meat platters, and loaded breakfast skillets. Guests prioritize thick, crispy, aromatic bacon and quick plate delivery.`;
+      opsChallenge = `BOH Focus: Massive morning bacon grease cleanup, uneven flat-top grill heat, and raw bacon shrinkage (over 65% weight lost with raw).`;
+      ideas = [
+        {
+          name: "Millionaire's Sweet Heat Candied Bacon Flight",
+          sku: 'HORMEL® BACON 1™ Pecanwood Thick Cut (#102341)',
+          placement: 'Brunch Starter Flight ($12.99)',
+          desc: '4-strip vertical flight of thick-cut Bacon 1 glazed with brown sugar, cracked black peppercorns, smoked paprika, and pure hot maple syrup drizzle.',
+          advantage: '⚡ Advantage: 82% food margin appetizer • Ready in 3 min in oven • Zero grease splatter.'
+        },
+        {
+          name: 'Crispy Hot Honey Chicken & Buttermilk Waffle Benny',
+          sku: 'FLASH 180™ Sous Vide Battered Chicken Breast (#306110)',
+          placement: 'Weekend Feature Entree ($18.50)',
+          desc: 'Scratch Belgian waffle topped with a crispy fried Flash 180 chicken breast, poached farm egg, Hollandaise, and spicy hot honey drizzle.',
+          advantage: '⏱️ Prep: Drops from frozen to golden-crisp in 3 min • Zero raw poultry cross-contamination.'
+        },
+        {
+          name: 'Loaded Fire-Braised Carnitas Breakfast Hash Skillet',
+          sku: 'HORMEL® FIRE BRAISED™ Pork Shoulder / Cafe H (#408210)',
+          placement: 'Signature Morning Skillet ($15.99)',
+          desc: 'Crispy seasoned hash browns topped with tender flame-seared carnitas, two sunny eggs, pickled red onions, cotija cheese, and cilantro crema.',
+          advantage: '⏱️ Prep: Heat & serve in 4 min • Eliminates 4 hours of overnight pork braising.'
+        }
+      ];
+    } else if (sub.includes('bbq') || sub.includes('smoke') || name.includes('bbq') || name.includes('barbeque') || name.includes('smokehouse') || name.includes('pit') || name.includes('ribs') || name.includes('brisket') || brand.includes('austin-blues')) {
+      archetype = '🍖 Hardwood Pit Smokehouse & Southern Kitchen';
+      knownFor = `Known for low-and-slow hardwood pit barbecue, tender sliced brisket, pulled pork platters, St. Louis ribs, house-made sauces, and hearty southern comfort sides. Operators face 12-16 hour smoke times and volatile meat shrinkage.`;
+      opsChallenge = `BOH Focus: Running out of fresh-pit brisket during unexpected weekend rush, smoker capacity limits, and overnight labor costs.`;
+      ideas = [
+        {
+          name: 'Smoked Brisket Burnt End Loaded Mac & Cheese',
+          sku: 'AUSTIN BLUES® Hardwood Smoked Burnt Ends (#501115)',
+          placement: 'Premium Comfort Entree ($17.50)',
+          desc: 'Cavatappi pasta tossed in four-cheese mornay, topped with Austin Blues hardwood pit-smoked brisket burnt ends, crispy fried onions, and BBQ drizzle.',
+          advantage: '⏱️ Prep: 4 min assemble & bake • Consistent smokehouse flavor with zero pit shrinkage.'
+        },
+        {
+          name: 'Pitmaster Hardwood Brisket & Cheddar Melt',
+          sku: 'AUSTIN BLUES® Smoked Beef Brisket (#501115)',
+          placement: 'Signature Lunch Sandwich ($16.95)',
+          desc: 'Toasted buttery Texas toast loaded with tender sliced Austin Blues brisket, melted sharp cheddar, caramelized onions, and smoky chipotle BBQ sauce.',
+          advantage: '⚡ Advantage: Perfect emergency backup protein when pit brisket sells out on busy nights.'
+        },
+        {
+          name: 'Flame-Seared Rib Tips & Southern Fried Okra Basket',
+          sku: 'HORMEL® FIRE BRAISED™ St. Louis Pork Ribs (#408210)',
+          placement: 'Smokehouse Appetizer ($14.99)',
+          desc: 'Flame-seared tender pork rib tips glazed in honey bourbon BBQ, served with crispy fried okra and house dill ranch dipping sauce.',
+          advantage: '⏱️ Prep: 6 min convection retherm • High perceived artisan value with 100% yield.'
+        }
+      ];
+    } else if (name.includes('taco') || name.includes('taqueria') || name.includes('mexican') || name.includes('cantina') || name.includes('burrito') || name.includes('latin') || brand.includes('cafe-h')) {
+      archetype = '🌮 Fast Casual Mexican Taqueria & Cantina';
+      knownFor = `Known for vibrant street tacos, slow-braised carnitas, tender barbacoa, loaded quesadillas, fresh salsas, and margaritas. High demand for authentic charred meat edges and speed-of-service on the taco line.`;
+      opsChallenge = `BOH Focus: Inconsistent pork braising, high lard fat rendering waste, and slow shredded meat prep during lunch rushes.`;
+      ideas = [
+        {
+          name: 'Crispy Carnitas Street Tacos with Charred Pineapple',
+          sku: 'CAFÉ H® Flame-Seared Carnitas (#602110)',
+          placement: 'Street Taco Trio ($14.95)',
+          desc: 'Double warm corn tortillas loaded with crispy seared Cafe H carnitas, diced charred pineapple salsa, chopped white onion, cilantro, and lime wedges.',
+          advantage: '⏱️ Prep: Flat-top sear in 90 seconds • Saves 4 hours of slow braising and lard rendering.'
+        },
+        {
+          name: 'Quesabirria-Style Fontanini Sausage & Cheese Crisp',
+          sku: 'Fontanini® Hot Calabrian Chili Sausage Crumbles (#204515)',
+          placement: 'Cantina Shareable ($13.50)',
+          desc: 'Griddled flour tortilla dipped in chili oil, stuffed with melted Oaxaca cheese and savory Calabrian sausage, served with spicy dipping consommé.',
+          advantage: '⚡ Advantage: Leverages the viral birria trend with spicy Italian sausage flair • 2 min ticket time.'
+        },
+        {
+          name: 'Loaded Flame-Seared Carnitas Nachos Supremos',
+          sku: 'HORMEL® FIRE BRAISED™ Pork Carnitas (#408210)',
+          placement: 'Bar Daypart Shareable ($16.00)',
+          desc: 'House-fried corn tortilla chips layered with queso blanco, fire-braised carnitas, black beans, pickled jalapeños, guacamole, and lime crema.',
+          advantage: '⏱️ Prep: Fast assembly on line • Massive check-average booster for bar dayparts.'
+        }
+      ];
+    } else if (sub.includes('college') || sub.includes('c&u') || sub.includes('univers') || sub.includes('campus') || name.includes('university') || name.includes('college') || brand.includes('halal')) {
+      archetype = '🎓 Higher Education Residential Dining & Food Hall';
+      knownFor = `Known for multi-station dining halls, rotating global street food fare, late-night student retail grabs, and surging demand for Halal-certified, clean-label, and allergen-friendly proteins. Need scalable, high-volume batch-cooking solutions that hold well on steam lines.`;
+      opsChallenge = `BOH Focus: High turnover student labor, cross-contamination concerns with specialized diets (Halal), and keeping proteins moist during 90-minute lunch rushes.`;
+      ideas = [
+        {
+          name: 'Certified Halal Pepperoni & Hot Honey Flatbread',
+          sku: 'Hormel® Certified Halal Pepperoni (#137666)',
+          placement: 'Global Campus Dining Station ($11.50)',
+          desc: 'Hand-tossed flatbread with plum tomato sauce, whole milk mozzarella, certified Halal beef/lamb pepperoni, and a drizzle of spicy hot honey.',
+          advantage: '⚡ Advantage: Provides certified Halal inclusivity without requiring a separate prep line.'
+        },
+        {
+          name: 'Baja Street Taco Station (Flash 180 Chicken & Carnitas)',
+          sku: 'FLASH 180™ Chicken Cutlets & Cafe H® Carnitas (#602110)',
+          placement: 'World Fare Action Station ($12.00)',
+          desc: 'Warm tortillas with sliced crispy Flash 180 chicken or slow-braised carnitas, topped with pickled red onions, cilantro, and chipotle crema.',
+          advantage: '⏱️ Prep: 3 min fryer retherm • High student visual excitement with zero raw poultry risks.'
+        },
+        {
+          name: 'Smoked Turkey & Avocado Club Grab-and-Go Wrap',
+          sku: 'JENNIE-O® Grand Champion Turkey & Bacon 1 (#703110)',
+          placement: 'Campus Micro-Market ($9.95)',
+          desc: 'Sliced tender turkey breast, crispy Bacon 1, sliced avocado, romaine, and herb aioli wrapped in a spinach tortilla.',
+          advantage: '⏱️ Prep: Fast cold assembly • Holds peak freshness and crispness for 48 hours in coolers.'
+        }
+      ];
+    } else if (sub.includes('health') || sub.includes('hospital') || sub.includes('senior') || sub.includes('living') || sub.includes('care') || name.includes('hospital') || name.includes('health') || name.includes('senior')) {
+      archetype = '🏥 Healthcare Nutrition & Senior Living Dining';
+      knownFor = `Known for balanced, low-sodium dietary compliant meals, patient tray lines, cafeteria dining, and resident dining rooms. High focus on fork-tender proteins, clean-label nutrition, allergen safety, and moisture retention under steam table holding.`;
+      opsChallenge = `BOH Focus: Strict dietary guidelines (low sodium/fat), eliminating tough or dry meats, and lack of trained culinary cooks on tray assembly lines.`;
+      ideas = [
+        {
+          name: 'Clean-Label Herb-Roasted Turkey with Spiced Apples',
+          sku: 'JENNIE-O® Grand Champion Turkey Roast (#703110)',
+          placement: 'Patient Tray & Dining Room Entree',
+          desc: 'Tender sliced Jennie-O turkey breast served with roasted root vegetables, mashed sweet potatoes, and low-sodium poultry au jus.',
+          advantage: '⚡ Advantage: Low-sodium dietary compliance with zero back-of-house raw poultry contamination.'
+        },
+        {
+          name: 'Flame-Seared Pork Loin with Roasted Apple Chutney',
+          sku: 'HORMEL® FIRE BRAISED™ Boneless Pork Loin (#408210)',
+          placement: 'Resident Signature Dining Feature',
+          desc: 'Seared boneless pork loin medallions with braised cinnamon apples, steamed green beans, and wild rice pilaf.',
+          advantage: '⏱️ Prep: Superior moisture retention under heat lamps • Eliminates tough, dry pork complaints.'
+        },
+        {
+          name: 'Fork-Tender Braised Beef & Vegetable Ragout',
+          sku: 'HORMEL® FIRE BRAISED™ Beef Chuck Roast (#408210)',
+          placement: 'Therapeutic Comfort Entree',
+          desc: 'Slow flame-seared chuck roast shredded over buttered egg noodles with savory herb brown gravy.',
+          advantage: '⏱️ Prep: Compatible with mechanical soft / IDDSI texture-modified senior diets.'
+        }
+      ];
+    } else if (sub.includes('sports') || sub.includes('bar') || sub.includes('pub') || sub.includes('brew') || name.includes('pub') || name.includes('brewery') || name.includes('tavern') || name.includes('taproom') || name.includes('grill')) {
+      archetype = '🍺 Neighborhood Sports Bar & Craft Brewpub';
+      knownFor = `Known for shareable finger foods, double smash burgers, loaded tots and fries, craft draft beer pairings, and elevated late-night bar bites. Kitchens prioritize lightning-fast execution that can be handled by a single fry cook during big game days.`;
+      opsChallenge = `BOH Focus: Fryer bottleneck during game times, slow burger prep times, and food waste from unsold perishable meats.`;
+      ideas = [
+        {
+          name: 'Nashville Hot Flash 180 Chicken Sliders (3-Pack)',
+          sku: 'FLASH 180™ 3 oz Chicken Sliders / Breast (#306110)',
+          placement: 'Game-Day Shareable Platter ($15.99)',
+          desc: 'Golden-crispy chicken cutlets dipped in fiery Nashville hot oil, sweet bread & butter pickles, and house slaw on toasted brioche slider buns.',
+          advantage: '⏱️ Prep: 3 min in deep fryer • Zero waste, drops directly from frozen.'
+        },
+        {
+          name: 'The Ultimate Double Bacon Jam Smash Burger',
+          sku: 'HORMEL® BACON 1™ Traditional Cut (#102342)',
+          placement: 'Signature Brewpub Burger ($17.50)',
+          desc: 'Twin smashed patties, American cheese, grilled onions, house burger sauce, and 4 criss-crossed strips of perfectly flat Bacon 1.',
+          advantage: '⚡ Advantage: Bacon 1 stays flat and crispy, cutting 40 seconds off burger assembly time.'
+        },
+        {
+          name: 'Smoked Pork Belly Burnt End Loaded Queso Tots',
+          sku: 'AUSTIN BLUES® Hardwood Smoked Burnt Ends (#501115)',
+          placement: 'Craft Beer Pairing Starter ($16.50)',
+          desc: 'Crispy potato tots smothered in warm craft beer cheese queso, Austin Blues hardwood-smoked burnt ends, pickled jalapeños, and BBQ drizzle.',
+          advantage: '⏱️ Prep: Ready in 4 min • Transforms a $4 side of tots into a $16 premium appetizer.'
+        }
+      ];
+    } else {
+      // Default: Casual American Dining & Family Grill
+      archetype = '🍽️ Casual American Dining & Neighborhood Grill';
+      knownFor = `Known for family-friendly comfort entrees, classic burgers, club sandwiches, hearty pasta, and signature appetizers. Menus emphasize quality ingredients, generous portions, and familiar favorites with modern flavor twists.`;
+      opsChallenge = `BOH Focus: Short-staffed line cooks, rising raw protein food costs, and maintaining consistent plate presentation across all shifts.`;
+      ideas = [
+        {
+          name: 'Crispy Bacon 1 Club Sandwich with Garlic Aioli',
+          sku: 'HORMEL® BACON 1™ Fully Cooked Bacon (#102342)',
+          placement: 'Signature Lunch Classic ($15.50)',
+          desc: 'Toasted sourdough stacked with sliced turkey breast, crisp lettuce, ripe tomatoes, garlic aioli, and 4 strips of thick-cut Bacon 1.',
+          advantage: '⏱️ Prep: Ready in 90 seconds • 100% pre-cooked with zero shrink or raw bacon hassle.'
+        },
+        {
+          name: 'Fontanini Sausage & Rigatoni Bolognese',
+          sku: 'Fontanini® Artisan Sausage Crumbles (#204510)',
+          placement: 'Dinner Pasta Entree ($19.99)',
+          desc: 'Al dente rigatoni tossed in rich slow-simmered tomato cream sauce with savory Fontanini Italian sausage crumbles, finished with shaved parmesan.',
+          advantage: '⏱️ Prep: 4 min saute retherm • Delivers authentic Italian trattoria flavor with zero raw meat prep.'
+        },
+        {
+          name: 'Flash 180 Crispy Chicken Tenderloin Basket',
+          sku: 'FLASH 180™ Sous Vide Battered Chicken (#306110)',
+          placement: 'All-Day Favorite ($14.99)',
+          desc: 'Crispy battered chicken cutlets served with seasoned shoestring fries, creamy coleslaw, and house honey mustard.',
+          advantage: '⏱️ Prep: 3 min fryer drop • Juicy sous vide interior with ultra-crisp crunch.'
+        }
+      ];
+    }
+
+    const gSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(compDisplay + ' ' + city + ' ' + state + ' menu')}`;
+    const yelpSearchUrl = `https://www.yelp.com/search?find_desc=${encodeURIComponent(compDisplay)}&find_loc=${encodeURIComponent(city + ' ' + state)}`;
+
+    return {
+      compDisplay,
+      city,
+      state,
+      archetype,
+      knownFor,
+      opsChallenge,
+      ideas,
+      gSearchUrl,
+      yelpSearchUrl
+    };
+  }
+
+  function renderDrawerRestaurantMenuIdeation(lead) {
+    const container = document.getElementById('drawer-menu-ideation-container');
+    if (!container) return;
+
+    const intel = getRestaurantConceptProfile(lead);
+
+    let ideasHtml = '';
+    intel.ideas.forEach(item => {
+      ideasHtml += `
+        <div class="menu-idea-card">
+          <div class="menu-idea-header">
+            <span class="menu-idea-title">${escapeHtml(item.name)}</span>
+            <span class="menu-idea-placement">${escapeHtml(item.placement)}</span>
+          </div>
+          <div class="menu-idea-sku-tag">📦 ${escapeHtml(item.sku)}</div>
+          <div class="menu-idea-desc">${escapeHtml(item.desc)}</div>
+          <div class="menu-idea-advantage">${escapeHtml(item.advantage)}</div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = `
+      <div class="drawer-culinary-intel-card">
+        <div class="concept-intel-header">
+          <span class="concept-intel-badge">🍴 RESTAURANT CONCEPT NOTES & MENU IDEATION</span>
+          <span class="concept-intel-source">Sourced from Menu Trend & Culinary Research</span>
+        </div>
+
+        <div class="concept-profile-box">
+          <div class="concept-title-row">
+            <span class="concept-archetype-tag">${escapeHtml(intel.archetype)}</span>
+            <div class="concept-research-links">
+              <a href="${intel.gSearchUrl}" target="_blank" class="concept-link-btn" title="Search this restaurant's menu on Google">
+                🔍 Google Menu ↗
+              </a>
+              <a href="${intel.yelpSearchUrl}" target="_blank" class="concept-link-btn" title="Search reviews and dish photos on Yelp">
+                ⭐ Yelp Profile ↗
+              </a>
+            </div>
+          </div>
+          <div class="concept-known-for-text">
+            <strong>What They Are Known For:</strong> ${escapeHtml(intel.knownFor)}
+          </div>
+          <div class="concept-ops-text">
+            ${escapeHtml(intel.opsChallenge)}
+          </div>
+        </div>
+
+        <div class="menu-ideation-heading">
+          <span>Potential New Menu Items (Using Hormel Products)</span>
+          <span class="count-tag">3 Chef Concepts</span>
+        </div>
+
+        <div class="menu-ideas-list">
+          ${ideasHtml}
+        </div>
+
+        <div class="menu-ideation-actions">
+          <button class="btn-copy-menu-ideas" id="btn-copy-menu-pitches">
+            📋 Copy Menu Concepts to Pitch
+          </button>
+          <a href="https://www.hormelfoodservice.com/recipes/" target="_blank" class="btn-recipes-link">
+            🍽️ Hormel Recipe Inspiration ↗
+          </a>
+        </div>
+      </div>
+    `;
+
+    // Bind Copy Menu Concepts Button
+    const copyMenuBtn = document.getElementById('btn-copy-menu-pitches');
+    if (copyMenuBtn) {
+      copyMenuBtn.onclick = () => {
+        const text = `Hi ${lead.full_name || 'Chef / Foodservice Operator'},
+
+Based on your menu at ${intel.compDisplay}, here are 3 high-margin culinary concepts designed to solve kitchen prep labor using Hormel Foodservice products:
+
+` +
+          intel.ideas.map((idea, idx) => 
+            `Concept ${idx + 1}: ${idea.name} (${idea.placement})
+` +
+            `• Featured Ingredient: ${idea.sku}
+` +
+            `• Culinary Execution: ${idea.desc}
+` +
+            `• Kitchen Advantage: ${idea.advantage}
+`
+          ).join('\n') +
+          `
+Let me know if you would like me to ship commercial samples of these items for your culinary team to test!
+
+Best regards,
+Hormel Foodservice Culinary Team`;
+
+        navigator.clipboard.writeText(text).then(() => {
+          showToast(`Copied 3 tailored menu concepts for ${intel.compDisplay} to clipboard!`);
+        });
+      };
     }
   }
 
