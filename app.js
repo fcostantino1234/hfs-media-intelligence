@@ -255,6 +255,13 @@
     initRoiSimulator();
 
     bindEvents();
+
+    // Support URL hash routing (e.g. #timeline, #trends)
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const targetTab = document.querySelector(`.nav-tab[data-view="${hash}"]`);
+      if (targetTab) targetTab.click();
+    }
   }
 
   // ===========================================================================
@@ -2355,6 +2362,12 @@
     }
     if (emptyState) emptyState.style.display = 'none';
 
+    if (pageSize !== 'all') {
+      const totalPages = Math.ceil(filteredLeads.length / pageSize) || 1;
+      if (currentPage > totalPages || currentPage < 1) {
+        currentPage = 1;
+      }
+    }
     const startIdx = pageSize === 'all' ? 0 : (currentPage - 1) * pageSize;
     const endIdx = pageSize === 'all' ? filteredLeads.length : startIdx + parseInt(pageSize);
     const pageLeads = filteredLeads.slice(startIdx, endIdx);
@@ -2637,8 +2650,36 @@
     }
   }
 
+
+  // ===========================================================================
+  // LEADS TABLE ANCHORING & FIRST PAGE RESET HELPER
+  // ===========================================================================
+  function anchorToLeadsTable() {
+    currentPage = 1;
+    const leadsTab = document.getElementById('tab-sales-leads');
+    if (leadsTab && currentView !== 'leads') {
+      leadsTab.click();
+    }
+
+    setTimeout(() => {
+      const table = document.getElementById('leads-table') || document.querySelector('.leads-table-container') || document.getElementById('view-leads');
+      if (table) {
+        const header = document.querySelector('.app-header');
+        const headerOffset = header ? header.getBoundingClientRect().height : 85;
+        const elementPosition = table.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
+  }
+
   function isolateByTactic(tacticId) {
     if (!tacticId) return;
+    currentPage = 1;
     leadFilters.tactic = tacticId;
     leadFilters.publication = '';
     leadFilters.utm_source = '';
@@ -2651,15 +2692,17 @@
 
     // Switch to View 4 (Leads Tab)
     const leadsTab = document.getElementById('tab-sales-leads');
-    if (leadsTab) leadsTab.click();
+    if (leadsTab && currentView !== 'leads') leadsTab.click();
 
     applyGlobalFilters();
+    anchorToLeadsTable();
     const t = allTactics.find(item => item.id === tacticId);
     showToast(`Isolating leads for tactic: ${t ? t.name : tacticId}`);
   }
 
   function isolateByPublication(pubName) {
     if (!pubName) return;
+    currentPage = 1;
     leadFilters.publication = pubName;
     leadFilters.tactic = '';
     leadFilters.utm_source = '';
@@ -2671,14 +2714,16 @@
     if (tSelect) tSelect.value = '';
 
     const leadsTab = document.getElementById('tab-sales-leads');
-    if (leadsTab) leadsTab.click();
+    if (leadsTab && currentView !== 'leads') leadsTab.click();
 
     applyGlobalFilters();
+    anchorToLeadsTable();
     showToast(`Isolating leads for publication: ${pubName}`);
   }
 
   function isolateByUtm(utmType, utmVal) {
     if (!utmVal) return;
+    currentPage = 1;
     leadFilters.tactic = '';
     leadFilters.publication = '';
     leadFilters.utm_source = '';
@@ -2692,14 +2737,16 @@
     if (tSelect) tSelect.value = '';
 
     const leadsTab = document.getElementById('tab-sales-leads');
-    if (leadsTab) leadsTab.click();
+    if (leadsTab && currentView !== 'leads') leadsTab.click();
 
     pushNavHistory();
     applyGlobalFilters();
+    anchorToLeadsTable();
     showToast(`Isolating leads for ${utmType}: ${utmVal}`);
   }
 
   function clearAttributeIsolation() {
+    currentPage = 1;
     pushNavHistory();
     leadFilters.tactic = '';
     leadFilters.publication = '';
@@ -2712,6 +2759,7 @@
     if (tSelect) tSelect.value = '';
 
     applyGlobalFilters();
+    anchorToLeadsTable();
     showToast('Attribute isolation cleared — full lead list restored');
   }
 
@@ -4043,9 +4091,11 @@ Hormel Foodservice`;
           if (clearSearch) clearSearch.classList.add('visible');
 
           // Switch to leads tab
+          currentPage = 1;
           const tab = document.querySelector('.nav-tab[data-view="leads"]');
           if (tab) tab.click();
           applyGlobalFilters();
+          anchorToLeadsTable();
           showToast(`Isolated high-value target: ${comp}`);
         }
       });
@@ -4332,17 +4382,20 @@ Hormel Foodservice`;
     });
 
     document.getElementById('btn-drill-leads').addEventListener('click', () => {
+      currentPage = 1;
       if (selectedTacticId === 'all') {
         leadFilters.tactic = '';
         document.getElementById('filter-tactic').value = '';
         document.getElementById('tab-sales-leads').click();
         applyGlobalFilters();
+        anchorToLeadsTable();
         showToast(`Showing all ${filteredLeads.length.toLocaleString()} verified leads from complete portfolio`);
       } else {
         leadFilters.tactic = selectedTacticId;
         document.getElementById('filter-tactic').value = selectedTacticId;
         document.getElementById('tab-sales-leads').click();
         applyGlobalFilters();
+        anchorToLeadsTable();
         showToast(`Isolated leads from ${selectedTacticId}`);
       }
     });
@@ -4448,12 +4501,14 @@ Hormel Foodservice`;
     const clearSearchBtn = document.getElementById('btn-clear-search');
 
     searchInput.addEventListener('input', (e) => {
+      currentPage = 1;
       leadFilters.search = e.target.value;
       clearSearchBtn.classList.toggle('visible', leadFilters.search.length > 0);
       applyGlobalFilters();
     });
 
     clearSearchBtn.addEventListener('click', () => {
+      currentPage = 1;
       searchInput.value = '';
       leadFilters.search = '';
       clearSearchBtn.classList.remove('visible');
@@ -4462,17 +4517,20 @@ Hormel Foodservice`;
 
     // Hook filter
     document.getElementById('filter-hook').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.key_hook = e.target.value;
       applyGlobalFilters();
     });
 
     // Pub group filter
     document.getElementById('filter-pub-group').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.publication_group = e.target.value;
       applyGlobalFilters();
     });
 
     document.getElementById('filter-brand').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.brand = e.target.value;
       globalBrand = e.target.value;
       document.getElementById('global-brand-select').value = globalBrand;
@@ -4480,6 +4538,7 @@ Hormel Foodservice`;
     });
 
     document.getElementById('filter-tactic').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.tactic = e.target.value;
       applyGlobalFilters();
     });
@@ -4487,27 +4546,32 @@ Hormel Foodservice`;
     const fOpSelect = document.getElementById('filter-operator-type');
     if (fOpSelect) {
       fOpSelect.addEventListener('change', (e) => {
+      currentPage = 1;
         leadFilters.operator_type = e.target.value;
         applyGlobalFilters();
       });
     }
 
     document.getElementById('filter-segment').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.segment = e.target.value;
       applyGlobalFilters();
     });
 
     document.getElementById('filter-subsegment').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.subsegment = e.target.value;
       applyGlobalFilters();
     });
 
     document.getElementById('filter-status').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.status = e.target.value;
       applyGlobalFilters();
     });
 
     document.getElementById('filter-score').addEventListener('change', (e) => {
+      currentPage = 1;
       leadFilters.score = e.target.value;
       applyGlobalFilters();
     });
@@ -5308,6 +5372,7 @@ Hormel Foodservice`;
     if (searchInput && !searchInput.dataset.bound) {
       searchInput.dataset.bound = 'true';
       searchInput.addEventListener('input', (e) => {
+      currentPage = 1;
         skuSearchQuery = e.target.value;
         renderSkuDirectoryTable(skuSearchQuery);
       });
