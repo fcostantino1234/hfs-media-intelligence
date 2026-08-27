@@ -15,42 +15,58 @@
   // ===========================================================================
   // 1. COLUMN REGISTRY FOR ALL 30 FIELDS
   // ===========================================================================
+    const COLUMN_CATEGORIES = [
+    { key: 'core', label: '📌 Core Lead & Operator Identity', icon: '📌' },
+    { key: 'media', label: '🎯 Media, Placement & Flight Timing', icon: '🎯' },
+    { key: 'brand', label: '🥩 Brand & Foodservice Profile', icon: '🥩' },
+    { key: 'sales', label: '🤝 Distributor & Sales Assignment', icon: '🤝' },
+    { key: 'digital', label: '🔗 Digital Tracking & Web Footprint', icon: '🔗' }
+  ];
+
   const ALL_COLUMNS = [
-    { key: 'date', label: 'Date', default: true },
-    { key: 'verification_badge', label: 'Operator Verification', default: true },
-    { key: 'full_name', label: 'Contact Name', default: true },
-    { key: 'company', label: 'Company / Restaurant', default: true },
-    { key: 'location', label: 'Location', default: true },
-    { key: 'brand', label: 'Brand Line', default: true },
-    { key: 'segment', label: 'IFMA Segment', default: true },
-    { key: 'tactic_name', label: 'Ad Tactic / Placement', default: true },
-    { key: 'tactic_run_date', label: 'Ad Deployment Date', default: true },
-    { key: 'key_hook', label: 'Strategic Key Hook', default: false },
-    { key: 'tactic_type', label: 'Tactic Format', default: false },
-    { key: 'lead_score', label: 'Score', default: true },
-    { key: 'status', label: 'Status', default: true },
-    { key: 'comments', label: 'Comments', default: true },
-    // Extended fields
-    { key: 'email', label: 'Email Address', default: false },
-    { key: 'phone', label: 'Phone', default: false },
-    { key: 'job_title', label: 'Job Title', default: false },
-    { key: 'distributor', label: 'Primary Distributor', default: false },
-    { key: 'distributor_rep', label: 'Distributor Rep', default: false },
-    { key: 'sales_rep', label: 'Hormel Sales Rep', default: false },
-    { key: 'crm_id', label: 'Salesforce CRM ID', default: false },
-    { key: 'publication_group', label: 'Media Partner Network', default: false },
-    { key: 'tactic_publisher', label: 'Publisher', default: false },
-    { key: 'tactic_channel', label: 'Channel', default: false },
-    { key: 'address', label: 'Street Address', default: false },
-    { key: 'zip', label: 'Zip Code', default: false },
-    { key: 'country', label: 'Country', default: false },
-    { key: 'lead_category', label: 'Customer Category', default: false },
-    { key: 'campaign', label: 'Pardot Campaign', default: false },
-    { key: 'utm_source', label: 'UTM Source', default: false },
-    { key: 'utm_medium', label: 'UTM Medium', default: false },
-    { key: 'utm_campaign', label: 'UTM Campaign', default: false },
-    { key: 'utm_content', label: 'UTM Content', default: false },
-    { key: 'page_url', label: 'Referring Web Page', default: true }
+    // Core Lead & Operator Info
+    { key: 'date', label: 'Date', default: true, category: 'core' },
+    { key: 'verification_badge', label: 'Operator Verification', default: true, category: 'core' },
+    { key: 'full_name', label: 'Contact Name', default: true, category: 'core' },
+    { key: 'company', label: 'Company / Restaurant', default: true, category: 'core' },
+    { key: 'location', label: 'Location', default: true, category: 'core' },
+    { key: 'job_title', label: 'Job Title', default: false, category: 'core' },
+    { key: 'lead_score', label: 'Score', default: true, category: 'core' },
+    { key: 'status', label: 'Status', default: true, category: 'core' },
+    { key: 'comments', label: 'Inbound Inquiry', default: true, category: 'core' },
+    { key: 'phone', label: 'Phone', default: false, category: 'core' },
+    { key: 'email', label: 'Email Address', default: false, category: 'core' },
+    { key: 'address', label: 'Street Address', default: false, category: 'core' },
+    { key: 'zip', label: 'Zip Code', default: false, category: 'core' },
+    { key: 'country', label: 'Country', default: false, category: 'core' },
+
+    // Media, Placement & Flight Timing
+    { key: 'tactic_name', label: 'Ad Tactic / Placement', default: true, category: 'media' },
+    { key: 'tactic_run_date', label: 'Ad Deployment Date', default: true, category: 'media' },
+    { key: 'publication_group', label: 'Media Partner Network', default: false, category: 'media' },
+    { key: 'tactic_publisher', label: 'Publisher', default: false, category: 'media' },
+    { key: 'tactic_channel', label: 'Channel', default: false, category: 'media' },
+    { key: 'key_hook', label: 'Strategic Key Hook', default: false, category: 'media' },
+    { key: 'tactic_type', label: 'Tactic Format', default: false, category: 'media' },
+
+    // Brand & Foodservice Profile
+    { key: 'brand', label: 'Brand Line', default: true, category: 'brand' },
+    { key: 'segment', label: 'IFMA Segment', default: true, category: 'brand' },
+    { key: 'lead_category', label: 'Customer Category', default: false, category: 'brand' },
+
+    // Distributor & Sales Assignment
+    { key: 'distributor', label: 'Primary Distributor', default: false, category: 'sales' },
+    { key: 'distributor_rep', label: 'Distributor Rep', default: false, category: 'sales' },
+    { key: 'sales_rep', label: 'Hormel Sales Rep', default: false, category: 'sales' },
+    { key: 'crm_id', label: 'Salesforce CRM ID', default: false, category: 'sales' },
+
+    // Digital Tracking & Web Footprint
+    { key: 'utm_source', label: 'UTM Source', default: false, category: 'digital' },
+    { key: 'utm_medium', label: 'UTM Medium', default: false, category: 'digital' },
+    { key: 'utm_campaign', label: 'UTM Campaign', default: false, category: 'digital' },
+    { key: 'utm_content', label: 'UTM Content', default: false, category: 'digital' },
+    { key: 'campaign', label: 'Pardot Campaign', default: false, category: 'digital' },
+    { key: 'page_url', label: 'Referring Web Page', default: true, category: 'digital' }
   ];
 
   const QUARTERS_ORDER = [
@@ -2310,38 +2326,120 @@
     renderColumnChecklist();
   }
 
+    let colSearchQuery = '';
+
   function renderColumnChecklist() {
     const container = document.getElementById('columns-checklist-container');
     if (!container) return;
     container.innerHTML = '';
 
-    ALL_COLUMNS.forEach(col => {
-      const label = document.createElement('label');
-      label.className = 'col-checkbox-item';
-      
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = col.key;
-      checkbox.checked = activeColumns.includes(col.key);
+    const query = colSearchQuery.toLowerCase().trim();
 
-      checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-          if (!activeColumns.includes(col.key)) activeColumns.push(col.key);
-        } else {
-          activeColumns = activeColumns.filter(k => k !== col.key);
+    // Group columns by category
+    COLUMN_CATEGORIES.forEach(cat => {
+      let catCols = ALL_COLUMNS.filter(c => c.category === cat.key);
+      if (query) {
+        catCols = catCols.filter(c => c.label.toLowerCase().includes(query) || c.key.toLowerCase().includes(query));
+      }
+      if (catCols.length === 0) return;
+
+      const section = document.createElement('div');
+      section.className = 'col-category-section';
+
+      const activeInCat = catCols.filter(c => activeColumns.includes(c.key)).length;
+
+      const header = document.createElement('div');
+      header.className = 'col-category-header';
+      header.innerHTML = `
+        <span>${cat.label}</span>
+        <span class="col-category-count">${activeInCat} / ${catCols.length} active</span>
+      `;
+      section.appendChild(header);
+
+      const grid = document.createElement('div');
+      grid.className = 'col-cards-grid';
+
+      catCols.forEach(col => {
+        const isSelected = activeColumns.includes(col.key);
+        const card = document.createElement('label');
+        card.className = `col-checkbox-card ${isSelected ? 'selected' : ''}`;
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = col.key;
+        checkbox.checked = isSelected;
+
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            if (!activeColumns.includes(col.key)) activeColumns.push(col.key);
+            card.classList.add('selected');
+          } else {
+            activeColumns = activeColumns.filter(k => k !== col.key);
+            card.classList.remove('selected');
+          }
+          localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+          updateColumnSummaryUI();
+          renderTableHeader();
+          renderTable();
+        });
+
+        const textCol = document.createElement('div');
+        textCol.className = 'col-card-text-col';
+
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'col-card-label';
+        labelSpan.textContent = col.label;
+
+        textCol.appendChild(labelSpan);
+        if (col.default) {
+          const defTag = document.createElement('span');
+          defTag.className = 'col-card-default-tag';
+          defTag.textContent = 'Default';
+          labelSpan.appendChild(defTag);
         }
-        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
-        document.getElementById('active-cols-count').textContent = activeColumns.length;
-        renderTableHeader();
-        renderTable();
+
+        card.appendChild(checkbox);
+        card.appendChild(textCol);
+        grid.appendChild(card);
       });
 
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(` ${col.label}`));
-      container.appendChild(label);
+      section.appendChild(grid);
+      container.appendChild(section);
     });
 
-    document.getElementById('active-cols-count').textContent = activeColumns.length;
+    if (container.children.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 30px 10px; color: #64748b;">
+          <div style="font-size: 1.5rem; margin-bottom: 6px;">🔍</div>
+          <div style="font-weight: 700; font-size: 0.875rem; color: #334155;">No matching columns found</div>
+          <div style="font-size: 0.75rem;">Try searching for a different keyword like "utm", "rep", or "date".</div>
+        </div>
+      `;
+    }
+
+    updateColumnSummaryUI();
+  }
+
+  function updateColumnSummaryUI() {
+    const totalCount = ALL_COLUMNS.length;
+    const activeCount = activeColumns.length;
+
+    const countBadge = document.getElementById('active-cols-count');
+    if (countBadge) countBadge.textContent = activeCount;
+
+    const pill = document.getElementById('cols-summary-pill');
+    if (pill) pill.textContent = `${activeCount} of ${totalCount} visible`;
+
+    // Highlight matching preset button
+    const defaultKeys = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
+    const isDefault = defaultKeys.length === activeColumns.length && defaultKeys.every(k => activeColumns.includes(k));
+    const isAll = activeColumns.length === totalCount;
+
+    const btnDefault = document.getElementById('btn-preset-default');
+    if (btnDefault) btnDefault.classList.toggle('active', isDefault);
+
+    const btnAll = document.getElementById('btn-cols-select-all');
+    if (btnAll) btnAll.classList.toggle('active', isAll);
   }
 
   function renderTableHeader() {
@@ -4510,37 +4608,134 @@ Hormel Foodservice`;
       });
     });
 
+        // Columns Customizer Popover Handlers
     const toggleColsBtn = document.getElementById('btn-toggle-columns');
     const colsDropdown = document.getElementById('columns-dropdown');
-    toggleColsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const open = colsDropdown.style.display === 'block';
-      colsDropdown.style.display = open ? 'none' : 'block';
-    });
+    const closeColsBtn = document.getElementById('btn-close-columns');
+    const colSearchInput = document.getElementById('col-search-input');
+    const clearColSearchBtn = document.getElementById('btn-clear-col-search');
 
-    document.addEventListener('click', (e) => {
-      if (colsDropdown && !colsDropdown.contains(e.target) && e.target !== toggleColsBtn) {
-        colsDropdown.style.display = 'none';
+    if (toggleColsBtn && colsDropdown) {
+      toggleColsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = colsDropdown.style.display === 'flex';
+        colsDropdown.style.display = isOpen ? 'none' : 'flex';
+        toggleColsBtn.classList.toggle('active', !isOpen);
+        if (!isOpen && colSearchInput) {
+          setTimeout(() => colSearchInput.focus(), 50);
+        }
+      });
+
+      if (closeColsBtn) {
+        closeColsBtn.addEventListener('click', () => {
+          colsDropdown.style.display = 'none';
+          toggleColsBtn.classList.remove('active');
+        });
       }
-    });
 
-    document.getElementById('btn-cols-select-all').addEventListener('click', () => {
-      activeColumns = ALL_COLUMNS.map(c => c.key);
-      localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
-      renderColumnChecklist();
-      renderTableHeader();
-      renderTable();
-      showToast('All 30 columns visible');
-    });
+      document.addEventListener('click', (e) => {
+        if (colsDropdown && !colsDropdown.contains(e.target) && e.target !== toggleColsBtn && !toggleColsBtn.contains(e.target)) {
+          colsDropdown.style.display = 'none';
+          toggleColsBtn.classList.remove('active');
+        }
+      });
 
-    document.getElementById('btn-cols-reset').addEventListener('click', () => {
-      activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
-      localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
-      renderColumnChecklist();
-      renderTableHeader();
-      renderTable();
-      showToast('Columns reset to defaults');
-    });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && colsDropdown.style.display === 'flex') {
+          colsDropdown.style.display = 'none';
+          toggleColsBtn.classList.remove('active');
+        }
+      });
+    }
+
+    if (colSearchInput) {
+      colSearchInput.addEventListener('input', (e) => {
+        colSearchQuery = e.target.value;
+        if (clearColSearchBtn) {
+          clearColSearchBtn.style.display = colSearchQuery ? 'block' : 'none';
+        }
+        renderColumnChecklist();
+      });
+    }
+
+    if (clearColSearchBtn) {
+      clearColSearchBtn.addEventListener('click', () => {
+        colSearchQuery = '';
+        if (colSearchInput) colSearchInput.value = '';
+        clearColSearchBtn.style.display = 'none';
+        renderColumnChecklist();
+      });
+    }
+
+    // Presets
+    const presetDefaultBtn = document.getElementById('btn-preset-default');
+    if (presetDefaultBtn) {
+      presetDefaultBtn.addEventListener('click', () => {
+        activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
+        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        renderColumnChecklist();
+        renderTableHeader();
+        renderTable();
+        showToast('Columns set to Default view');
+      });
+    }
+
+    const presetMediaBtn = document.getElementById('btn-preset-media');
+    if (presetMediaBtn) {
+      presetMediaBtn.addEventListener('click', () => {
+        activeColumns = [
+          'date', 'verification_badge', 'company', 'brand', 'tactic_name', 
+          'tactic_run_date', 'publication_group', 'tactic_publisher', 
+          'key_hook', 'tactic_type', 'utm_source', 'utm_medium', 
+          'utm_campaign', 'utm_content', 'page_url'
+        ];
+        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        renderColumnChecklist();
+        renderTableHeader();
+        renderTable();
+        showToast('Columns set to Media & Tactics view');
+      });
+    }
+
+    const presetSalesBtn = document.getElementById('btn-preset-sales');
+    if (presetSalesBtn) {
+      presetSalesBtn.addEventListener('click', () => {
+        activeColumns = [
+          'date', 'verification_badge', 'full_name', 'company', 'location', 
+          'job_title', 'phone', 'email', 'distributor', 'distributor_rep', 
+          'sales_rep', 'crm_id', 'lead_score', 'status', 'comments'
+        ];
+        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        renderColumnChecklist();
+        renderTableHeader();
+        renderTable();
+        showToast('Columns set to Sales Outreach view');
+      });
+    }
+
+    const selectAllColsBtn = document.getElementById('btn-cols-select-all');
+    if (selectAllColsBtn) {
+      selectAllColsBtn.addEventListener('click', () => {
+        activeColumns = ALL_COLUMNS.map(c => c.key);
+        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        renderColumnChecklist();
+        renderTableHeader();
+        renderTable();
+        showToast(`All ${ALL_COLUMNS.length} columns visible`);
+      });
+    }
+
+    const resetColsBtn = document.getElementById('btn-cols-reset');
+    if (resetColsBtn) {
+      resetColsBtn.addEventListener('click', () => {
+        activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
+        localStorage.setItem('hfs_ground_columns', JSON.stringify(activeColumns));
+        renderColumnChecklist();
+        renderTableHeader();
+        renderTable();
+        showToast('Columns reset to defaults');
+      });
+    }
 
     const searchInput = document.getElementById('lead-search-input');
     const clearSearchBtn = document.getElementById('btn-clear-search');

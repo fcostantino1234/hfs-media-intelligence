@@ -734,20 +734,48 @@
             </button>
 
             <!-- Columns Customizer -->
-            <div class="dropdown-wrapper">
-              <button id="btn-toggle-columns" class="btn btn-outline">
-                ⚙️ Columns (<span id="active-cols-count">10</span>)
+            <div class="dropdown-wrapper col-customizer-wrapper">
+              <button id="btn-toggle-columns" class="btn btn-outline btn-columns-toggle" title="Customize visible table columns">
+                <span class="col-btn-icon">⚙️</span>
+                <span class="col-btn-text">Columns</span>
+                <span id="active-cols-count" class="col-active-badge">12</span>
               </button>
-              <div id="columns-dropdown" class="dropdown-menu columns-dropdown">
-                <div class="dropdown-header">
-                  <strong>Visible Columns</strong>
-                  <div class="dropdown-quick-actions">
-                    <button id="btn-cols-select-all" class="btn-link">All (30)</button>
-                    <button id="btn-cols-reset" class="btn-link">Reset</button>
+
+              <div id="columns-dropdown" class="columns-popover" style="display: none;">
+                <div class="col-popover-header">
+                  <div class="col-popover-title-row">
+                    <div class="col-popover-title">
+                      <span class="col-title-icon">⚙️</span> Table Column Customizer
+                    </div>
+                    <span id="cols-summary-pill" class="cols-summary-pill">12 of 34 visible</span>
+                  </div>
+
+                  <!-- Quick Presets Row -->
+                  <div class="col-presets-bar">
+                    <span class="col-presets-label">Presets:</span>
+                    <button id="btn-preset-default" class="btn-preset-chip active" type="button">Default (12)</button>
+                    <button id="btn-preset-media" class="btn-preset-chip" type="button">Media & Tactics</button>
+                    <button id="btn-preset-sales" class="btn-preset-chip" type="button">Sales Outreach</button>
+                    <button id="btn-cols-select-all" class="btn-preset-chip" type="button">All (34)</button>
+                    <button id="btn-cols-reset" class="btn-preset-chip chip-reset" type="button">Reset</button>
+                  </div>
+
+                  <!-- Column Search Bar -->
+                  <div class="col-search-wrapper">
+                    <input type="text" id="col-search-input" class="col-search-input" placeholder="🔍 Search columns (e.g. date, utm, distributor, rep)...">
+                    <button id="btn-clear-col-search" class="col-search-clear" style="display: none;" type="button">✕</button>
                   </div>
                 </div>
-                <div class="columns-checklist" id="columns-checklist-container">
-                  <!-- Checkboxes populated via JS -->
+
+                <!-- Grouped Checklist Container -->
+                <div class="columns-popover-body" id="columns-checklist-container">
+                  <!-- Checkboxes grouped by category rendered via JS -->
+                </div>
+
+                <!-- Footer with Done Button -->
+                <div class="col-popover-footer">
+                  <span class="col-footer-hint">✨ Changes apply instantly & persist across browser sessions</span>
+                  <button id="btn-close-columns" class="btn btn-primary btn-sm btn-done-cols" type="button">Done ✓</button>
                 </div>
               </div>
             </div>
