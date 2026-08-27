@@ -2594,7 +2594,7 @@
     const sumBadge = document.getElementById('sum-panel-badge');
     const sumShare = document.getElementById('sum-portfolio-share');
 
-    if (sumBadge) sumBadge.textContent = '📊 FILTERED LEADS INTELLIGENCE SUMMARY';
+    // sum-panel-badge removed per user directive
     const portfolioTotal = allLeads.length || 25326;
     const sharePct = portfolioTotal > 0 ? ((totalCount / portfolioTotal) * 100).toFixed(1) : 0;
     if (sumShare) sumShare.textContent = `(${sharePct}% of complete portfolio • ${totalCount.toLocaleString()} total matching leads)`;
