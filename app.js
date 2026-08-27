@@ -6076,10 +6076,6 @@ Hormel Foodservice Culinary Team`;
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  window.addEventListener('DOMContentLoaded', init);
-})();
-
-
   // ==========================================================================
   // DELORES // JT MEGA CONCIERGE ENGINE (DIRECTOR OF IN-ANIMATION)
   // ==========================================================================
@@ -6462,3 +6458,6 @@ Hormel Foodservice Culinary Team`;
       );
     }
   }
+
+  window.addEventListener('DOMContentLoaded', init);
+})();
