@@ -1973,5 +1973,105 @@
   <script src="tactics_data.js"></script>
   <script src="leads_data.js"></script>
   <script src="app.js"></script>
+
+  <!-- ========================================================================= -->
+  <!-- DELORES // JT MEGA AGENCY CONCIERGE (DIRECTOR OF IN-ANIMATION)            -->
+  <!-- ========================================================================= -->
+  <div id="delores-container" class="delores-container">
+    <!-- Floating Avatar Button -->
+    <div id="delores-floating-btn" class="delores-floating-btn" title="Ask Delores // JT Mega Director of In-Animation">
+      <div class="delores-avatar-ring">
+        <img src="assets/delores_avatar.png" alt="Delores // Director of In-Animation" class="delores-avatar-img">
+        <span class="delores-pulse-dot" title="On Duty"></span>
+      </div>
+      <div class="delores-btn-pill">
+        <span class="delores-btn-text">// ASK DELORES //</span>
+        <span class="delores-btn-sub">Director of In-Animation</span>
+      </div>
+    </div>
+
+    <!-- Speech Bubble Peek -->
+    <div id="delores-speech-bubble" class="delores-speech-bubble" style="display: none;">
+      <button id="delores-bubble-close" class="delores-bubble-close" title="Dismiss">&times;</button>
+      <div class="bubble-title">// DELORES // JT MEGA CONCIERGE //</div>
+      <div class="bubble-body">
+        Holding this burger so you don't have to. Need help navigating our 25k leads, media data, or connecting with someone at the agency?
+      </div>
+      <div class="bubble-action">
+        <button id="delores-bubble-open-btn" class="btn-bubble-chat">Ask Delores &rarr;</button>
+      </div>
+    </div>
+
+    <!-- The Interactive Concierge Panel -->
+    <aside id="delores-chat-panel" class="delores-chat-panel" aria-hidden="true" style="display: none;">
+      <!-- Panel Header -->
+      <div class="delores-panel-header">
+        <div class="delores-panel-profile">
+          <img src="assets/delores_avatar.png" alt="Delores" class="delores-panel-avatar">
+          <div class="delores-panel-title-block">
+            <div class="delores-panel-name">DELORES</div>
+            <div class="delores-panel-role">// DIRECTOR OF IN-ANIMATION //</div>
+            <div class="delores-panel-agency">JT Mega Food Advertising Agency</div>
+          </div>
+        </div>
+        <div class="delores-panel-header-actions">
+          <button id="delores-panel-close" class="delores-panel-close" title="Minimize Delores">&times;</button>
+        </div>
+      </div>
+
+      <!-- Quick Preset Suggestions Bar -->
+      <div class="delores-quick-chips-bar">
+        <button class="delores-chip" data-query="How do I filter to certified MQLs?">Certified MQLs</button>
+        <button class="delores-chip" data-query="Explain the 2027 Big Bets plan">2027 Big Bets</button>
+        <button class="delores-chip" data-query="What makes Bacon 1 labor-saving?">Bacon 1 Specs</button>
+        <button class="delores-chip" data-query="How does website correlation work?">Web Correlation</button>
+        <button class="delores-chip delores-chip-agency" data-action="agency-directory">Contact JT Mega &rarr;</button>
+      </div>
+
+      <!-- Chat History Stream -->
+      <div id="delores-chat-stream" class="delores-chat-stream">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Agency Contact Router View (collapsible) -->
+      <div id="delores-agency-router" class="delores-agency-router" style="display: none;">
+        <div class="router-header">
+          <span class="router-title">// DIRECT ROUTE // JT MEGA SPECIALISTS //</span>
+          <button id="btn-close-router" class="router-close-btn">&times;</button>
+        </div>
+        <div class="router-subtitle">
+          "When synthetic intelligence hits its limit, let's get you connected with a real human at JT Mega with a heartbeat and actual appetite."
+        </div>
+        <div class="router-cards-grid">
+          <div class="router-team-card" data-dept="media" data-email="media@jtmega.com" data-subject="HFS Media Planning & Tactic Flowchart Inquiry">
+            <div class="router-card-role">// MEDIA STRATEGY & FLOWCHART //</div>
+            <div class="router-card-desc">Flight schedules, publisher partnerships, and print/digital ad units.</div>
+            <button class="btn-router-connect">Connect with Media Team &rarr;</button>
+          </div>
+          <div class="router-team-card" data-dept="culinary" data-email="culinary@jtmega.com" data-subject="HFS Culinary Creative & Operator Menu Concepts">
+            <div class="router-card-role">// CULINARY CREATIVE & CONCEPTS //</div>
+            <div class="router-card-desc">Chef-crafted menu concepts, prep specs, and brand creative ideation.</div>
+            <button class="btn-router-connect">Connect with Culinary Team &rarr;</button>
+          </div>
+          <div class="router-team-card" data-dept="analytics" data-email="analytics@jtmega.com" data-subject="HFS Connections Intelligence & Data Analytics">
+            <div class="router-card-role">// DATA, MQLS & ATTRIBUTION //</div>
+            <div class="router-card-desc">Database triangulation, CRM lead scoring, and web attribution trends.</div>
+            <button class="btn-router-connect">Connect with Analytics Team &rarr;</button>
+          </div>
+          <div class="router-team-card" data-dept="account" data-email="accounts@jtmega.com" data-subject="HFS Account Leadership & Strategy Consultation">
+            <div class="router-card-role">// ACCOUNT LEADERSHIP //</div>
+            <div class="router-card-desc">Strategic executive partnership, 2027 Big Bets planning, and agency services.</div>
+            <button class="btn-router-connect">Connect with Account Lead &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Area -->
+      <form id="delores-input-form" class="delores-input-form">
+        <input type="text" id="delores-input-field" class="delores-input-field" placeholder="Ask Delores anything or request agency help..." autocomplete="off">
+        <button type="submit" id="delores-send-btn" class="delores-send-btn" title="Send message">&rarr;</button>
+      </form>
+    </aside>
+  </div>
 </body>
 </html>

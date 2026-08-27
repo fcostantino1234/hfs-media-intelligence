@@ -275,6 +275,7 @@
     initRoiSimulator();
 
     bindEvents();
+    initDeloresConcierge();
 
     // Support URL hash routing (e.g. #timeline, #trends)
     const hash = window.location.hash.replace('#', '');
@@ -6071,3 +6072,383 @@ Hormel Foodservice Culinary Team`;
 
   window.addEventListener('DOMContentLoaded', init);
 })();
+
+
+  // ==========================================================================
+  // DELORES // JT MEGA CONCIERGE ENGINE (DIRECTOR OF IN-ANIMATION)
+  // ==========================================================================
+  function initDeloresConcierge() {
+    const floatingBtn = document.getElementById('delores-floating-btn');
+    const speechBubble = document.getElementById('delores-speech-bubble');
+    const bubbleClose = document.getElementById('delores-bubble-close');
+    const bubbleOpenBtn = document.getElementById('delores-bubble-open-btn');
+    const chatPanel = document.getElementById('delores-chat-panel');
+    const panelClose = document.getElementById('delores-panel-close');
+    const chatStream = document.getElementById('delores-chat-stream');
+    const inputForm = document.getElementById('delores-input-form');
+    const inputField = document.getElementById('delores-input-field');
+    const agencyRouter = document.getElementById('delores-agency-router');
+    const closeRouterBtn = document.getElementById('btn-close-router');
+
+    if (!floatingBtn || !chatPanel) return;
+
+    let hasGreeted = false;
+
+    // Show speech bubble after 3.5 seconds on first visit
+    setTimeout(() => {
+      if (!sessionStorage.getItem('hfs_delores_peeked') && chatPanel.style.display !== 'flex') {
+        if (speechBubble) speechBubble.style.display = 'block';
+        sessionStorage.setItem('hfs_delores_peeked', 'true');
+      }
+    }, 3500);
+
+    if (bubbleClose) {
+      bubbleClose.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (speechBubble) speechBubble.style.display = 'none';
+      });
+    }
+
+    if (bubbleOpenBtn) {
+      bubbleOpenBtn.addEventListener('click', () => {
+        if (speechBubble) speechBubble.style.display = 'none';
+        openDeloresPanel();
+      });
+    }
+
+    floatingBtn.addEventListener('click', () => {
+      if (speechBubble) speechBubble.style.display = 'none';
+      if (chatPanel.style.display === 'flex') {
+        closeDeloresPanel();
+      } else {
+        openDeloresPanel();
+      }
+    });
+
+    if (panelClose) {
+      panelClose.addEventListener('click', closeDeloresPanel);
+    }
+
+    function openDeloresPanel() {
+      chatPanel.style.display = 'flex';
+      chatPanel.setAttribute('aria-hidden', 'false');
+      if (floatingBtn) floatingBtn.style.display = 'none';
+
+      if (!hasGreeted) {
+        hasGreeted = true;
+        renderDeloresInitialGreeting();
+      }
+
+      if (inputField) {
+        setTimeout(() => inputField.focus(), 150);
+      }
+    }
+
+    function closeDeloresPanel() {
+      chatPanel.style.display = 'none';
+      chatPanel.setAttribute('aria-hidden', 'true');
+      if (floatingBtn) floatingBtn.style.display = 'flex';
+    }
+
+    // Quick chips
+    document.querySelectorAll('.delores-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const action = chip.getAttribute('data-action');
+        const query = chip.getAttribute('data-query');
+        if (action === 'agency-directory') {
+          toggleAgencyRouter(true);
+        } else if (query) {
+          handleUserDeloresQuery(query);
+        }
+      });
+    });
+
+    if (closeRouterBtn) {
+      closeRouterBtn.addEventListener('click', () => toggleAgencyRouter(false));
+    }
+
+    function toggleAgencyRouter(show) {
+      if (!agencyRouter) return;
+      agencyRouter.style.display = show ? 'block' : 'none';
+      if (show) {
+        agencyRouter.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // Connect buttons inside router
+    document.querySelectorAll('.router-team-card').forEach(card => {
+      const btn = card.querySelector('.btn-router-connect');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const email = card.getAttribute('data-email');
+          const subject = card.getAttribute('data-subject');
+          const role = card.querySelector('.router-card-role').textContent.trim();
+          
+          const body = encodeURIComponent(
+            `Hello JT Mega Team,\n\nI am exploring the Hormel Foodservice Connections Intelligence Suite and would like to connect regarding: ${role}.\n\nCurrent Active View: ${window.location.hash || 'Sales Leads'}\n\nThank you!`
+          );
+          window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${body}`;
+          showToast(`Connecting with ${role}...`);
+        });
+      }
+    });
+
+    // Form submit
+    if (inputForm) {
+      inputForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = inputField.value.trim();
+        if (!text) return;
+        inputField.value = '';
+        handleUserDeloresQuery(text);
+      });
+    }
+
+    function appendUserMessage(text) {
+      const msgEl = document.createElement('div');
+      msgEl.className = 'delores-msg delores-msg-user';
+      msgEl.innerHTML = `
+        <div class="delores-msg-header">YOU</div>
+        <div class="delores-msg-bubble">${escapeHtml(text)}</div>
+      `;
+      chatStream.appendChild(msgEl);
+      chatStream.scrollTop = chatStream.scrollHeight;
+    }
+
+    function appendDeloresMessage(htmlText, actionBtn) {
+      const msgEl = document.createElement('div');
+      msgEl.className = 'delores-msg delores-msg-agent';
+
+      let btnHtml = '';
+      if (actionBtn) {
+        btnHtml = `<button class="delores-action-btn-bubble" type="button">${escapeHtml(actionBtn.label)}</button>`;
+      }
+
+      msgEl.innerHTML = `
+        <div class="delores-msg-header">DELORES // DIRECTOR OF IN-ANIMATION</div>
+        <div class="delores-msg-bubble">
+          ${htmlText}
+          ${btnHtml}
+        </div>
+      `;
+
+      if (actionBtn && actionBtn.onClick) {
+        const btn = msgEl.querySelector('.delores-action-btn-bubble');
+        if (btn) {
+          btn.addEventListener('click', actionBtn.onClick);
+        }
+      }
+
+      chatStream.appendChild(msgEl);
+      chatStream.scrollTop = chatStream.scrollHeight;
+    }
+
+    function renderDeloresInitialGreeting() {
+      chatStream.innerHTML = '';
+      appendDeloresMessage(
+        `<strong>Hello! I'm Delores, JT Mega's Director of In-Animation.</strong><br><br>
+        I don't blink, I don't take lunch breaks, and I've been holding this exact burger with unwavering poise since our last status meeting.<br><br>
+        Ask me anything about our <strong>25,326 leads</strong>, media flight tactics, brand specs, or the <strong>2027 Big Bets strategy</strong>. Or, if you need a live human with a pulse, I can connect you directly with the right specialist at JT Mega!`,
+        {
+          label: 'Contact JT Mega Team ->',
+          onClick: () => toggleAgencyRouter(true)
+        }
+      );
+    }
+
+    function handleUserDeloresQuery(rawQuery) {
+      appendUserMessage(rawQuery);
+
+      const q = rawQuery.toLowerCase();
+
+      // Show typing simulation delay
+      setTimeout(() => {
+        respondToQuery(q, rawQuery);
+      }, 400);
+    }
+
+    function respondToQuery(q, rawQuery) {
+      // 1. MQLs & Leads
+      if (q.includes('mql') || q.includes('certified') || (q.includes('lead') && (q.includes('how many') || q.includes('count') || q.includes('filter') || q.includes('isolate')))) {
+        appendDeloresMessage(
+          `Out of our <strong>25,326 total leads</strong>, exactly <strong>15,306 (60.4%)</strong> are certified MQL Foodservice Outlets with an average lead score of 72/100.<br><br>
+          We deliberately scrubbed out 5,678 distributor reps and 2,376 home cooks so your territory reps only spend their time calling qualified commercial operators and high-volume institutional kitchens.`,
+          {
+            label: 'Filter Table to Certified MQLs (15,306) ->',
+            onClick: () => {
+              const filterEl = document.getElementById('filter-operator-type');
+              if (filterEl) {
+                filterEl.value = 'certified_mql';
+                applyGlobalFilters();
+                const tableSection = document.getElementById('view-sales-leads');
+                if (tableSection) tableSection.scrollIntoView({ behavior: 'smooth' });
+                showToast('Delores filtered table to 15,306 Certified MQLs!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 2. 2027 Big Bets / Budget / ROI
+      if (q.includes('big bet') || q.includes('2027') || q.includes('budget') || q.includes('roi') || q.includes('roas') || q.includes('plan')) {
+        appendDeloresMessage(
+          `Our recommended <strong>2027 Big Bets Strategy</strong> reallocates $217K from underperforming, fragmented tactics to self-fund the 4 highest-converting channels:<br>
+          • <strong>Trade Media Growth (+18%)</strong> — $315K<br>
+          • <strong>Integrated Campaigns (+25%)</strong> — $225K<br>
+          • <strong>Paid Search & Halal (+40%)</strong> — $70K<br>
+          • <strong>Owned CRM Nurture (+12%)</strong> — $45K<br><br>
+          This plan projects <strong>1,230 incremental MQLs</strong> at a projected 4.2x ROAS!`,
+          {
+            label: 'Open 2027 ROI & Big Bets Simulator ->',
+            onClick: () => {
+              const tab = document.getElementById('tab-roi-simulator');
+              if (tab) {
+                tab.click();
+                showToast('Delores navigated to 2027 Big Bets Simulator!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 3. Bacon 1
+      if (q.includes('bacon')) {
+        appendDeloresMessage(
+          `<strong>Bacon 1 Perfectly Cooked Bacon</strong> is the ultimate kitchen prep hack. It delivers:<br>
+          • <strong>Cooking time:</strong> 3 minutes flat in a convection oven.<br>
+          • <strong>Labor advantage:</strong> Saves 30+ minutes of dangerous morning sheet-pan grease frying and fryer cleaning.<br>
+          • <strong>Yield:</strong> 100% usable slice yield with zero curl and zero greasy shrinkage.`,
+          {
+            label: 'Inspect Bacon 1 Leads in Table ->',
+            onClick: () => {
+              const brandFilter = document.getElementById('filter-brand');
+              if (brandFilter) {
+                brandFilter.value = 'Bacon 1';
+                applyGlobalFilters();
+                showToast('Delores filtered leads to Bacon 1!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 4. Fontanini
+      if (q.includes('fontanini') || q.includes('meatball') || q.includes('pizza') || q.includes('sausage')) {
+        appendDeloresMessage(
+          `<strong>Fontanini Italian Meats</strong> brings 60+ years of authentic Chicago Italian craftsmanship:<br>
+          • <strong>Signature Line:</strong> Raw & pre-cooked pizza toppings, authentic meatballs, and Italian rope sausage.<br>
+          • <strong>BOH Advantage:</strong> Fully cooked crumbles drop right onto dough with 0 prep time, delivering 100% yield and zero grease-soak on crusts.`,
+          {
+            label: 'Inspect Fontanini Leads ->',
+            onClick: () => {
+              const brandFilter = document.getElementById('filter-brand');
+              if (brandFilter) {
+                brandFilter.value = 'Fontanini';
+                applyGlobalFilters();
+                showToast('Delores filtered leads to Fontanini!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 5. Austin Blues / BBQ
+      if (q.includes('austin') || q.includes('blues') || q.includes('bbq') || q.includes('brisket') || q.includes('pork')) {
+        appendDeloresMessage(
+          `<strong>Austin Blues Barbeque</strong> delivers genuine hardwood-smoked Texas pit flavor without the pitmaster labor:<br>
+          • <strong>Specialty:</strong> Smoked pulled pork, beef brisket, and smoked sausage.<br>
+          • <strong>BOH Advantage:</strong> Retherms in minutes. Eliminates 12 to 14 hours of overnight smoking and absorbs 0% pit shrinkage.`,
+          {
+            label: 'Inspect Austin Blues Leads ->',
+            onClick: () => {
+              const brandFilter = document.getElementById('filter-brand');
+              if (brandFilter) {
+                brandFilter.value = 'Austin Blues';
+                applyGlobalFilters();
+                showToast('Delores filtered leads to Austin Blues!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 6. Cafe H / Carnitas
+      if (q.includes('cafe h') || q.includes('carnitas') || q.includes('barbacoa') || q.includes('mexican') || q.includes('global')) {
+        appendDeloresMessage(
+          `<strong>Cafe H Global Flavors</strong> delivers authentic street-food flair:<br>
+          • <strong>Signature Line:</strong> All-natural braised Pork Carnitas, Beef Barbacoa, and fire-roasted salsas.<br>
+          • <strong>BOH Advantage:</strong> Flat-top sear in 90 seconds. Saves 4 hours of slow-braising and lard rendering.`,
+          {
+            label: 'Inspect Cafe H Leads ->',
+            onClick: () => {
+              const brandFilter = document.getElementById('filter-brand');
+              if (brandFilter) {
+                brandFilter.value = 'Cafe H';
+                applyGlobalFilters();
+                showToast('Delores filtered leads to Cafe H!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 7. Correlation & Trends
+      if (q.includes('correlation') || q.includes('pearson') || q.includes('trend') || q.includes('traffic') || q.includes('website')) {
+        appendDeloresMessage(
+          `Our <strong>Advertising & Traffic Correlation Analysis</strong> demonstrates a <strong>Pearson Correlation Coefficient of r = 0.58</strong> between monthly media spend and organic website traffic.<br><br>
+          Keep in mind: print publications feature a natural <strong>30-to-60 day conversion lag</strong> because operators read physical trade journals over weeks, while digital search delivers immediate conversions.`,
+          {
+            label: 'View Correlation Analysis & Timeline ->',
+            onClick: () => {
+              const tab = document.getElementById('tab-macro-analytics');
+              if (tab) {
+                tab.click();
+                showToast('Delores navigated to Trends & Analytics!');
+              }
+            }
+          }
+        );
+        return;
+      }
+
+      // 8. Contact JT Mega / Agency / Help / Human
+      if (q.includes('jt mega') || q.includes('agency') || q.includes('contact') || q.includes('person') || q.includes('human') || q.includes('call') || q.includes('talk') || q.includes('help') || q.includes('email')) {
+        appendDeloresMessage(
+          `JT Mega has been 'Thought for Food' for over 50 years! As proud as I am of my fiberglass stamina, sometimes you need a real human with creative culinary chops or media planning mastery.<br><br>
+          I've opened the <strong>JT Mega Specialists Directory</strong> below—pick the team you'd like to connect with and I'll route your note immediately!`,
+          {
+            label: 'Open Agency Directory ->',
+            onClick: () => toggleAgencyRouter(true)
+          }
+        );
+        toggleAgencyRouter(true);
+        return;
+      }
+
+      // 9. Mannequin / Burger / Tongue-in-cheek
+      if (q.includes('burger') || q.includes('mannequin') || q.includes('plastic') || q.includes('delores') || q.includes('wig') || q.includes('glasses') || q.includes('lunch') || q.includes('stiff')) {
+        appendDeloresMessage(
+          `Yes, it's a real synthetic burger. No, you can't have a bite—it has been seasoned with 50 years of agency trade lore.<br><br>
+          Some people say I'm rigid, but I take pride in holding this pose since 1974. Plus, being in-animate means I never complain about scope creep or run out of coffee.<br><br>
+          What else can I help you track down?`
+        );
+        return;
+      }
+
+      // Default Fallback
+      appendDeloresMessage(
+        `That's a thoughtful question! While my synthetic memory is loaded with 25,326 leads, 449 media tactics, and culinary specs, a live strategist at JT Mega would be happy to give you human guidance.<br><br>
+        Would you like me to connect you with our team?`,
+        {
+          label: 'Connect with JT Mega Specialists ->',
+          onClick: () => toggleAgencyRouter(true)
+        }
+      );
+    }
+  }
