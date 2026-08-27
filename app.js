@@ -286,6 +286,15 @@
         openLeadDrawer(filteredLeads[0]);
       }
     }
+    if (hash.startsWith('search=')) {
+      const qVal = decodeURIComponent(hash.replace('search=', ''));
+      leadFilters.search = qVal;
+      const sInput = document.getElementById('lead-search-input');
+      if (sInput) sInput.value = qVal;
+      const clrBtn = document.getElementById('btn-clear-search');
+      if (clrBtn) clrBtn.classList.add('visible');
+      applyGlobalFilters();
+    }
     if (hash === 'delores') {
       setTimeout(() => {
         const btn = document.getElementById('delores-floating-btn');
