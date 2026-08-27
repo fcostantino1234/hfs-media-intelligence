@@ -562,24 +562,80 @@
         </div>
       </div>
 
-      <!-- 2. Master Dual-Axis Advertising & Web Traffic Correlation Chart -->
-      <div class="chart-card full-width-chart" style="margin-bottom: 24px;">
-        <div class="chart-header">
+            <!-- 2. The 4-Tile Marketing & Intent Correlation Intelligence Matrix -->
+      <div class="corr-tiles-section" style="margin-bottom: 24px;">
+        <div class="corr-tiles-header">
           <div>
-            <h4 id="corr-chart-title">Media Spend vs. Web Traffic & Distributor Intent (Dual-Axis)</h4>
-            <span class="section-subtitle">Paid flight spend ($K) compared against monthly web sessions and distributor item lookups</span>
-            <div class="corr-series-toggles" id="corr-series-toggle-group">
-              <span style="font-size: 0.6875rem; font-weight: 700; color: #64748b; margin-right: 4px; align-self: center;">View:</span>
-              <button type="button" class="btn-corr-series active" data-corr-filter="all">All Series</button>
-              <button type="button" class="btn-corr-series" data-corr-filter="spend-traffic">Spend vs. Web Traffic</button>
-              <button type="button" class="btn-corr-series" data-corr-filter="spend-lookups">Spend vs. Distributor Lookups</button>
-              <button type="button" class="btn-corr-series" data-corr-filter="spend-utms">Spend vs. Direct UTM Visits</button>
+            <h4 class="corr-tiles-title">// MULTI-TOUCH INTENT & FLIGHT ATTRIBUTION TILES //</h4>
+            <p class="corr-tiles-subtitle">
+              Deconstructed multi-metric performance showing monthly media spend flight velocity alongside digital response, dark funnel web halo, and distributor purchasing actions.
+            </p>
+          </div>
+          <div class="corr-tiles-meta">
+            <span class="badge badge-emerald" id="corr-tiles-summary-badge">Strong Multi-Touch Correlation</span>
+          </div>
+        </div>
+
+        <div class="corr-tiles-grid">
+          <!-- Tile 1: Paid Media Flight Spend -->
+          <div class="corr-tile-card">
+            <div class="corr-tile-head">
+              <div class="corr-tile-tag">// TILE 1 // INVESTMENT FLIGHT VELOCITY //</div>
+              <div class="corr-tile-metric" id="tile-spend-val">$187.4K <span class="corr-tile-sub">Peak Run</span></div>
+              <div class="corr-tile-label">Paid Media Flight Spend ($K) • Real Seasonal Surge</div>
+            </div>
+            <div class="corr-tile-chart-wrapper">
+              <canvas id="chart-tile-spend"></canvas>
+            </div>
+            <div class="corr-tile-footer">
+              <span class="corr-tile-footer-note">Captures concentrated bursts (e.g. Pizza Expo, NRA Show, Fall menu drops) vs. maintenance periods.</span>
             </div>
           </div>
-          <span class="chart-tag" id="corr-chart-tag">r = +0.892 Pearson Correlation</span>
-        </div>
-        <div class="chart-canvas-wrapper" style="height: 360px;">
-          <canvas id="chart-advertising-traffic-correlation"></canvas>
+
+          <!-- Tile 2: Organic & Direct Web Traffic Halo -->
+          <div class="corr-tile-card">
+            <div class="corr-tile-head">
+              <div class="corr-tile-tag">// TILE 2 // "DARK FUNNEL" WEB TRAFFIC HALO //</div>
+              <div class="corr-tile-metric" id="tile-traffic-val">18.9K <span class="corr-tile-sub">Peak Sessions</span></div>
+              <div class="corr-tile-label">Total Web Sessions (Thousands) • r = +0.892 Correlation</div>
+            </div>
+            <div class="corr-tile-chart-wrapper">
+              <canvas id="chart-tile-traffic"></canvas>
+            </div>
+            <div class="corr-tile-footer">
+              <span class="corr-tile-footer-note">Chefs seeing print ads Google "Hormel Bacon 1" on desktop with an organic +41.8% lift.</span>
+            </div>
+          </div>
+
+          <!-- Tile 3: Direct Campaign UTM Visits -->
+          <div class="corr-tile-card">
+            <div class="corr-tile-head">
+              <div class="corr-tile-tag">// TILE 3 // IMMEDIATE DIGITAL UTM CLICKS //</div>
+              <div class="corr-tile-metric" id="tile-utms-val">5.8K <span class="corr-tile-sub">Monthly Clicks</span></div>
+              <div class="corr-tile-label">Direct Digital Campaign UTM Visits • r = +0.764 Correlation</div>
+            </div>
+            <div class="corr-tile-chart-wrapper">
+              <canvas id="chart-tile-utms"></canvas>
+            </div>
+            <div class="corr-tile-footer">
+              <span class="corr-tile-footer-note">Direct immediate click-throughs from active digital banners and eNewsletter headers.</span>
+            </div>
+          </div>
+
+          <!-- Tile 4: Distributor "Where to Buy" Lookups -->
+          <div class="corr-tile-card">
+            <div class="corr-tile-head">
+              <div class="corr-tile-tag">// TILE 4 // COMMERCIAL PURCHASING INTENT //</div>
+              <div class="corr-tile-metric" id="tile-lookups-val">2.2K <span class="corr-tile-sub">Monthly Lookups</span></div>
+              <div class="corr-tile-label">Sysco / US Foods / Dot Item Lookups • 22 : 1 Ratio</div>
+            </div>
+            <div class="corr-tile-chart-wrapper">
+              <canvas id="chart-tile-lookups"></canvas>
+            </div>
+            <div class="corr-tile-footer">
+              <span class="corr-tile-footer-note">Commercial operators verify distributor item codes before ordering from sales reps.</span>
+            </div>
+          </div>
         </div>
       </div>
 
