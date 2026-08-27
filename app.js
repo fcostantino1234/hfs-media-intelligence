@@ -24,6 +24,7 @@
     { key: 'brand', label: 'Brand Line', default: true },
     { key: 'segment', label: 'IFMA Segment', default: true },
     { key: 'tactic_name', label: 'Ad Tactic / Placement', default: true },
+    { key: 'tactic_run_date', label: 'Ad Deployment Date', default: true },
     { key: 'key_hook', label: 'Strategic Key Hook', default: false },
     { key: 'tactic_type', label: 'Tactic Format', default: false },
     { key: 'lead_score', label: 'Score', default: true },
@@ -210,12 +211,15 @@
 
       const chosenTactic = matched[idx % matched.length] || allTactics[0];
 
+      const chosenRunDate = chosenTactic.run_date || (chosenTactic.flight_start ? `${chosenTactic.flight_start} Flight` : (chosenTactic.year ? `${chosenTactic.year} Flight` : 'Flowchart Flight'));
       return {
         ...lead,
         brand: brand,
         tactic_id: chosenTactic.id,
         tactic_name: chosenTactic.name,
         tactic_channel: chosenTactic.channel,
+        tactic_run_date: chosenRunDate,
+        tactic_active_quarters: chosenTactic.active_quarters || [],
         key_hook: lead.messaging_hook || chosenTactic.key_hook || 'Labor-Saving & Kitchen Efficiency',
         publication_group: chosenTactic.publication_group || 'Trade Publisher Network'
       };
@@ -2295,6 +2299,14 @@
     } else {
       activeColumns = ALL_COLUMNS.filter(c => c.default).map(c => c.key);
     }
+    if (!activeColumns.includes('tactic_run_date')) {
+      const tIdx = activeColumns.indexOf('tactic_name');
+      if (tIdx !== -1) {
+        activeColumns.splice(tIdx + 1, 0, 'tactic_run_date');
+      } else {
+        activeColumns.push('tactic_run_date');
+      }
+    }
     renderColumnChecklist();
   }
 
@@ -2409,10 +2421,26 @@
             const segStr = lead.subsegment ? `${lead.segment} (${lead.subsegment})` : lead.segment;
             rowHtml += `<td><span class="badge badge-segment">${escapeHtml(segStr)}</span></td>`;
           } else if (col.key === 'tactic_name') {
+            const depDate = lead.tactic_run_date || lead.run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
             rowHtml += `
               <td>
                 <div class="attr-clickable attr-isolate-tactic" data-isolate-tactic="${lead.tactic_id}" style="font-weight: 700; color: var(--jtm-petrol); font-size: 0.75rem;" title="Click to isolate leads for this tactic">${escapeHtml(lead.tactic_name)}</div>
-                <div class="attr-clickable attr-isolate-pub" data-isolate-pub="${escapeHtml(lead.publication_group)}" style="font-size: 0.6875rem; color: var(--text-muted);" title="Click to isolate leads from ${escapeHtml(lead.publication_group)}">${escapeHtml(lead.publication_group)}</div>
+                <div style="font-size: 0.6875rem; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  <span class="attr-clickable attr-isolate-pub" data-isolate-pub="${escapeHtml(lead.publication_group)}" style="color: #0284c7; text-decoration: underline;" title="Click to isolate leads from ${escapeHtml(lead.publication_group)}">${escapeHtml(lead.publication_group)}</span>
+                  <span style="color: #cbd5e1;">•</span>
+                  <span class="badge-rundate" style="font-size: 0.6875rem; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 1px 6px; border-radius: 4px;" title="Ad Unit Deployment / Flowchart Run Date">
+                    📅 Deployed: <strong>${escapeHtml(depDate)}</strong>
+                  </span>
+                </div>
+              </td>
+            `;
+          } else if (col.key === 'tactic_run_date' || col.key === 'tactic_deployment_date') {
+            const depDate = lead.tactic_run_date || lead.run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
+            rowHtml += `
+              <td style="white-space: nowrap;">
+                <span class="badge-rundate" style="font-size: 0.72rem; font-weight: 700; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 2px 7px; border-radius: 4px;" title="Ad Unit Deployment Date per media flowchart">
+                  📅 ${escapeHtml(depDate)}
+                </span>
               </td>
             `;
           } else if (col.key === 'publication_group' || col.key === 'tactic_publisher') {
@@ -3390,8 +3418,10 @@
       opBadgeHtml = `<span class="badge-consumer" style="font-size: 0.75rem; padding: 4px 10px;" title="${escapeHtml(lead.verification_source || '')}">🏠 Home Cook / Consumer Profile</span>`;
     }
 
+    const depDateStr = lead.tactic_run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Flowchart Flight';
     badges.innerHTML = `
       ${opBadgeHtml}
+      <span class="badge badge-rundate" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; padding: 4px 10px; font-size: 0.75rem;" title="Ad Unit Deployment Date per media flowchart">📅 Ad Deployed: ${escapeHtml(depDateStr)}</span>
       <span class="badge badge-hook">🎯 ${escapeHtml(lead.key_hook)}</span>
       <span class="badge badge-brand">${escapeHtml(lead.brand)}</span>
       <span class="badge badge-segment">${escapeHtml(lead.subsegment || lead.segment)}</span>
@@ -3426,6 +3456,10 @@
     document.getElementById('drawer-sales-rep').textContent = lead.sales_rep || 'Unassigned';
     document.getElementById('drawer-products').textContent = lead.products || '—';
     document.getElementById('drawer-crm-id').innerHTML = lead.crm_id ? `<a href="${getCrmUrl(lead.crm_id)}" target="_blank" class="text-link">${escapeHtml(lead.crm_id)}</a>` : '—';
+    const depEl = document.getElementById('drawer-tactic-deployment-date');
+    if (depEl) depEl.textContent = `📅 ${depDateStr}`;
+    const adUnitEl = document.getElementById('drawer-ad-unit-name');
+    if (adUnitEl) adUnitEl.textContent = lead.tactic_name || '—';
 
     const commentsBox = document.getElementById('drawer-comments-box');
     commentsBox.innerHTML = lead.comments ? escapeHtml(lead.comments) : '<span style="color: var(--text-muted); font-style: italic;">No custom inquiry submitted with form.</span>';
