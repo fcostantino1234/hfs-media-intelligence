@@ -6083,3 +6083,43 @@ body {
   line-height: 1.35;
   display: block;
 }
+
+
+/* Search Box Flex Layout & Search Button */
+.search-box-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-input-inner {
+  position: relative;
+  flex: 1;
+}
+
+.btn-search-submit {
+  background: var(--jtm-petrol, #0E313D);
+  color: #ffffff;
+  border: 1px solid var(--jtm-petrol, #0E313D);
+  font-weight: 800;
+  font-size: 0.8125rem;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.02em;
+}
+
+.btn-search-submit:hover {
+  background: var(--jtm-chartreuse, #B4D334);
+  color: var(--jtm-petrol, #0E313D);
+  border-color: var(--jtm-chartreuse, #B4D334);
+}

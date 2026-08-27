@@ -775,11 +775,15 @@
       <div class="toolbar-card">
         <div class="toolbar-top">
           
-          <!-- Search Box -->
+          <!-- Search Box with Search Button -->
           <div class="search-box-wrapper">
-            
-            <input type="text" id="lead-search-input" class="search-input" placeholder="Search by name, company, title, city, distributor, or CRM ID...">
-            <button id="btn-clear-search" class="btn-clear-search">&times;</button>
+            <div class="search-input-inner">
+              <input type="text" id="lead-search-input" class="search-input" placeholder="Search by name, company, title, city, distributor, or CRM ID...">
+              <button id="btn-clear-search" class="btn-clear-search" type="button" title="Clear search query">&times;</button>
+            </div>
+            <button id="btn-submit-search" class="btn btn-search-submit" type="button" title="Execute search">
+              Search
+            </button>
           </div>
 
           <!-- Action Buttons -->

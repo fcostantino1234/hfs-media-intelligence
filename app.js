@@ -4140,7 +4140,80 @@
     };
   }
 
-    function openLeadDrawer(lead) {
+    function renderAttributionPathway(lead) {
+    const pathway = document.getElementById('drawer-attribution-pathway');
+    if (!pathway) return;
+
+    const chosenTactic = allTactics.find(t => t.id === lead.tactic_id) || {};
+    const depDateStr = lead.tactic_run_date || chosenTactic.run_date || 'Flowchart Flight';
+    const pageInfo = getConversionPageInfo(lead);
+
+    pathway.innerHTML = `
+      <div class="attribution-node">
+        <div class="attribution-dot dot-tactic" title="Strategic Key Hook"></div>
+        <div class="attribution-label">Strategic Focus: <strong>${escapeHtml(lead.key_hook || chosenTactic.key_hook || 'Labor-Saving Execution')}</strong></div>
+      </div>
+      <div class="attribution-meta">Tactic: <strong>${escapeHtml(lead.tactic_name || chosenTactic.name || 'Trade Print Placement')}</strong> &bull; Flight: <strong>${escapeHtml(depDateStr)}</strong></div>
+
+      <div class="attribution-connector"></div>
+      
+      <div style="margin: 6px 0 10px 0;">
+        <div style="font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em;">
+          // SEQUENTIAL MARKETING PATHWAY //
+        </div>
+        <div class="pathway-step-card">
+          <div class="pathway-step-header">
+            <span class="pathway-touch-badge">Initial Touch</span>
+            <span class="pathway-pub-name">${escapeHtml(lead.publication_group || chosenTactic.publication_group || 'Trade Media')}</span>
+          </div>
+          <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin: 4px 0;">
+            ${escapeHtml(lead.tactic_name || 'Campaign Placement')}
+          </div>
+          <div class="pathway-utms-list" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
+            ${lead.utm_source ? `<span class="utm-chip drawer-utm-chip">source: <strong>${escapeHtml(lead.utm_source)}</strong></span>` : ''}
+            ${lead.utm_medium ? `<span class="utm-chip drawer-utm-chip">medium: <strong>${escapeHtml(lead.utm_medium)}</strong></span>` : ''}
+            ${lead.utm_campaign ? `<span class="utm-chip drawer-utm-chip">campaign: <strong>${escapeHtml(lead.utm_campaign)}</strong></span>` : ''}
+          </div>
+        </div>
+      </div>
+
+      <div class="attribution-connector"></div>
+      <div class="attribution-node">
+        <div class="attribution-dot dot-touchpoint" title="Web Inbound Lead Conversion"></div>
+        <div class="attribution-label" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <span>Website Form Conversion</span>
+          <span class="badge" style="font-size: 0.6875rem; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;">
+            ${pageInfo.badgeText || 'HFS Landing Page'}
+          </span>
+        </div>
+      </div>
+
+      <div class="conversion-page-step-card" style="margin-top: 8px; margin-left: 26px;">
+        <div class="conversion-thumb-col" title="Click to view conversion page" onclick="window.open('${escapeHtml(pageInfo.rawUrl || '#')}', '_blank')">
+          <img src="${escapeHtml(pageInfo.thumbImg || 'assets/landing_pages/real_hfs_home.png')}" alt="${escapeHtml(pageInfo.pageTitle || 'Landing Page')}" class="conversion-thumb-img" onerror="this.src='assets/landing_pages/real_hfs_home.png'">
+        </div>
+
+        <div class="pathway-details-col">
+          <div class="pathway-step-header">
+            <span style="color: #047857; font-weight: 800;">Landing Page Viewed</span>
+            <a href="${escapeHtml(pageInfo.rawUrl || '#')}" target="_blank" class="conversion-external-btn" title="Open page in new tab">
+              Open Page ↗
+            </a>
+          </div>
+
+          <div style="font-weight: 800; font-size: 0.8125rem; color: var(--jtm-petrol); margin-bottom: 4px;">
+            ${escapeHtml(pageInfo.pageTitle || 'Hormel Foodservice Portal')}
+          </div>
+
+          <div class="pathway-date-badge" style="background: #f0fdf4; color: #166534; border-color: #bbf7d0; margin-bottom: 6px;">
+            Conversion Date: <strong>${escapeHtml(lead.date)}</strong>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function openLeadDrawer(lead) {
     const intel = getRestaurantConceptProfile(lead);
 
     const nameEl = document.getElementById('drawer-lead-name');
@@ -5241,6 +5314,16 @@ Hormel Foodservice`;
         btnToggleBreakdown.classList.toggle('active', isHidden);
         if (breakdownText) breakdownText.textContent = isHidden ? 'Hide Breakdowns' : 'Show Breakdowns';
         if (breakdownArrow) breakdownArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+    }
+
+    const submitSearchBtn = document.getElementById('btn-submit-search');
+    if (submitSearchBtn) {
+      submitSearchBtn.addEventListener('click', () => {
+        currentPage = 1;
+        leadFilters.search = searchInput ? searchInput.value : '';
+        applyGlobalFilters();
+        anchorToLeadsTable();
       });
     }
 
