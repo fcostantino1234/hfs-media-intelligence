@@ -296,12 +296,12 @@
       }
     }
     if (hash.startsWith('lead-')) {
-      const targetId = parseInt(hash.replace('lead-', ''), 10);
+      const targetId = hash.replace('lead-', '').trim();
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
-      const targetLead = allLeads.find(l => l.id === targetId) || filteredLeads[0];
+      const targetLead = allLeads.find(l => String(l.id) === targetId || String(l.prospect_id) === targetId) || (filteredLeads && filteredLeads[0]);
       if (targetLead) {
-        openLeadDrawer(targetLead);
+        setTimeout(() => openLeadDrawer(targetLead), 80);
       }
     }
     if (hash.startsWith('search=')) {
