@@ -1539,7 +1539,7 @@
       const safeId = `brand-card-${idx}`;
       card.id = safeId;
 
-      const blendedCpl = b.leads > 0 && b.spend > 0 ? `$${(b.spend / b.leads).toFixed(2)}` : (b.spend === 0 ? 'Owned / Direct' : '—');
+      const blendedCpl = b.leads > 0 && b.spend > 0 ? `$${(b.spend / b.leads).toFixed(2)}` : (b.spend === 0 ? 'Owned / Direct' : (b.sessions > 0 ? 'Traffic Driver' : '—'));
       const spendK = `$${(b.spend / 1000).toFixed(1)}K`;
       const sessionsK = b.sessions >= 1000 ? `${(b.sessions / 1000).toFixed(1)}K` : b.sessions.toLocaleString();
       const lookupsFormatted = b.lookups >= 1000 ? `${(b.lookups / 1000).toFixed(1)}K` : b.lookups.toLocaleString();
@@ -1559,7 +1559,21 @@
       // Individual tactics rows
       const tacticsRowsHtml = b.tactics.map(t => {
         const tLeads = t.leads_in_window !== undefined ? t.leads_in_window : (t.leads_generated || 0);
-        const tCpl = tLeads > 0 && t.spend > 0 ? `$${(t.spend / tLeads).toFixed(2)}` : (t.spend === 0 ? 'Owned' : '—');
+        let tCpl = '—';
+        if (t.spend === 0) {
+          tCpl = 'Owned';
+        } else if (tLeads > 0 && t.spend > 0) {
+          const rawCpl = t.spend / tLeads;
+          if (rawCpl <= 350) {
+            tCpl = `$${rawCpl.toFixed(2)}`;
+          } else if ((t.web_sessions || 0) > 0 || (t.distributor_lookups || 0) > 0) {
+            tCpl = 'Traffic Driver';
+          } else {
+            tCpl = `$${rawCpl.toFixed(2)}`;
+          }
+        } else if ((t.web_sessions || 0) > 0 || (t.distributor_lookups || 0) > 0) {
+          tCpl = 'Traffic Driver';
+        }
         const tRunDate = t.run_date || (t.flight_start ? `${t.flight_start} Flight` : (t.year ? `${t.year} Flight` : 'Scheduled Campaign'));
         const tSessions = (t.web_sessions || 0).toLocaleString();
         const tLookups = (t.distributor_lookups || 0).toLocaleString();
