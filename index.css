@@ -4815,11 +4815,16 @@ body {
   margin-bottom: 16px;
 }
 
-.corr-def-item strong {
+.corr-def-item > strong:first-child {
   display: block;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: #0A1921;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.corr-def-item p strong {
+  display: inline !important;
+  font-weight: 800;
 }
 
 .corr-def-item p {
