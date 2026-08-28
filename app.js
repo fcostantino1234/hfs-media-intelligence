@@ -1430,6 +1430,881 @@
     });
   }
 
+  
+  // ==========================================================================
+  // BRAND & CAMPAIGN DRILL-DOWN ENGINE (COMPRESSED SUITE WITH WEB & DISTRIBUTOR)
+  // ==========================================================================
+  let activeBrandSubnavFilter = 'all';
+
+  function renderBrandTacticsDrilldown(filter = 'all') {
+    activeBrandSubnavFilter = filter;
+    const container = document.getElementById('brand-portfolios-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Group tactics by brand
+    const brandMap = {};
+
+    allTactics.forEach(t => {
+      if (globalBrand && !matchesBrand(t.brand, globalBrand)) return;
+      if (globalChannel && !matchesChannel(t.channel, globalChannel)) return;
+      if (!isTacticInDateWindow(t)) return;
+
+      const bName = t.brand || 'Other Foodservice Placements';
+      if (!brandMap[bName]) {
+        brandMap[bName] = {
+          name: bName,
+          tactics: [],
+          spend: 0,
+          impressions: 0,
+          clicks: 0,
+          leads: 0,
+          sessions: 0,
+          lookups: 0,
+          runDates: []
+        };
+      }
+
+      const lCount = t.leads_in_window !== undefined ? t.leads_in_window : (t.leads_generated || 0);
+      brandMap[bName].tactics.push(t);
+      brandMap[bName].spend += t.spend || 0;
+      brandMap[bName].impressions += t.impressions || 0;
+      brandMap[bName].clicks += t.clicks || 0;
+      brandMap[bName].leads += lCount;
+      brandMap[bName].sessions += t.web_sessions || 0;
+      brandMap[bName].lookups += t.distributor_lookups || 0;
+
+      if (t.run_date && !brandMap[bName].runDates.includes(t.run_date)) {
+        brandMap[bName].runDates.push(t.run_date);
+      }
+    });
+
+    let brandList = Object.values(brandMap);
+
+    // Apply subnav filter if not 'all'
+    if (filter !== 'all') {
+      if (filter === 'Other') {
+        const standardBrands = ['Hormel Bacon 1', 'Fontanini', 'Austin Blues', 'Fire Braised', 'Flash 180', 'HFS Convenience', 'Hormel Halal', 'Hormel Foodservice Master'];
+        brandList = brandList.filter(b => !standardBrands.some(sb => matchesBrand(b.name, sb)));
+      } else {
+        brandList = brandList.filter(b => matchesBrand(b.name, filter));
+      }
+    }
+
+    // Sort brands by spend/leads
+    brandList.sort((a, b) => b.spend - a.spend);
+
+    // Update Quick Stats
+    const bCountEl = document.getElementById('bt-brand-count');
+    const tCountEl = document.getElementById('bt-tactic-count');
+    if (bCountEl) bCountEl.textContent = `${brandList.length} Brand${brandList.length === 1 ? '' : 's'}`;
+    const totalTacticsVisible = brandList.reduce((acc, b) => acc + b.tactics.length, 0);
+    if (tCountEl) tCountEl.textContent = `${totalTacticsVisible} Tactics`;
+
+    if (brandList.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+          <p style="color: #64748b; font-size: 0.875rem; margin: 0;">No brand tactics match the current active date or channel filters.</p>
+          <button type="button" class="btn btn-outline" style="margin-top: 10px;" onclick="resetAllGlobalFilters()">Reset Filters</button>
+        </div>
+      `;
+      return;
+    }
+
+    brandList.forEach((b, idx) => {
+      const card = document.createElement('div');
+      card.className = 'brand-portfolio-card';
+      const safeId = `brand-card-${idx}`;
+      card.id = safeId;
+
+      const blendedCpl = b.leads > 0 && b.spend > 0 ? `$${(b.spend / b.leads).toFixed(2)}` : (b.spend === 0 ? 'Owned / Direct' : '—');
+      const spendK = `$${(b.spend / 1000).toFixed(1)}K`;
+      const sessionsK = b.sessions >= 1000 ? `${(b.sessions / 1000).toFixed(1)}K` : b.sessions.toLocaleString();
+      const lookupsFormatted = b.lookups >= 1000 ? `${(b.lookups / 1000).toFixed(1)}K` : b.lookups.toLocaleString();
+      const dateSummary = b.runDates.length > 0 ? (b.runDates.length <= 2 ? b.runDates.join(', ') : `${b.runDates[0]} – ${b.runDates[b.runDates.length - 1]}`) : 'Flighted FY24–FY26';
+
+      // Narrative per brand
+      let brandDesc = 'Commercial operator engagement and BOH menu ideation.';
+      if (b.name.includes('Bacon 1')) brandDesc = 'Labor-saving prep-free fully cooked bacon for commercial restaurant kitchens.';
+      else if (b.name.includes('Fontanini')) brandDesc = 'Authentic Italian meats, artisan pizza toppings, and handcrafted meatballs.';
+      else if (b.name.includes('Austin Blues')) brandDesc = 'Authentic pit-smoked barbecue meats and pulled pork for high-volume foodservice.';
+      else if (b.name.includes('Fire Braised')) brandDesc = 'Seared and slow-braised tender meats for versatile bowl, sandwich, and entrée builds.';
+      else if (b.name.includes('Flash 180')) brandDesc = 'Speed-cooked sous-vide style proteins engineered for rapid kitchen execution.';
+      else if (b.name.includes('Convenience')) brandDesc = 'High-margin grab-and-go roller grill items and hot-case warmers for c-stores.';
+      else if (b.name.includes('Halal')) brandDesc = 'Certified Halal proteins meeting strict dietary compliance for healthcare & college dining.';
+      else if (b.name.includes('Master')) brandDesc = 'Enterprise umbrella brand advertising across national trade media publications.';
+
+      // Individual tactics rows
+      const tacticsRowsHtml = b.tactics.map(t => {
+        const tLeads = t.leads_in_window !== undefined ? t.leads_in_window : (t.leads_generated || 0);
+        const tCpl = tLeads > 0 && t.spend > 0 ? `$${(t.spend / tLeads).toFixed(2)}` : (t.spend === 0 ? 'Owned' : '—');
+        const tRunDate = t.run_date || (t.flight_start ? `${t.flight_start} Flight` : (t.year ? `${t.year} Flight` : 'Flowchart Flight'));
+        const tSessions = (t.web_sessions || 0).toLocaleString();
+        const tLookups = (t.distributor_lookups || 0).toLocaleString();
+
+        return `
+          <tr>
+            <td>
+              <strong style="color: var(--jtm-petrol);">${escapeHtml(t.name)}</strong>
+              <div style="font-size: 0.6875rem; color: #64748b; margin-top: 2px;">Creative: ${escapeHtml(t.creative_angle || t.key_hook || 'BOH Solutions')}</div>
+            </td>
+            <td>
+              <span class="tactic-rundate-cell">📅 ${escapeHtml(tRunDate)}</span>
+            </td>
+            <td>
+              <span class="attr-clickable" style="font-weight: 600; color: #0369a1;" onclick="isolateByPublication('${escapeHtml(t.publisher)}')" title="Filter leads by publisher">${escapeHtml(t.publisher)}</span>
+            </td>
+            <td>
+              <span style="font-size: 0.75rem; color: #475569;">${escapeHtml(t.ad_format || t.tactic_type)}</span>
+            </td>
+            <td style="text-align: right; font-weight: 700;">$${(t.spend || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+            <td style="text-align: right; font-weight: 600; color: #059669;">${tSessions}</td>
+            <td style="text-align: right; font-weight: 600; color: #0284c7;">${tLookups}</td>
+            <td style="text-align: right; font-weight: 800; color: #047857;">${tLeads.toLocaleString()}</td>
+            <td style="text-align: right; font-weight: 600;">${tCpl}</td>
+            <td style="text-align: center; white-space: nowrap;">
+              <button type="button" class="btn-tactic-scorecard" onclick="selectTacticFromMatrix('${t.id}')" title="Inspect single tactic scorecard">Scorecard</button>
+              <button type="button" class="btn-tactic-leads-link" onclick="isolateByTactic('${t.id}')" title="View leads from this tactic">Leads (${tLeads}) &rarr;</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="brand-summary-row" onclick="toggleBrandCardAccordion('${safeId}')">
+          <div class="brand-summary-left">
+            <div class="brand-title-badge-row">
+              <h4 class="brand-name-heading">// ${escapeHtml(b.name.toUpperCase())} //</h4>
+              <span class="brand-tactics-tag">${b.tactics.length} Media Tactics</span>
+              <span class="brand-flight-dates-tag">📅 ${escapeHtml(dateSummary)}</span>
+            </div>
+            <p class="brand-summary-desc">${escapeHtml(brandDesc)}</p>
+          </div>
+
+          <div class="brand-kpis-summary">
+            <div class="brand-kpi-pill">
+              <span class="b-kpi-lbl">Media Spend</span>
+              <span class="b-kpi-val">${spendK}</span>
+            </div>
+            <div class="brand-kpi-pill traffic-pill" title="GA4 Website Sessions associated with this brand">
+              <span class="b-kpi-lbl">🌐 Web Traffic</span>
+              <span class="b-kpi-val">${sessionsK}</span>
+            </div>
+            <div class="brand-kpi-pill lookup-pill" title="Distributor Item & Where-to-Buy Lookups">
+              <span class="b-kpi-lbl">🤝 Dist. Lookups</span>
+              <span class="b-kpi-val">${lookupsFormatted}</span>
+            </div>
+            <div class="brand-kpi-pill leads-pill" title="Total Inbound MQL Leads generated">
+              <span class="b-kpi-lbl">🛡️ Verified Leads</span>
+              <span class="b-kpi-val">${b.leads.toLocaleString()}</span>
+            </div>
+            <div class="brand-kpi-pill">
+              <span class="b-kpi-lbl">Blended CPL</span>
+              <span class="b-kpi-val">${blendedCpl}</span>
+            </div>
+          </div>
+
+          <div class="brand-accordion-toggle">
+            <button type="button" class="btn-brand-toggle" id="btn-toggle-${safeId}">
+              <span class="toggle-text">View ${b.tactics.length} Tactics</span>
+              <span class="toggle-arrow">▾</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="brand-tactics-expanded" id="expanded-${safeId}" style="display: ${filter !== 'all' ? 'block' : 'none'};">
+          <div class="tactics-table-toolbar">
+            <span class="tactics-table-count">Displaying all <strong>${b.tactics.length}</strong> tactics for ${escapeHtml(b.name)}</span>
+            <button type="button" class="btn-view-brand-leads" onclick="isolateBrandAndGoToLeads('${escapeHtml(b.name)}')">
+              Inspect All ${b.leads.toLocaleString()} Leads from ${escapeHtml(b.name)} in Table &rarr;
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="brand-nested-table">
+              <thead>
+                <tr>
+                  <th>Ad Tactic / Media Placement</th>
+                  <th>Flight Run Date</th>
+                  <th>Publisher / Network</th>
+                  <th>Format</th>
+                  <th style="text-align: right;">Spend</th>
+                  <th style="text-align: right;">Web Sessions</th>
+                  <th style="text-align: right;">Dist. Lookups</th>
+                  <th style="text-align: right;">Leads</th>
+                  <th style="text-align: right;">CPL</th>
+                  <th style="text-align: center;">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tacticsRowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function toggleBrandCardAccordion(cardId) {
+    const card = document.getElementById(cardId);
+    if (!card) return;
+    const expandedDiv = document.getElementById(`expanded-${cardId}`);
+    const toggleBtn = document.getElementById(`btn-toggle-${cardId}`);
+    if (!expandedDiv) return;
+
+    const isHidden = expandedDiv.style.display === 'none' || !expandedDiv.style.display;
+    expandedDiv.style.display = isHidden ? 'block' : 'none';
+    card.classList.toggle('expanded', isHidden);
+
+    if (toggleBtn) {
+      const toggleText = toggleBtn.querySelector('.toggle-text');
+      const toggleArrow = toggleBtn.querySelector('.toggle-arrow');
+      if (toggleText) toggleText.textContent = isHidden ? 'Collapse Tactics' : `View Tactics`;
+      if (toggleArrow) toggleArrow.textContent = isHidden ? '▴' : '▾';
+    }
+  }
+
+  function isolateBrandAndGoToLeads(brandName) {
+    globalBrand = brandName;
+    const brandSelect = document.getElementById('global-brand-select');
+    if (brandSelect) brandSelect.value = brandName;
+    applyGlobalFilters();
+    const leadsTab = document.getElementById('tab-sales-leads');
+    if (leadsTab) leadsTab.click();
+    showToast(`Filtered 25,326 leads to brand: ${brandName}`);
+  }
+
+  function selectTacticFromMatrix(tacticId) {
+    selectedTacticId = tacticId;
+    const tacticSelect = document.getElementById('tactic-select');
+    if (tacticSelect) tacticSelect.value = tacticId;
+    renderTacticScorecard(tacticId);
+    const scorecardEl = document.getElementById('tactic-scorecard');
+    if (scorecardEl) scorecardEl.scrollIntoView({ behavior: 'smooth' });
+    showToast(`Isolated tactic scorecard: ${tacticId}`);
+  }
+
+  // Alias for matrix rendering
+  function renderTacticsMatrixTable() {
+    renderBrandTacticsDrilldown(activeBrandSubnavFilter);
+  }
+
+  function sortFilteredLeads() {
+    filteredLeads.sort((a, b) => {
+      let valA = a[sortField];
+      let valB = b[sortField];
+
+      if (sortField === 'lead_score') {
+        valA = a.lead_score || 0;
+        valB = b.lead_score || 0;
+      } else if (sortField === 'status') {
+        valA = getLeadStatus(a);
+        valB = getLeadStatus(b);
+      } else if (sortField === 'is_enterprise') {
+        valA = a.is_enterprise ? 1 : 0;
+        valB = b.is_enterprise ? 1 : 0;
+      } else if (typeof valA === 'number' && typeof valB === 'number') {
+        return sortDirection === 'asc' ? valA - valB : valB - valA;
+      } else {
+        valA = (valA || '').toString().toLowerCase();
+        valB = (valB || '').toString().toLowerCase();
+      }
+
+      if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+      if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  // ===========================================================================
+  // 6. VIEW 1: MACRO ROLLUP EXPLORER (BIG PICTURE VIEW)
+  // ===========================================================================
+  function initMacroDimensionTabs() {
+    const tabs = document.querySelectorAll('.btn-dim-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        macroDimension = tab.getAttribute('data-dim');
+        renderMacroRollup();
+      });
+    });
+  }
+
+  function renderMacroRollup() {
+    const container = document.getElementById('macro-cards-grid');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Group tactics by active macro dimension
+    const groups = {};
+    let totalWindowSpend = 0;
+    let totalWindowLeads = 0;
+
+    allTactics.forEach(t => {
+      if (globalBrand && !matchesBrand(t.brand, globalBrand)) return;
+      if (globalChannel && !matchesChannel(t.channel, globalChannel)) return;
+      if (!isTacticInDateWindow(t)) return;
+
+      let key = t.key_hook;
+      if (macroDimension === 'pub') key = t.publication_group;
+      else if (macroDimension === 'type') key = t.tactic_type;
+
+      if (!groups[key]) {
+        groups[key] = {
+          name: key,
+          tactics: [],
+          spend: 0,
+          impressions: 0,
+          clicks: 0,
+          leads: 0,
+          sessions: 0,
+          lookups: 0
+        };
+      }
+
+      const lCount = t.leads_in_window !== undefined ? t.leads_in_window : t.leads_generated;
+      groups[key].tactics.push(t);
+      groups[key].spend += t.spend;
+      groups[key].impressions += t.impressions;
+      groups[key].clicks += t.clicks;
+      groups[key].leads += lCount;
+      groups[key].sessions += t.web_sessions;
+      groups[key].lookups += t.distributor_lookups;
+
+      totalWindowSpend += t.spend;
+      totalWindowLeads += lCount;
+    });
+
+    const groupList = Object.values(groups).sort((a, b) => b.leads - a.leads);
+
+    groupList.forEach(g => {
+      const card = document.createElement('div');
+      card.className = 'macro-card';
+
+      const blendedCpl = g.leads > 0 && g.spend > 0 ? `$${(g.spend / g.leads).toFixed(2)}` : (g.spend === 0 ? 'Owned / Inbound' : '$0.00');
+      const spendShare = totalWindowSpend > 0 ? ((g.spend / totalWindowSpend) * 100).toFixed(1) : 0;
+      const leadsShare = totalWindowLeads > 0 ? ((g.leads / totalWindowLeads) * 100).toFixed(1) : 0;
+      const ctr = g.impressions > 0 ? ((g.clicks / g.impressions) * 100).toFixed(2) : '—';
+
+      // Dimension description
+      let narrative = '';
+      if (macroDimension === 'hook') {
+        if (g.name.includes('Labor-Saving')) narrative = 'Solving back-of-house kitchen labor shortages with prep-free, fully cooked proteins (Bacon 1, Flash 180, Fire Braised).';
+        else if (g.name.includes('Artisan Flavor')) narrative = 'Authentic Italian heritage, specialty Calabrian chili heat, and pizza innovation for pizzerias and high-margin menus.';
+        else if (g.name.includes('Specialty Sourcing')) narrative = 'Certified Halal proteins catering to growing operator sourcing and clean-label dietary compliance.';
+        else if (g.name.includes('High-Margin Grab-and-Go')) narrative = 'Impulse roller grill and hot-case warmers designed for convenience store speed of service.';
+        else if (g.name.includes('Non-Commercial Healthcare')) narrative = 'Nutritional compliance, tray service efficiency, and batch cooking for hospital & campus dining.';
+        else narrative = 'Executive thought leadership, daily news mindshare, and continuous organic sourcing across foodservice operators.';
+      } else if (macroDimension === 'pub') {
+        narrative = `Targeting foodservice operators across ${g.tactics.length} active placement(s) in this publishing network.`;
+      } else {
+        narrative = `Standardized format across ${g.tactics.length} campaign execution(s) and creative touchpoints.`;
+      }
+
+      card.innerHTML = `
+        <div class="macro-card-top">
+          <div>
+            <span class="badge badge-hook" style="margin-bottom: 4px;">${macroDimension.toUpperCase()} ROLLUP</span>
+            <div class="macro-card-title">${escapeHtml(g.name)}</div>
+          </div>
+        </div>
+
+        <p class="macro-card-narrative">${escapeHtml(narrative)}</p>
+
+        <!-- 4-KPI Mini Grid -->
+        <div class="macro-kpis">
+          <div class="macro-kpi-item">
+            <span class="macro-kpi-label">Media Spend</span>
+            <span class="macro-kpi-val">$${g.spend.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+            <span class="macro-kpi-sub">${spendShare}% of budget</span>
+          </div>
+
+          <div class="macro-kpi-item">
+            <span class="macro-kpi-label">Verified Leads</span>
+            <span class="macro-kpi-val highlight">${g.leads.toLocaleString()}</span>
+            <span class="macro-kpi-sub">${leadsShare}% of leads</span>
+          </div>
+
+          <div class="macro-kpi-item">
+            <span class="macro-kpi-label">Blended CPL</span>
+            <span class="macro-kpi-val highlight">${blendedCpl}</span>
+            <span class="macro-kpi-sub">Acquisition Cost</span>
+          </div>
+
+          <div class="macro-kpi-item">
+            <span class="macro-kpi-label">Total Reach</span>
+            <span class="macro-kpi-val">${g.impressions.toLocaleString()}</span>
+            <span class="macro-kpi-sub">${g.clicks.toLocaleString()} Clicks (${ctr}%)</span>
+          </div>
+        </div>
+
+        <!-- Sub-tactics Drilldown List -->
+        <div class="macro-subtactics">
+          <div class="macro-subtactics-header">
+            <span class="macro-subtactics-title">Component Tactics (${g.tactics.length}):</span>
+          </div>
+          <div class="subtactic-pills-list">
+            ${g.tactics.map(t => `
+              <div class="subtactic-pill" data-tactic-id="${t.id}" title="Click to isolate this tactic">
+                <span class="subtactic-pill-name">${escapeHtml(t.name)}</span>
+                <span class="subtactic-pill-leads">${(t.leads_in_window !== undefined ? t.leads_in_window : t.leads_generated).toLocaleString()} leads</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <button class="btn-inspect-macro" data-dim-type="${macroDimension}" data-dim-val="${escapeHtml(g.name)}">
+            Inspect All ${g.leads.toLocaleString()} Leads from this Group &rarr;
+          </button>
+        </div>
+      `;
+
+      // Wire Sub-Tactic Pills Click
+      card.querySelectorAll('.subtactic-pill').forEach(pill => {
+        pill.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const tid = pill.getAttribute('data-tactic-id');
+          selectedTacticId = tid;
+          document.getElementById('tactic-select').value = tid;
+          renderTacticScorecard(tid);
+          document.getElementById('tactic-scorecard').scrollIntoView({ behavior: 'smooth' });
+          showToast(`Isolated tactic scorecard: ${tid}`);
+        });
+      });
+
+      // Wire Inspect Macro Group Button
+      card.querySelector('.btn-inspect-macro').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dimType = e.target.getAttribute('data-dim-type');
+        const dimVal = e.target.getAttribute('data-dim-val');
+
+        if (dimType === 'hook') {
+          leadFilters.key_hook = dimVal;
+          document.getElementById('filter-hook').value = dimVal;
+        } else if (dimType === 'pub') {
+          leadFilters.publication_group = dimVal;
+          document.getElementById('filter-pub-group').value = dimVal;
+        }
+
+        document.getElementById('tab-sales-leads').click();
+        applyGlobalFilters();
+        showToast(`Filtered leads by ${dimType}: ${dimVal}`);
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  // ===========================================================================
+  // 7. VIEW 1: TACTIC ISOLATOR SCORECARD & BENCHMARKING MATRIX
+  // ===========================================================================
+
+  function initTacticSelector() {
+    const select = document.getElementById('tactic-select');
+    const filterTacticSelect = document.getElementById('filter-tactic');
+    const yearBadge = document.getElementById('selector-year-badge');
+    const bypassBtn = document.getElementById('btn-bypass-tactic');
+    if (!select) return;
+
+    select.innerHTML = '';
+    if (filterTacticSelect) {
+      filterTacticSelect.innerHTML = '<option value="">All Tactics</option>';
+    }
+
+    const targetYear = getActiveYearTarget();
+    const yearLabel = targetYear ? targetYear : 'All Time';
+
+    // Separate active and inactive tactics for this year and active brand/channel
+    const activeTactics = [];
+    const inactiveTactics = [];
+
+    allTactics.forEach(t => {
+      if (globalBrand && !matchesBrand(t.brand, globalBrand)) return;
+      if (globalChannel && !matchesChannel(t.channel, globalChannel)) return;
+
+      const activeInYear = !targetYear || (t.active_quarters && t.active_quarters.some(q => q.includes(targetYear))) || (t.leads_in_window > 0);
+      if (activeInYear) {
+        activeTactics.push(t);
+      } else {
+        inactiveTactics.push(t);
+      }
+    });
+
+    // Fallback if none match
+    if (activeTactics.length === 0 && inactiveTactics.length === 0) {
+      allTactics.forEach(t => activeTactics.push(t));
+    }
+
+    if (yearBadge) {
+      yearBadge.textContent = `${yearLabel} (${activeTactics.length} Active)`;
+    }
+
+    // TOP OPTION: ALL TACTICS (PORTFOLIO ROLLUP)
+    const allOpt = document.createElement('option');
+    allOpt.value = 'all';
+    allOpt.textContent = `All Tactics (Portfolio Rollup — ${activeTactics.length} Active in ${yearLabel})`;
+    select.appendChild(allOpt);
+
+    // Group active tactics by channel
+    const channels = {};
+    activeTactics.forEach(t => {
+      if (!channels[t.channel]) channels[t.channel] = [];
+      channels[t.channel].push(t);
+    });
+
+    Object.keys(channels).forEach(ch => {
+      const optgroup = document.createElement('optgroup');
+      optgroup.label = `Active in ${yearLabel}: ${ch}`;
+
+      channels[ch].forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        const leadsCount = t.leads_in_window !== undefined ? t.leads_in_window : t.leads_generated;
+        const cplVal = t.cpl_in_window !== undefined && t.cpl_in_window > 0 ? `$${t.cpl_in_window}` : (t.cost_per_lead > 0 ? `$${t.cost_per_lead.toFixed(2)}` : 'Owned');
+        const runStr = t.run_date ? ` [${t.run_date}]` : '';
+        opt.textContent = `${t.name}${runStr} (${leadsCount.toLocaleString()} leads • ${cplVal} CPL)`;
+        optgroup.appendChild(opt);
+
+        if (filterTacticSelect) {
+          const filterOpt = document.createElement('option');
+          filterOpt.value = t.id;
+          filterOpt.textContent = `${t.name}${runStr}`;
+          filterTacticSelect.appendChild(filterOpt);
+        }
+      });
+
+      select.appendChild(optgroup);
+    });
+
+    // Inactive tactics in this year (if any)
+    if (inactiveTactics.length > 0) {
+      const inactGroup = document.createElement('optgroup');
+      inactGroup.label = `Concluded / Inactive in ${yearLabel} (${inactiveTactics.length} Tactics)`;
+
+      inactiveTactics.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.id;
+        const runStr = t.run_date ? ` [${t.run_date}]` : '';
+        opt.textContent = `${t.name}${runStr} (0 leads in ${yearLabel} — Inactive Flight)`;
+        inactGroup.appendChild(opt);
+
+        if (filterTacticSelect) {
+          const filterOpt = document.createElement('option');
+          filterOpt.value = t.id;
+          filterOpt.textContent = `${t.name}${runStr} (Inactive in ${yearLabel})`;
+          filterTacticSelect.appendChild(filterOpt);
+        }
+      });
+
+      select.appendChild(inactGroup);
+    }
+
+    if (filterTacticSelect && leadFilters.tactic) {
+      filterTacticSelect.value = leadFilters.tactic;
+    }
+
+    // Determine current selection
+    const isCurrentActive = selectedTacticId === 'all' || activeTactics.some(t => t.id === selectedTacticId);
+    if (!isCurrentActive) {
+      selectedTacticId = 'all';
+    }
+
+    select.value = selectedTacticId;
+
+    if (bypassBtn) {
+      bypassBtn.classList.toggle('active', selectedTacticId === 'all');
+    }
+
+    // Bind change listener
+    select.onchange = (e) => {
+      selectedTacticId = e.target.value;
+      if (bypassBtn) {
+        bypassBtn.classList.toggle('active', selectedTacticId === 'all');
+      }
+      renderTacticScorecard(selectedTacticId);
+      if (selectedTacticId === 'all') {
+        showToast(`Viewing Complete Portfolio Rollup for ${yearLabel}`);
+      } else {
+        const match = allTactics.find(item => item.id === selectedTacticId);
+        if (match) showToast(`Isolated: ${match.name}`);
+      }
+    };
+
+    // Bind bypass button
+    if (bypassBtn) {
+      bypassBtn.onclick = () => {
+        selectedTacticId = 'all';
+        select.value = 'all';
+        bypassBtn.classList.add('active');
+        renderTacticScorecard('all');
+        const macroEl = document.querySelector('.macro-rollup-section');
+        if (macroEl) macroEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast(`Bypassed individual isolation — displaying full portfolio rollup for ${yearLabel}`);
+      };
+    }
+  }
+
+  function initTacticChips() {
+    document.querySelectorAll('.tactic-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.tactic-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+
+        const filter = chip.getAttribute('data-filter');
+        const select = document.getElementById('tactic-select');
+
+        if (filter === 'all') {
+          selectedTacticId = 'all';
+          initTacticSelector();
+          renderTacticScorecard('all');
+        } else {
+          select.innerHTML = '';
+          const targetYear = getActiveYearTarget();
+          const yearLabel = targetYear ? targetYear : 'All Time';
+
+          const matching = allTactics.filter(t => {
+            if (t.channel !== filter) return false;
+            return !targetYear || (t.active_quarters && t.active_quarters.some(q => q.includes(targetYear))) || (t.leads_in_window > 0);
+          });
+
+          // Option: All in this channel
+          const chAllOpt = document.createElement('option');
+          chAllOpt.value = 'all';
+          chAllOpt.textContent = `All ${filter} Campaigns (${matching.length} Active)`;
+          select.appendChild(chAllOpt);
+
+          matching.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.id;
+            const leadsCount = t.leads_in_window !== undefined ? t.leads_in_window : t.leads_generated;
+            opt.textContent = `${t.name} (${leadsCount.toLocaleString()} leads)`;
+            select.appendChild(opt);
+          });
+
+          if (matching.length > 0) {
+            selectedTacticId = matching[0].id;
+            select.value = selectedTacticId;
+            renderTacticScorecard(selectedTacticId);
+          } else {
+            selectedTacticId = 'all';
+            renderTacticScorecard('all');
+          }
+        }
+      });
+    });
+  }
+
+  function renderTacticScorecard(tacticId) {
+    const targetYear = getActiveYearTarget();
+    const yearLabel = targetYear ? targetYear : 'All Time';
+    const bypassBtn = document.getElementById('btn-bypass-tactic');
+    const select = document.getElementById('tactic-select');
+
+    if (bypassBtn) {
+      bypassBtn.classList.toggle('active', tacticId === 'all');
+    }
+    if (select && select.value !== tacticId) {
+      select.value = tacticId;
+    }
+
+    // =========================================================================
+    // CASE 1: PORTFOLIO ROLLUP ("ALL TACTICS" / BYPASS ISOLATOR)
+    // =========================================================================
+    if (tacticId === 'all') {
+      selectedTacticId = 'all';
+
+      const activeTactics = allTactics.filter(t => {
+        if (globalBrand && !matchesBrand(t.brand, globalBrand)) return false;
+        if (globalChannel && !matchesChannel(t.channel, globalChannel)) return false;
+        return isTacticInDateWindow(t);
+      });
+
+      let totalSpend = 0;
+      let totalImpressions = 0;
+      let totalClicks = 0;
+      let totalSessions = 0;
+      let totalLookups = 0;
+      let totalLeads = filteredLeads.length;
+
+      activeTactics.forEach(t => {
+        totalSpend += t.spend;
+        totalImpressions += t.impressions;
+        totalClicks += t.clicks;
+        totalSessions += t.web_sessions;
+        totalLookups += t.distributor_lookups;
+      });
+
+      const blendedCpc = totalClicks > 0 ? (totalSpend / totalClicks) : 0;
+      const blendedCtr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100) : 0;
+      const blendedCpl = totalLeads > 0 ? (totalSpend / totalLeads) : 0;
+      const convRate = totalClicks > 0 ? ((totalLeads / totalClicks) * 100).toFixed(2) : '—';
+
+      document.getElementById('sc-name').textContent = `Hormel Foodservice — Complete Media Portfolio Rollup (${activeTactics.length} Active in ${yearLabel})`;
+      document.getElementById('sc-key-hook').textContent = `Cross-Portfolio Multi-Hook Strategy`;
+      document.getElementById('sc-channel').textContent = `Omnichannel Integrated Portfolio`;
+      document.getElementById('sc-brand').textContent = `All HFS Brands Portfolio`;
+      
+      const pubEl = document.getElementById('sc-publisher');
+      if (pubEl) {
+        pubEl.textContent = `All 8 Media Networks`;
+        pubEl.onclick = null;
+        pubEl.classList.remove('attr-clickable');
+      }
+
+      const runEl = document.getElementById('sc-run-date');
+      if (runEl) {
+        runEl.textContent = `Run Date: Complete Decade Flowchart Portfolio (${yearLabel})`;
+      }
+
+      const utmRow = document.getElementById('sc-utm-row');
+      if (utmRow) utmRow.style.display = 'none';
+
+      document.getElementById('sc-tactic-type').textContent = `Multi-Format Execution (${activeTactics.length} Tactics)`;
+      const jobEl = document.getElementById('sc-job');
+      if (jobEl) jobEl.textContent = `Omnichannel Master (${activeTactics.length} Flights)`;
+      const deckEl = document.getElementById('sc-source-deck');
+      if (deckEl) deckEl.textContent = '48 Decks Triangulated in HFSDATA';
+
+      document.getElementById('sc-notes').innerHTML = `
+        <div style="margin-bottom: 6px;"><strong>Strategic Angle:</strong> Comprehensive portfolio summary across all active flights in ${yearLabel}.</div>
+        <div style="color: var(--jtm-chartreuse); font-weight: 600;"><strong>Triangulation Source:</strong> Triangulated across 39 brand PowerPoint decks and 9 Omnichannel GA4 Dashboard reports in <code>My Drive/HFSDATA</code>.</div>
+      `;
+      document.getElementById('sc-leads-btn-count').textContent = totalLeads.toLocaleString();
+
+      document.getElementById('sc-spend').textContent = `$${totalSpend.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('sc-cpc').textContent = `$${blendedCpc.toFixed(2)}`;
+      document.getElementById('sc-impressions').textContent = totalImpressions.toLocaleString();
+      document.getElementById('sc-ctr').textContent = `${blendedCtr.toFixed(2)}%`;
+      document.getElementById('sc-clicks').textContent = totalClicks.toLocaleString();
+      document.getElementById('sc-sessions').textContent = totalSessions.toLocaleString();
+      document.getElementById('sc-lookups').textContent = totalLookups.toLocaleString();
+      document.getElementById('sc-leads').textContent = totalLeads.toLocaleString();
+      document.getElementById('sc-cpl').textContent = `$${blendedCpl.toFixed(2)} (Blended)`;
+      document.getElementById('sc-conv-rate').textContent = convRate !== '—' ? `${convRate}%` : '—';
+
+      const drillBtn = document.getElementById('btn-drill-leads');
+      if (drillBtn) {
+        drillBtn.innerHTML = `Inspect All <span id="sc-leads-btn-count">${totalLeads.toLocaleString()}</span> Leads from Portfolio &rarr;`;
+        drillBtn.onclick = () => {
+          clearAttributeIsolation();
+          const leadsTab = document.getElementById('tab-sales-leads');
+          if (leadsTab) leadsTab.click();
+        };
+      }
+
+      const sub = document.getElementById('sc-leads-sub');
+      if (sub) {
+        sub.textContent = globalDatePreset !== 'all' ? `Filtered (${globalDatePreset.toUpperCase()})` : 'All Time Total';
+      }
+
+      // Remove row selection in matrix table
+      document.querySelectorAll('#tactics-matrix-tbody tr').forEach(tr => {
+        tr.classList.remove('row-selected');
+      });
+
+      return;
+    }
+
+    // =========================================================================
+    // CASE 2: INDIVIDUAL TACTIC ISOLATION
+    // =========================================================================
+    const t = allTactics.find(item => item.id === tacticId) || allTactics[0];
+    if (!t) return;
+
+    selectedTacticId = t.id;
+    const leadsCount = t.leads_in_window !== undefined ? t.leads_in_window : t.leads_generated;
+    const cplVal = t.cpl_in_window !== undefined && t.cpl_in_window > 0 ? `$${t.cpl_in_window}` : (t.cost_per_lead > 0 ? `$${t.cost_per_lead.toFixed(2)}` : 'Owned / Inbound');
+
+    document.getElementById('sc-name').textContent = t.name;
+    document.getElementById('sc-key-hook').textContent = `${t.key_hook}`;
+    document.getElementById('sc-channel').textContent = t.channel;
+    document.getElementById('sc-brand').textContent = t.brand;
+    
+    const pubEl = document.getElementById('sc-publisher');
+    if (pubEl) {
+      pubEl.textContent = t.publisher;
+      pubEl.classList.add('attr-clickable');
+      pubEl.title = `Click to isolate leads from publisher: ${t.publisher}`;
+      pubEl.onclick = () => isolateByPublication(t.publisher);
+    }
+
+    const runEl = document.getElementById('sc-run-date');
+    if (runEl) {
+      runEl.textContent = `Run Date: ${t.run_date || 'Flowchart Flight'}`;
+    }
+
+    const utmRow = document.getElementById('sc-utm-row');
+    if (utmRow) {
+      utmRow.style.display = 'flex';
+      const uSrc = document.getElementById('sc-utm-source');
+      if (uSrc) {
+        uSrc.textContent = `source: ${t.utm_source || t.publisher}`;
+        uSrc.onclick = () => isolateByUtm('utm_source', t.utm_source || t.publisher);
+      }
+      const uMed = document.getElementById('sc-utm-medium');
+      if (uMed) {
+        uMed.textContent = `medium: ${t.utm_medium || t.ad_format}`;
+        uMed.onclick = () => isolateByUtm('utm_medium', t.utm_medium || t.ad_format);
+      }
+      const uCmp = document.getElementById('sc-utm-campaign');
+      if (uCmp) {
+        uCmp.textContent = `campaign: ${t.utm_campaign || t.brand}`;
+        uCmp.onclick = () => isolateByUtm('utm_campaign', t.utm_campaign || t.brand);
+      }
+      const uCnt = document.getElementById('sc-utm-content');
+      if (uCnt) {
+        uCnt.textContent = `content: ${t.utm_content || t.key_hook}`;
+        uCnt.onclick = () => isolateByUtm('utm_content', t.utm_content || t.key_hook);
+      }
+    }
+
+    document.getElementById('sc-tactic-type').textContent = t.tactic_type;
+    document.getElementById('sc-flight-active').textContent = t.flight_intensity || 'Active Flight';
+    document.getElementById('sc-meta').textContent = `Format: ${t.ad_format} • Creative Angle: ${t.creative_angle}`;
+    
+    const jobEl = document.getElementById('sc-job');
+    if (jobEl) jobEl.textContent = `Job # ${t.job_number || 'HFS-General'}`;
+    const deckEl = document.getElementById('sc-source-deck');
+    if (deckEl) deckEl.textContent = `${t.source_deck || 'Official Media Deck'}`;
+
+    document.getElementById('sc-notes').innerHTML = `
+      <div style="margin-bottom: 6px;"><strong>Strategic Angle:</strong> ${escapeHtml(t.notes)}</div>
+      <div style="color: var(--jtm-chartreuse); font-weight: 600;"><strong>Deck Evidence:</strong> ${escapeHtml(t.deck_evidence || 'Triangulated from HFSDATA shareout decks.')}</div>
+    `;
+    document.getElementById('sc-leads-btn-count').textContent = leadsCount.toLocaleString();
+
+    document.getElementById('sc-spend').textContent = `$${t.spend.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    document.getElementById('sc-cpc').textContent = `$${t.cpc.toFixed(2)}`;
+    document.getElementById('sc-impressions').textContent = t.impressions.toLocaleString();
+    document.getElementById('sc-ctr').textContent = `${t.ctr.toFixed(2)}%`;
+    document.getElementById('sc-clicks').textContent = t.clicks.toLocaleString();
+    document.getElementById('sc-sessions').textContent = t.web_sessions.toLocaleString();
+    document.getElementById('sc-lookups').textContent = t.distributor_lookups.toLocaleString();
+    document.getElementById('sc-leads').textContent = leadsCount.toLocaleString();
+    document.getElementById('sc-cpl').textContent = cplVal;
+
+    const convRate = t.clicks > 0 ? ((leadsCount / t.clicks) * 100).toFixed(2) : '—';
+    document.getElementById('sc-conv-rate').textContent = convRate !== '—' ? `${convRate}%` : '—';
+
+    const drillBtn = document.getElementById('btn-drill-leads');
+    if (drillBtn) {
+      drillBtn.innerHTML = `Inspect <span id="sc-leads-btn-count">${leadsCount.toLocaleString()}</span> Leads from this Tactic &rarr;`;
+      drillBtn.onclick = () => isolateByTactic(t.id);
+    }
+
+    const sub = document.getElementById('sc-leads-sub');
+    if (sub) {
+      sub.textContent = globalDatePreset !== 'all' ? `Filtered (${globalDatePreset.toUpperCase()})` : 'All Time Total';
+    }
+
+    document.querySelectorAll('#tactics-matrix-tbody tr').forEach(tr => {
+      tr.classList.toggle('row-selected', tr.getAttribute('data-tactic-id') === t.id);
+    });
+  }
+
   function renderTacticsMatrixTable() {
     const tbody = document.getElementById('tactics-matrix-tbody');
     if (!tbody) return;

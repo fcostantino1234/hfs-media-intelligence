@@ -6366,3 +6366,408 @@ body {
   gap: 10px;
   z-index: 10;
 }
+
+
+
+/* ==========================================================================
+   BRAND & CAMPAIGN DRILL-DOWN SUITE STYLES (WITH TRAFFIC & DISTRIBUTOR METRICS)
+   ========================================================================== */
+.brand-tactics-section {
+  background: #ffffff;
+  border-radius: var(--radius-lg, 12px);
+  border: 1px solid #cbd5e1;
+  padding: 24px;
+  margin-top: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.brand-tactics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 16px;
+}
+
+.brand-tactics-stats {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.brand-quick-stat {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.b-stat-num {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--jtm-petrol, #0E313D);
+}
+
+.b-stat-lbl {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+/* Brand Subnav Pills */
+.brand-subnav-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.subnav-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.brand-subnav-pill {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.brand-subnav-pill:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.brand-subnav-pill.active {
+  background: var(--jtm-petrol, #0E313D);
+  color: #ffffff;
+  border-color: var(--jtm-petrol, #0E313D);
+}
+
+/* Brand Portfolios Accordion Container */
+.brand-portfolios-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brand-portfolio-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.brand-portfolio-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(14, 49, 61, 0.06);
+}
+
+.brand-portfolio-card.expanded {
+  border-color: var(--jtm-petrol, #0E313D);
+  box-shadow: 0 6px 18px rgba(14, 49, 61, 0.08);
+}
+
+.brand-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: #ffffff;
+  gap: 16px;
+  flex-wrap: wrap;
+  transition: background 0.15s ease;
+}
+
+.brand-summary-row:hover {
+  background: #f8fafc;
+}
+
+.brand-summary-left {
+  flex: 1;
+  min-width: 260px;
+}
+
+.brand-title-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.brand-name-heading {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--jtm-petrol, #0E313D);
+  margin: 0;
+}
+
+.brand-tactics-tag {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  background: #f1f5f9;
+  color: #475569;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.brand-flight-dates-tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
+}
+
+.brand-summary-desc {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Brand KPIs Grid (5 Pillars: Spend, Web Traffic, Distributor Lookups, Leads, CPL) */
+.brand-kpis-summary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.brand-kpi-pill {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+  min-width: 90px;
+}
+
+.brand-kpi-pill.traffic-pill {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.brand-kpi-pill.traffic-pill .b-kpi-val {
+  color: #15803d;
+}
+
+.brand-kpi-pill.lookup-pill {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.brand-kpi-pill.lookup-pill .b-kpi-val {
+  color: #0369a1;
+}
+
+.brand-kpi-pill.leads-pill {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.brand-kpi-pill.leads-pill .b-kpi-val {
+  color: #047857;
+}
+
+.b-kpi-lbl {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.b-kpi-val {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--jtm-petrol, #0E313D);
+}
+
+.brand-accordion-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.btn-brand-toggle {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: var(--jtm-petrol, #0E313D);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-brand-toggle:hover {
+  background: var(--jtm-chartreuse, #B4D334);
+  color: var(--jtm-petrol, #0E313D);
+  border-color: var(--jtm-chartreuse, #B4D334);
+}
+
+/* Expanded Individual Tactics Table */
+.brand-tactics-expanded {
+  border-top: 1.5px solid #e2e8f0;
+  background: #fafafa;
+  padding: 16px 20px 20px 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.tactics-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tactics-table-count {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.btn-view-brand-leads {
+  background: var(--jtm-chartreuse, #B4D334);
+  color: var(--jtm-petrol, #0E313D);
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view-brand-leads:hover {
+  background: #0E313D;
+  color: #ffffff;
+}
+
+/* Nested Table Styling */
+.brand-nested-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  font-size: 0.8125rem;
+}
+
+.brand-nested-table th {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 700;
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.brand-nested-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.brand-nested-table tr:hover td {
+  background: #f8fafc;
+}
+
+.tactic-rundate-cell {
+  font-weight: 700;
+  color: #0369a1;
+  background: #f0f9ff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  white-space: nowrap;
+  border: 1px solid #e0f2fe;
+}
+
+.btn-tactic-scorecard {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.btn-tactic-scorecard:hover {
+  background: var(--jtm-petrol);
+  color: #ffffff;
+}
+
+.btn-tactic-leads-link {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-tactic-leads-link:hover {
+  background: #047857;
+  color: #ffffff;
+}
+
+/* Fix Macro Cards Grid to never overflow */
+.macro-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.macro-card {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.subtactic-pills-list {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
+}

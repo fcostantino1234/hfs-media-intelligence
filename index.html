@@ -320,57 +320,49 @@
         </div>
       </div>
 
-      <!-- Comparative Benchmarking Table -->
-      <div class="benchmarking-section">
-        <div class="section-title-row">
+            <!-- 🌟 THE BRAND & CAMPAIGN DRILL-DOWN SUITE (Compressed Brand Matrix with Sub-Nav, Run Dates, Web Traffic & Distributor Lookups) -->
+      <div class="brand-tactics-section">
+        <div class="brand-tactics-header">
           <div>
-            <h3 class="section-title">All Ad Tactics & Placement Efficiency Matrix</h3>
-            <p class="section-subtitle">Ranked by Leads Generated, Cost Per Lead (CPL), and Total Reach</p>
+            <span class="section-badge" style="background: rgba(180, 211, 52, 0.2); color: var(--jtm-petrol); border: 1px solid var(--jtm-chartreuse); font-weight: 800;">BRAND PORTFOLIOS</span>
+            <h3 class="section-title">// BRAND & CAMPAIGN TACTIC DRILL-DOWN //</h3>
+            <p class="section-subtitle">
+              Compressed brand portfolios tracking <strong>Media Investment</strong>, <strong>Associated Web Traffic</strong>, <strong>Distributor "Where to Buy" Lookups</strong>, and <strong>Verified Inbound Leads</strong>. Expand any brand to inspect individual placement mechanics and flight run dates.
+            </p>
           </div>
-          <div class="matrix-sort-controls">
-            <button id="btn-matrix-all-tactics" class="btn btn-outline" style="font-size: 0.75rem; padding: 6px 12px; border: 1.5px solid var(--jtm-chartreuse); color: var(--jtm-chartreuse); font-weight: 700; background: rgba(204, 215, 0, 0.1); cursor: pointer; border-radius: var(--radius-sm);">
-              // FULL PORTFOLIO ROLLUP //
-            </button>
-            <label>Sort Matrix by:</label>
-            <select id="matrix-sort-select" class="form-select">
-              <option value="leads">Most Leads Generated</option>
-              <option value="cpl_asc">Lowest Cost Per Lead (Most Efficient)</option>
-              <option value="spend">Highest Media Spend</option>
-              <option value="impressions">Highest Impressions</option>
-              <option value="clicks">Highest Clicks</option>
-            </select>
+          
+          <div class="brand-tactics-stats">
+            <div class="brand-quick-stat">
+              <span class="b-stat-num" id="bt-brand-count">11 Brands</span>
+              <span class="b-stat-lbl">Portfolios</span>
+            </div>
+            <div class="brand-quick-stat">
+              <span class="b-stat-num" id="bt-tactic-count">449 Tactics</span>
+              <span class="b-stat-lbl">Placements</span>
+            </div>
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="data-table" id="tactics-matrix-table">
-            <thead>
-              <tr>
-                <th class="th-sortable" data-matrix-sort="name" title="Click to sort by Tactic Name">Ad Tactic / Media Placement<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="key_hook" title="Click to sort by Strategic Key Hook">Strategic Key Hook<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="publication_group" title="Click to sort by Publisher / Network">Publisher / Network<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="brand" title="Click to sort by Brand Focus">Brand Focus<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="run_date" title="Click to sort by Run Date">Run Date<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="spend" style="text-align: right;" title="Click to sort by Media Spend">Media Spend<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="impressions" style="text-align: right;" title="Click to sort by Target Impressions">Impressions<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="clicks" style="text-align: right;" title="Click to sort by Clicks">Clicks<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="cpc" style="text-align: right;" title="Click to sort by Cost Per Click">CPC<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="web_sessions" style="text-align: right;" title="Click to sort by Web Sessions">Web Sessions<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable" data-matrix-sort="distributor_lookups" style="text-align: right;" title="Click to sort by Distributor Lookups">Dist. Lookups<span class="sort-icon"> ⇅</span></th>
-                <th class="th-sortable sorted sorted-desc" data-matrix-sort="leads" style="text-align: right;" title="Click to sort by Verified Leads">Leads (Window)<span class="sort-icon"> ▼</span></th>
-                <th class="th-sortable" data-matrix-sort="cpl" style="text-align: right;" title="Click to sort by Cost Per Lead">CPL<span class="sort-icon"> ⇅</span></th>
-                <th style="text-align: center;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="tactics-matrix-tbody">
-              <!-- Populated via JS -->
-            </tbody>
-          </table>
+        <!-- Brand Sub-Nav Filter Chips -->
+        <div class="brand-subnav-bar" id="brand-subnav-bar">
+          <span class="subnav-label">Brand Focus:</span>
+          <button type="button" class="brand-subnav-pill active" data-brand-filter="all">All Brands (449)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Bacon 1">Bacon 1 (32)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Fontanini">Fontanini (69)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Austin Blues">Austin Blues (81)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Fire Braised">Fire Braised (46)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Flash 180">Flash 180 (28)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="HFS Convenience">Convenience (61)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Halal">Halal (30)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Foodservice Master">HFS Master (78)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Other">Other Brands (24)</button>
+        </div>
+
+        <!-- Brand Cards Accordion / Group List -->
+        <div class="brand-portfolios-container" id="brand-portfolios-container">
+          <!-- Dynamically populated via JS -->
         </div>
       </div>
-
-    </div>
-  </main>
 
   <!-- ========================================================================= -->
   <!-- VIEW 2: MEDIA TIMELINE & EFFORTS ROADMAP (ZOOM-OUT VIEW)                  -->
