@@ -295,6 +295,15 @@
         openLeadDrawer(filteredLeads[0]);
       }
     }
+    if (hash.startsWith('lead-')) {
+      const targetId = parseInt(hash.replace('lead-', ''), 10);
+      const leadsTab = document.getElementById('tab-sales-leads');
+      if (leadsTab) leadsTab.click();
+      const targetLead = allLeads.find(l => l.id === targetId) || filteredLeads[0];
+      if (targetLead) {
+        openLeadDrawer(targetLead);
+      }
+    }
     if (hash.startsWith('search=')) {
       const qVal = decodeURIComponent(hash.replace('search=', ''));
       leadFilters.search = qVal;
