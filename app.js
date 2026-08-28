@@ -278,30 +278,40 @@
     bindEvents();
     initDeloresConcierge();
 
-    // Support URL hash routing (e.g. #timeline, #trends)
+    // Support URL params & hash routing (e.g. ?lead=8, #drawer, #timeline, #trends)
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramLead = urlParams.get('lead');
     const hash = window.location.hash.replace('#', '');
-    if (hash === 'minimized') {
+
+    window.openLeadDrawerById = function(id) {
+      const found = allLeads.find(l => String(l.id) === String(id) || String(l.prospect_id) === String(id));
+      if (found) {
+        const leadsTab = document.getElementById('tab-sales-leads');
+        if (leadsTab) leadsTab.click();
+        openLeadDrawer(found);
+      }
+    };
+
+    if (paramLead || hash.startsWith('lead-')) {
+      const targetId = (paramLead || hash.replace('lead-', '')).trim();
+      const leadsTab = document.getElementById('tab-sales-leads');
+      if (leadsTab) leadsTab.click();
+      const targetLead = allLeads.find(l => String(l.id) === targetId || String(l.prospect_id) === targetId) || (filteredLeads && filteredLeads[0]);
+      if (targetLead) {
+        openLeadDrawer(targetLead);
+      }
+    } else if (hash === 'minimized') {
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
       if (filteredLeads && filteredLeads.length > 0) {
         currentDrawerLead = filteredLeads[0];
         minimizeLeadDrawer();
       }
-    }
-    if (hash === 'drawer') {
+    } else if (hash === 'drawer') {
       const leadsTab = document.getElementById('tab-sales-leads');
       if (leadsTab) leadsTab.click();
       if (filteredLeads && filteredLeads.length > 0) {
         openLeadDrawer(filteredLeads[0]);
-      }
-    }
-    if (hash.startsWith('lead-')) {
-      const targetId = hash.replace('lead-', '').trim();
-      const leadsTab = document.getElementById('tab-sales-leads');
-      if (leadsTab) leadsTab.click();
-      const targetLead = allLeads.find(l => String(l.id) === targetId || String(l.prospect_id) === targetId) || (filteredLeads && filteredLeads[0]);
-      if (targetLead) {
-        openLeadDrawer(targetLead);
       }
     }
     if (hash.startsWith('search=')) {
