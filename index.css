@@ -1279,7 +1279,8 @@ body {
   vertical-align: middle;
 }
 
-.data-table tbody tr:hover { background-color: #f8fafc; }
+.data-table tbody tr { cursor: pointer; }
+.data-table tbody tr:hover { background-color: #f1f5f9; }
 .data-table tbody tr.row-selected { background-color: #f0fdf4; }
 
 .leads-table-container {
