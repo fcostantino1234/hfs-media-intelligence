@@ -301,7 +301,7 @@
       if (leadsTab) leadsTab.click();
       const targetLead = allLeads.find(l => String(l.id) === targetId || String(l.prospect_id) === targetId) || (filteredLeads && filteredLeads[0]);
       if (targetLead) {
-        setTimeout(() => openLeadDrawer(targetLead), 80);
+        openLeadDrawer(targetLead);
       }
     }
     if (hash.startsWith('search=')) {
