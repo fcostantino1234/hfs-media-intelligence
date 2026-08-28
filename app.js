@@ -248,7 +248,10 @@
   // ===========================================================================
   // 3. INITIALIZATION
   // ===========================================================================
+  let isInitialized = false;
   function init() {
+    if (isInitialized) return;
+    isInitialized = true;
     allTactics = window.TACTICS_DATA || [];
     normalizeAllLeads();
 
