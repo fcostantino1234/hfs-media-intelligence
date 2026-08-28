@@ -3497,9 +3497,9 @@
 
     // Update KPI Strip
     const rEl = document.getElementById('corr-r-val');
-    if (rEl) rEl.textContent = `${r >= 0 ? '+' : ''}${r.toFixed(3)}`;
+    if (rEl) rEl.textContent = `${r >= 0 ? '+' : ''}${r.toFixed(2)} Score`;
     const rTag = document.getElementById('corr-chart-tag');
-    if (rTag) rTag.textContent = `r = ${r >= 0 ? '+' : ''}${r.toFixed(3)} Pearson Correlation`;
+    if (rTag) rTag.textContent = `${r >= 0 ? '+' : ''}${r.toFixed(2)} Media Lockstep`;
 
     // Multiplier
     if (labels.length > 0) {
@@ -3508,7 +3508,7 @@
       if (maxSpendPeriod && minSpendPeriod && cohorts[minSpendPeriod].totalSessions > 0) {
         const mult = (cohorts[maxSpendPeriod].totalSessions / cohorts[minSpendPeriod].totalSessions).toFixed(1);
         const surgeEl = document.getElementById('corr-surge-val');
-        if (surgeEl) surgeEl.textContent = `${mult}x Velocity`;
+        if (surgeEl) surgeEl.textContent = `${mult}x Lift`;
       }
     }
 
@@ -3517,7 +3517,7 @@
     const sumLeads = labels.reduce((acc, k) => acc + cohorts[k].leads, 0);
     const ratio = sumLeads > 0 ? Math.round(sumLookups / sumLeads) : 22;
     const lkEl = document.getElementById('corr-lookups-ratio');
-    if (lkEl) lkEl.textContent = `${ratio} : 1`;
+    if (lkEl) lkEl.textContent = `${ratio} : 1 Ratio`;
 
     // Build filtered datasets based on corrSeriesFilter
     const datasets = [];
