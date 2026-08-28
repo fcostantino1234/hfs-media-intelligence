@@ -4984,17 +4984,21 @@
       menuBtn.href = lead.menu_search_url || `https://www.google.com/search?q=${encodeURIComponent((lead.company || '') + ' menu')}`;
     }
 
-    // Populate What They Are Famous For (Only show if authentic verified info exists)
+    // Populate What They Are Famous For (Only for verified commercial restaurants; NEVER for home cooks, internals, or distributors)
+    const isHomeCook = lead.mql_tier === 'consumer' || lead.lead_category === 'Home Cook';
+    const isInternal = lead.mql_tier === 'internal' || lead.lead_category === 'Internal';
+    const isDistributor = lead.mql_tier === 'distributor' || lead.lead_category === 'Distributor';
+
     const knownForEl = document.getElementById('drawer-known-for-text');
     const knownCardEl = document.getElementById('drawer-primary-known-for-card');
     if (knownCardEl) {
-      if (intel.knownFor && intel.isCommercialRestaurant) {
+      if (!isHomeCook && !isInternal && !isDistributor && intel.knownFor && intel.isCommercialRestaurant) {
         knownCardEl.style.display = 'block';
         if (knownForEl) {
           knownForEl.innerHTML = `<strong>${escapeHtml(intel.knownFor)}</strong> ${intel.opsChallenge ? `— ${escapeHtml(intel.opsChallenge)}` : ''}`;
         }
       } else {
-        knownCardEl.style.display = 'none'; // Completely hidden for unverified or non-restaurant records!
+        knownCardEl.style.display = 'none'; // Completely hidden for home cooks, internals, distributors, or unverified records
       }
     }
 
@@ -6343,6 +6347,7 @@ Hormel Foodservice`;
     showToast('Lead filters reset');
   }
 
+
   // =========================================================================
   // VIEW 5: ADVERTISING ROI & 2027 BIG BETS SIMULATOR
   // =========================================================================
@@ -7352,303 +7357,6 @@ Hormel Foodservice`;
     return raw;
   }
 
-  function renderDrawerRestaurantMenuIdeation(lead) {
-    const container = document.getElementById('drawer-menu-ideation-container');
-    if (!container) return;
-
-    const intel = getRestaurantConceptProfile(lead);
-
-    let ideasHtml = '';
-    intel.ideas.forEach(item => {
-      ideasHtml += `
-        <div class="menu-idea-card">
-          <div class="menu-idea-header">
-            <span class="menu-idea-title">${escapeHtml(item.name)}</span>
-            <span class="menu-idea-placement">${escapeHtml(item.placement)}</span>
-          </div>
-          <div class="menu-idea-sku-tag">SKU: ${escapeHtml(item.sku)}</div>
-          <div class="menu-idea-desc">${escapeHtml(item.desc)}</div>
-          <div class="menu-idea-advantage">${escapeHtml(item.advantage)}</div>
-        </div>
-      `;
-    });
-
-    container.innerHTML = `
-      <div class="drawer-culinary-intel-card">
-        <div class="concept-intel-header">
-          <span class="concept-intel-badge">// RESTAURANT CONCEPT NOTES & MENU IDEATION //</span>
-          <span class="concept-intel-source">Sourced from Menu Trend & Culinary Research</span>
-        </div>
-
-        <div class="concept-profile-box">
-          <div class="concept-title-row">
-            <span class="concept-archetype-tag">${escapeHtml(intel.archetype)}</span>
-            <div class="concept-research-links">
-              <a href="${intel.gSearchUrl}" target="_blank" class="concept-link-btn" title="Search this restaurant's menu on Google">
-                Google Menu ->
-              </a>
-              <a href="${intel.yelpSearchUrl}" target="_blank" class="concept-link-btn" title="Search reviews and dish photos on Yelp">
-                Yelp Profile ->
-              </a>
-            </div>
-          </div>
-          <div class="concept-known-for-text">
-            <strong>What They Are Known For:</strong> ${escapeHtml(intel.knownFor)}
-          </div>
-          <div class="concept-ops-text">
-            ${escapeHtml(intel.opsChallenge)}
-          </div>
-        </div>
-
-        <div class="menu-ideation-heading">
-          <span>Potential New Menu Items (Using Hormel Products)</span>
-          <span class="count-tag">3 Chef Concepts</span>
-        </div>
-
-        <div class="menu-ideas-list">
-          ${ideasHtml}
-        </div>
-
-        <div class="menu-ideation-actions">
-          <button class="btn-copy-menu-ideas" id="btn-copy-menu-pitches">
-            Copy Menu Concepts to Pitch
-          </button>
-          <a href="https://www.hormelfoodservice.com/recipes/" target="_blank" class="btn-recipes-link">
-            Hormel Recipe Inspiration ↗
-          </a>
-        </div>
-      </div>
-    `;
-
-    // Bind Copy Menu Concepts Button
-    const copyMenuBtn = document.getElementById('btn-copy-menu-pitches');
-    if (copyMenuBtn) {
-      copyMenuBtn.onclick = () => {
-        const recipient = getCleanRecipientName(lead);
-        const comp = getCleanCompanyDisplay(lead);
-        const venuePhrase = comp ? `at ${comp}` : 'for your kitchen';
-        const repName = lead.sales_rep || 'Your Hormel Foodservice Culinary Specialist';
-        const knownTopic = (intel.knownFor || 'scratch-quality food and guest hospitality').replace(/\.$/, '');
-
-        let conceptsText = intel.ideas.map((idea, idx) => {
-          const cleanAdv = idea.advantage.replace(/^\s*/, '').replace(/^Prep:\s*/, '').trim();
-          return `${idx + 1}. ${idea.name} (${idea.placement})\n` +
-                 `   • The Dish: ${idea.desc}\n` +
-                 `   • BOH Advantage: Featuring ${idea.sku}. ${cleanAdv}\n`;
-        }).join('\n');
-
-        const pitchText = `Hi ${recipient},
-
-I hope service is running smoothly this week! I was looking over what you're doing ${venuePhrase}—especially your focus on ${knownTopic.toLowerCase()}—and a few creative menu thoughts came to mind that could fit right into your lineup without adding prep strain to your line cooks.
-
-Here are 3 chef-crafted dish concepts I put together specifically with your kitchen in mind:
-
-${conceptsText}
-Curious—how is your kitchen currently holding up with prep hours during your busiest rushes? Are you experimenting with any new seasonal features or looking to streamline high-labor prep stations?
-
-I would love to drop off or ship a complimentary chef evaluation kit for you and your culinary crew to taste-test on your own equipment—no strings attached. Just wanted to share some culinary inspiration and see if any of these spark an idea for your menu.
-
-Would you be open to tasting a few samples next week?
-
-Warm regards,
-
-${repName}
-Culinary Specialist | Hormel Foodservice`;
-
-        navigator.clipboard.writeText(pitchText).then(() => {
-          showToast(`Copied conversational menu pitch for ${comp || 'Chef'} to clipboard!`);
-        });
-      };
-    }
-  }
-
-  function renderDrawerCulinaryPlaybook(lead) {
-    const container = document.getElementById('drawer-brand-pitch-container');
-    if (!container) return;
-
-    const brands = window.BRAND_CATALOG_DATA || [];
-    const bName = (lead.brand || '').toLowerCase();
-    const segName = (lead.segment || '').toLowerCase();
-    const subName = (lead.subsegment || '').toLowerCase();
-    const hookName = (lead.key_hook || '').toLowerCase();
-
-    // Match brand
-    let matchedBrand = brands.find(b => bName.includes(b.brand_line.toLowerCase()) || b.brand_line.toLowerCase().includes(bName));
-    if (!matchedBrand) {
-      if (subName.includes('pizz') || subName.includes('italian') || hookName.includes('chili') || hookName.includes('calabrian')) matchedBrand = brands.find(b => b.id === 'fontanini');
-      else if (subName.includes('college') || subName.includes('c&u') || subName.includes('univers')) matchedBrand = brands.find(b => b.id === 'hormel-halal');
-      else if (subName.includes('school') || subName.includes('k-12')) matchedBrand = brands.find(b => b.id === 'jennie-o');
-      else if (subName.includes('qsr') || subName.includes('c-store') || subName.includes('fast')) matchedBrand = brands.find(b => b.id === 'flash-180');
-      else if (subName.includes('bbq') || subName.includes('smoke')) matchedBrand = brands.find(b => b.id === 'austin-blues');
-      else if (subName.includes('health') || subName.includes('hospital')) matchedBrand = brands.find(b => b.id === 'fire-braised');
-      else matchedBrand = brands[0]; // Bacon 1
-    }
-
-    if (!matchedBrand) return;
-
-    // Select optimal SKU (e.g. if Calabrian Chili hook, select #204515)
-    let topSku = null;
-    if (hookName.includes('calabrian') || hookName.includes('chili')) {
-      topSku = matchedBrand.flagship_skus.find(s => s.item_code === '#204515');
-    }
-    if (!topSku) {
-      topSku = (matchedBrand.flagship_skus && matchedBrand.flagship_skus[0]) || { item_code: '#102342', name: 'Flagship SKU', pack: 'Bulk case' };
-    }
-
-    const prepSummary = matchedBrand.prep_specs.convection_oven || matchedBrand.prep_specs.deep_fryer || matchedBrand.prep_specs.oven_bake || matchedBrand.prep_specs.steamer_or_oven || 'Heat & Serve';
-
-    // Distributor OpCo Guess & Ordering Codes
-    const distIntel = predictDistributorBranch(lead);
-    const codes = topSku.distributor_codes || {
-      sysco_supc: "7184291", us_foods: "4819203", dot_foods: "641029", pfg_item: "912384", gfs_item: "204510"
-    };
-
-    const isSysco = distIntel.primaryDistributor.toLowerCase().includes('sysco');
-    const isUSFoods = distIntel.primaryDistributor.toLowerCase().includes('us foods');
-    const isGFS = distIntel.primaryDistributor.toLowerCase().includes('gordon') || distIntel.primaryDistributor.toLowerCase().includes('gfs');
-    const isPFG = distIntel.primaryDistributor.toLowerCase().includes('pfg') || distIntel.primaryDistributor.toLowerCase().includes('performance');
-    const isDot = distIntel.primaryDistributor.toLowerCase().includes('dot');
-
-    const cleanSkuDigits = topSku.item_code.replace('#', '');
-    const findDistUrl = `https://www.hormelfoodservice.com/find-distributor/`;
-
-    container.innerHTML = `
-      <div class="drawer-pitch-card">
-        <div class="drawer-pitch-header">
-          <div class="drawer-pitch-badge">RECOMMENDED: ${escapeHtml(matchedBrand.brand_name)}</div>
-          <div class="drawer-pitch-tagline">"${escapeHtml(matchedBrand.tagline)}"</div>
-        </div>
-
-        <p class="drawer-pitch-copy">${escapeHtml(matchedBrand.official_copy)}</p>
-
-        <div class="drawer-pitch-specs-row">
-          <div class="drawer-spec-pill">
-            <span>Prep:</span> <strong>${escapeHtml(prepSummary)}</strong>
-          </div>
-          <div class="drawer-spec-pill">
-            <span>Advantage:</span> <strong>${escapeHtml(matchedBrand.prep_specs.labor_savings)}</strong>
-          </div>
-        </div>
-
-        <div class="drawer-pitch-sku-box">
-          <div class="pitch-sku-title">Featured SKU:</div>
-          <div class="pitch-sku-detail">
-            <strong>${escapeHtml(topSku.item_code)}:</strong> ${escapeHtml(topSku.name)} (${escapeHtml(topSku.pack)})
-          </div>
-          <div class="pitch-sku-desc">${escapeHtml(topSku.description)}</div>
-        </div>
-
-        <!-- Distributor Location Guess & Ordering Codes Card -->
-        <div class="drawer-distributor-intel-card">
-          <div class="dist-intel-header">
-            <span class="dist-intel-badge">// DISTRIBUTOR LOGISTICS & ORDERING //</span>
-            <span class="dist-intel-source">Hormel Directory Reference</span>
-          </div>
-
-          <div class="dist-branch-row">
-            <div class="dist-branch-icon">[ HUB ]</div>
-            <div>
-              <div class="dist-branch-title">Predicted Local Branch (OpCo):</div>
-              <div class="dist-branch-name">${escapeHtml(distIntel.branchName)}</div>
-              <div class="dist-branch-meta">
-                ${escapeHtml(distIntel.branchLocation)} • Indicated: <strong>${escapeHtml(lead.distributor || 'Not Specified')}</strong>
-                ${distIntel.isZipEstimated ? ` (Market ZIP: <strong>${distIntel.zipUsed}</strong>)` : ` (ZIP: <strong>${distIntel.zipUsed}</strong>)`}
-              </div>
-            </div>
-          </div>
-
-          <div class="dist-codes-grid">
-            <div class="dist-code-box ${isSysco ? 'active-dist' : ''}">
-              <span class="dist-code-lbl">SYSCO SUPC #:</span>
-              <strong class="dist-code-val">${escapeHtml(codes.sysco_supc)}</strong>
-            </div>
-            <div class="dist-code-box ${isUSFoods ? 'active-dist' : ''}">
-              <span class="dist-code-lbl">US FOODS ITEM #:</span>
-              <strong class="dist-code-val">${escapeHtml(codes.us_foods)}</strong>
-            </div>
-            <div class="dist-code-box ${isDot ? 'active-dist' : ''}">
-              <span class="dist-code-lbl">DOT FOODS #:</span>
-              <strong class="dist-code-val">${escapeHtml(codes.dot_foods)}</strong>
-            </div>
-            <div class="dist-code-box ${(isPFG || isGFS) ? 'active-dist' : ''}">
-              <span class="dist-code-lbl">${isGFS ? 'GFS ITEM #:' : 'PFG ITEM #:'}</span>
-              <strong class="dist-code-val">${escapeHtml(isGFS ? codes.gfs_item : codes.pfg_item)}</strong>
-            </div>
-          </div>
-
-          <div class="dist-lookup-footer">
-            <div class="dist-lookup-params">
-              Distributor Inputs: SKU <code>${cleanSkuDigits}</code> | ZIP <code>${distIntel.zipUsed}</code>
-            </div>
-            <div class="dist-lookup-actions">
-              <button class="dist-copy-btn" id="btn-copy-lookup-params" title="Copy SKU and ZIP to clipboard">
-                Copy SKU & ZIP
-              </button>
-              <a href="${findDistUrl}" target="_blank" class="dist-verify-btn" title="Open Hormel Foodservice Find a Distributor tool">
-                Verify on Distributor Tool ↗
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="drawer-pitch-actions">
-          <button class="btn btn-primary btn-sm btn-drawer-copy-script" id="btn-copy-lead-pitch">
-            Copy Rep Pitch
-          </button>
-          <a href="${escapeHtml(matchedBrand.site_url)}" target="_blank" class="btn btn-secondary btn-sm">
-            Specs ↗
-          </a>
-        </div>
-      </div>
-    `;
-
-    // Bind Copy Lookup Params
-    const copyLookupBtn = document.getElementById('btn-copy-lookup-params');
-    if (copyLookupBtn) {
-      copyLookupBtn.onclick = () => {
-        const text = `Hormel SKU: ${cleanSkuDigits} | ZIP: ${distIntel.zipUsed}`;
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(`Copied SKU ${cleanSkuDigits} & ZIP ${distIntel.zipUsed} for Hormel Distributor Lookup!`);
-        });
-      };
-    }
-
-    // Bind Copy Lead Pitch Script
-    const copyBtn = document.getElementById('btn-copy-lead-pitch');
-    if (copyBtn) {
-      copyBtn.onclick = () => {
-        const recipient = getCleanRecipientName(lead);
-        const comp = getCleanCompanyDisplay(lead);
-        const venuePhrase = comp ? `for ${comp}` : 'for your kitchen';
-        const primeCode = isSysco ? `Sysco SUPC #${codes.sysco_supc}` : (isUSFoods ? `US Foods Item #${codes.us_foods}` : (isGFS ? `GFS #${codes.gfs_item}` : (isPFG ? `PFG #${codes.pfg_item}` : `Sysco SUPC #${codes.sysco_supc} / US Foods #${codes.us_foods}`)));
-        const repName = lead.sales_rep || 'Hormel Foodservice Culinary Team';
-
-        const script = `Hi ${recipient},
-
-I saw that you were looking into our ${lead.brand || matchedBrand.brand_name} lineup ${venuePhrase}. With everything that goes into running a high-volume kitchen, I wanted to share a quick culinary thought.
-
-One of the biggest challenges operators talk to us about is balancing authentic scratch flavor with back-of-house speed. Our culinary team designed ${topSku.name} (${topSku.item_code}) specifically for that: it delivers ${matchedBrand.prep_specs.yield_advantage.toLowerCase()} with a prep time of just ${prepSummary}, eliminating raw meat trimming and reducing line pressure during peak rushes.
-
-Curious—how is your kitchen currently handling prep for this part of your menu? Are you exploring ways to take pressure off your line cooks?
-
-If you'd like to test a case on your next order, your local distributor rep at ${distIntel.branchName} (${distIntel.branchLocation}) already has this in stock:
-• Featured Item: ${topSku.name} (Hormel SKU: ${cleanSkuDigits})
-• Primary Ordering Code: ${primeCode} (Dot Foods Item #${codes.dot_foods})
-• Instant Stock Check: https://www.hormelfoodservice.com/find-distributor/ (ZIP: ${distIntel.zipUsed})
-
-I'd be glad to coordinate a complimentary chef sample kit or connect with your rep at ${distIntel.primaryDistributor} so you can taste it on your own line. Would you be open to tasting a sample next week?
-
-Warm regards,
-
-${repName}
-Hormel Foodservice Culinary Team`;
-
-        navigator.clipboard.writeText(script).then(() => {
-          showToast(`Copied conversational distributor pitch for ${comp || 'Chef'} to clipboard!`);
-        });
-      };
-    }
-  }
 
   function showToast(msg) {
     const el = document.getElementById('toast');
