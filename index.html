@@ -1822,31 +1822,44 @@
   <!-- LEAD DETAIL DRAWER                                                        -->
   <!-- ========================================================================= -->
   <div id="drawer-overlay" class="drawer-overlay"></div>
-    <aside id="lead-drawer" class="lead-drawer" aria-hidden="true">
-    <!-- Primary Top Operator Card (Contact Name, Restaurant, Address, What They Are Known For) -->
+  <aside id="lead-drawer" class="lead-drawer" aria-hidden="true">
+    
+    <!-- Compact Top Header (Leaves Maximum Screen Height for Scrollable Body) -->
     <div class="drawer-header">
-      <div class="drawer-header-primary">
+      <div class="drawer-header-left">
         <div class="drawer-name-badge-row">
           <h2 id="drawer-lead-name" class="drawer-primary-contact-name">Operator Name</h2>
           <div id="drawer-badges" class="drawer-badges"></div>
         </div>
+      </div>
+      <div class="drawer-header-controls">
+        <button type="button" class="btn-drawer-minimize" id="btn-minimize-drawer-header" title="Minimize drawer to bottom dock">
+          <span class="min-icon">&minus;</span> Minimize
+        </button>
+        <button id="btn-close-drawer" class="btn-close-drawer" title="Close drawer">&times;</button>
+      </div>
+    </div>
 
-        <!-- Venue / Restaurant Card -->
-        <div class="drawer-venue-card">
+    <!-- Spacious Scrollable Body -->
+    <div class="drawer-body">
+
+      <!-- 1. Operator Venue & Direct Contact Card -->
+      <div class="drawer-section drawer-venue-primary-card">
+        <div class="drawer-venue-card" style="margin-bottom: 10px;">
           <div class="drawer-venue-main">
             <span id="drawer-company-name" class="drawer-venue-name">Restaurant / Operation Name</span>
             <span id="drawer-job-title" class="drawer-venue-role">Executive Chef</span>
           </div>
-          <div class="drawer-venue-address">
+          <div class="drawer-venue-address" style="margin-top: 6px;">
             <span id="drawer-address-full">Address Not Listed</span>
             <a id="action-maps" href="#" target="_blank" class="address-link-btn" title="View on Google Maps">Maps &rarr;</a>
             <a id="drawer-menu-link" href="#" target="_blank" class="address-link-btn" title="Search Restaurant Menu">Menu &rarr;</a>
           </div>
         </div>
 
-        <!-- What They Are Known For (High-Priority Primary Sourced Intel) -->
-        <div class="drawer-known-for-card" id="drawer-primary-known-for-card">
-          <div class="known-for-label">// CULINARY IDENTITY // WHAT THEY ARE KNOWN FOR //</div>
+        <!-- What They Are Famous For (Only displayed if authentic verified restaurant data exists) -->
+        <div class="drawer-known-for-card" id="drawer-primary-known-for-card" style="display: none; margin-bottom: 12px;">
+          <div class="known-for-label">// CULINARY IDENTITY // WHAT THEY ARE FAMOUS FOR //</div>
           <div id="drawer-known-for-text" class="known-for-text">
             Sourced culinary specialty and kitchen focus...
           </div>
@@ -1854,7 +1867,7 @@
 
         <!-- Direct Contact Reach & Actions Toolbar -->
         <div class="drawer-contact-reach-bar">
-          <div class="drawer-contact-pills">
+          <div class="drawer-contact-pills" style="margin-bottom: 8px;">
             <a id="drawer-email-link" href="#" class="contact-reach-pill" title="Email Operator">operator@email.com</a>
             <span id="drawer-phone" class="contact-reach-pill phone-pill">Phone not listed</span>
             <span id="drawer-distributor-pill" class="contact-reach-pill dist-pill">Distributor: —</span>
@@ -1868,15 +1881,6 @@
           </div>
         </div>
       </div>
-      <div class="drawer-header-controls">
-        <button type="button" class="btn-drawer-minimize" id="btn-minimize-drawer-header" title="Minimize drawer to bottom dock">
-          <span class="min-icon">&minus;</span> Minimize
-        </button>
-        <button id="btn-close-drawer" class="btn-close-drawer" title="Close drawer">&times;</button>
-      </div>
-    </div>
-
-    <div class="drawer-body">
       
       <!-- 1. The Attribution & Marketing Pathway (Second in hierarchy) -->
       <div class="drawer-section">

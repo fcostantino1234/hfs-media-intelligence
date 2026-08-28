@@ -4984,10 +4984,18 @@
       menuBtn.href = lead.menu_search_url || `https://www.google.com/search?q=${encodeURIComponent((lead.company || '') + ' menu')}`;
     }
 
-    // Populate What They Are Known For in Top Primary Card
+    // Populate What They Are Famous For (Only show if authentic verified info exists)
     const knownForEl = document.getElementById('drawer-known-for-text');
-    if (knownForEl) {
-      knownForEl.innerHTML = `<strong>${escapeHtml(intel.knownFor)}</strong> — ${escapeHtml(intel.opsChallenge)}`;
+    const knownCardEl = document.getElementById('drawer-primary-known-for-card');
+    if (knownCardEl) {
+      if (intel.knownFor && intel.isCommercialRestaurant) {
+        knownCardEl.style.display = 'block';
+        if (knownForEl) {
+          knownForEl.innerHTML = `<strong>${escapeHtml(intel.knownFor)}</strong> ${intel.opsChallenge ? `— ${escapeHtml(intel.opsChallenge)}` : ''}`;
+        }
+      } else {
+        knownCardEl.style.display = 'none'; // Completely hidden for unverified or non-restaurant records!
+      }
     }
 
     // Populate Contact Reach Pills
