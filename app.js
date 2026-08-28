@@ -1687,6 +1687,13 @@
     showToast(`Isolated tactic scorecard: ${tacticId}`);
   }
 
+  // Expose brand drilldown helpers to global window for inline onclicks
+  window.toggleBrandCardAccordion = toggleBrandCardAccordion;
+  window.isolateBrandAndGoToLeads = isolateBrandAndGoToLeads;
+  window.selectTacticFromMatrix = selectTacticFromMatrix;
+  window.renderBrandTacticsDrilldown = renderBrandTacticsDrilldown;
+
+
   // Alias for matrix rendering
   function renderTacticsMatrixTable() {
     renderBrandTacticsDrilldown(activeBrandSubnavFilter);
