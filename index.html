@@ -152,45 +152,131 @@
         </div>
       </div>
 
-      <!-- MACRO LEVEL ROLLUP EXPLORER SECTION -->
-      <div class="macro-rollup-section">
-        <div class="macro-rollup-header">
+      <!-- 🌟 THE BRAND & CAMPAIGN DRILL-DOWN SUITE (Compressed Brand Matrix with Sub-Nav, Run Dates, Web Traffic & Distributor Lookups) -->
+      <div class="brand-tactics-section">
+        <div class="brand-tactics-header">
           <div>
-            <span class="section-badge">ROLLUP</span>
-            <h3 class="section-title">Performance Rollup</h3>
-            <p class="section-subtitle">Aggregate metrics across key media dimensions</p>
+            <span class="section-badge" style="background: rgba(180, 211, 52, 0.2); color: var(--jtm-petrol); border: 1px solid var(--jtm-chartreuse); font-weight: 800;">BRAND PORTFOLIOS</span>
+            <h3 class="section-title">// BRAND & CAMPAIGN TACTIC DRILL-DOWN //</h3>
+            <p class="section-subtitle">
+              Compressed brand portfolios tracking <strong>Media Investment</strong>, <strong>Associated Web Traffic</strong>, <strong>Distributor "Where to Buy" Lookups</strong>, and <strong>Verified Inbound Leads</strong>. Expand any brand to inspect individual placement mechanics and flight run dates.
+            </p>
           </div>
-
-          <!-- Macro Dimension Toggle Buttons -->
-          <div class="macro-dimension-tabs">
-            <button class="btn-dim-tab active" id="dim-tab-hook" data-dim="hook">
-              By Key Hook
-            </button>
-            <button class="btn-dim-tab" id="dim-tab-pub" data-dim="pub">
-              By Publisher
-            </button>
-            <button class="btn-dim-tab" id="dim-tab-type" data-dim="type">
-              By Format
-            </button>
+          
+          <div class="brand-tactics-stats">
+            <div class="brand-quick-stat">
+              <span class="b-stat-num" id="bt-brand-count">11 Brands</span>
+              <span class="b-stat-lbl">Portfolios</span>
+            </div>
+            <div class="brand-quick-stat">
+              <span class="b-stat-num" id="bt-tactic-count">449 Tactics</span>
+              <span class="b-stat-lbl">Placements</span>
+            </div>
           </div>
         </div>
 
-        <!-- Macro Rollup Cards Grid -->
-        <div class="macro-cards-grid" id="macro-cards-grid">
-          <!-- Populated dynamically via JS -->
+        <!-- Brand Sub-Nav Filter Chips -->
+        <div class="brand-subnav-bar" id="brand-subnav-bar">
+          <span class="subnav-label">Brand Focus:</span>
+          <button type="button" class="brand-subnav-pill active" data-brand-filter="all">All Brands (449)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Bacon 1">Bacon 1 (32)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Fontanini">Fontanini (69)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Austin Blues">Austin Blues (81)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Fire Braised">Fire Braised (46)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Flash 180">Flash 180 (28)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="HFS Convenience">Convenience (61)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Halal">Halal (30)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Foodservice Master">HFS Master (78)</button>
+          <button type="button" class="brand-subnav-pill" data-brand-filter="Other">Other Brands (24)</button>
+        </div>
+
+        <!-- Brand Cards Accordion / Group List -->
+        <div class="brand-portfolios-container" id="brand-portfolios-container">
+          <!-- Dynamically populated via JS -->
         </div>
       </div>
 
-      <!-- Quick Tactic Filter Chips -->
-      <div class="tactic-chips-row">
-        <span class="chip-label">Filter Tactics:</span>
-        <button class="tactic-chip active" data-filter="all">All Channels</button>
-        <button class="tactic-chip" data-filter="Paid Trade Media">Trade Publications</button>
-        <button class="tactic-chip" data-filter="Integrated Campaign">Brand Campaigns</button>
-        <button class="tactic-chip" data-filter="Events & Exhibitions">Trade Shows & Events</button>
-        <button class="tactic-chip" data-filter="Paid SEM & Social">Paid Search & Halal</button>
-        <button class="tactic-chip" data-filter="Owned Database Marketing">Owned Email Nurture</button>
+  <!-- ========================================================================= -->
+  <!-- VIEW 2: MEDIA TIMELINE & EFFORTS ROADMAP (ZOOM-OUT VIEW)                  -->
+  <!-- ========================================================================= -->
+  <main id="view-timeline" class="app-view">
+    <div class="view-container">
+
+      <!-- Zoom-Out Header -->
+      <div class="timeline-hero">
+        <div class="timeline-hero-text">
+          <span class="hero-badge">MACRO ROADMAP</span>
+          <h2>Zoom-Out View: All Media Efforts & Campaign Flighting Over Time</h2>
+          <p>Chronological roadmap of all trade media placements, brand innovation launches, industry expos, and always-on search efforts across FY24, FY25, and FY26.</p>
+        </div>
+        <div class="timeline-stats-summary">
+          <div class="tl-stat-item">
+            <span class="tl-stat-label">Active Flights</span>
+            <span class="tl-stat-val" id="tl-active-count">18 Campaigns</span>
+          </div>
+          <div class="tl-stat-item">
+            <span class="tl-stat-label">Tracked Window</span>
+            <span class="tl-stat-val">FY24 Q1 – FY26 Q4</span>
+          </div>
+        </div>
       </div>
+
+      <!-- Media Flighting Matrix / Gantt Roadmap -->
+      <div class="timeline-container-card">
+        <div class="timeline-matrix-header">
+          <div class="matrix-brand-col">Brand / Tactic Placement</div>
+          <div class="quarters-timeline-wrapper">
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q1<small>Nov-Jan</small></div>
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q2<small>Feb-Apr</small></div>
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q3<small>May-Jul</small></div>
+            <div class="quarter-col-header" data-fy="fy24">FY24 Q4<small>Aug-Oct</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q1<small>Nov-Jan</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q2<small>Feb-Apr</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q3<small>May-Jul</small></div>
+            <div class="quarter-col-header" data-fy="fy25">FY25 Q4<small>Aug-Oct</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q1<small>Nov-Jan</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q2<small>Feb-Apr</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q3<small>May-Jul</small></div>
+            <div class="quarter-col-header" data-fy="fy26">FY26 Q4<small>Aug-Oct</small></div>
+          </div>
+        </div>
+
+        <div class="timeline-matrix-body" id="timeline-matrix-body">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+
+      <!-- Media Flighting vs Lead Acquisition Spikes Correlation -->
+      <div class="chart-card" style="margin-top: 28px;">
+        <div class="chart-header">
+          <div>
+            <h4>Media Flight Intensity vs. Operator Lead Generation</h4>
+            <span class="section-subtitle">Comparing quarterly paid media spend ($K) against inbound operator inquiry volume</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <!-- Axis scale toggle for 11/24 consolidation spike -->
+            <div class="chart-scale-toggle-group" id="flight-scale-toggle-group">
+              <span class="scale-label">Y-Axis Scale:</span>
+              <button type="button" class="btn-scale-toggle active" data-flight-scale="smart" id="btn-flight-scale-smart">
+                Organic Scale
+              </button>
+              <button type="button" class="btn-scale-toggle" data-flight-scale="full" id="btn-flight-scale-full">
+                Full Scale (w/ 11/24 Spike)
+              </button>
+            </div>
+            <span class="chart-tag" id="flight-chart-tag">Flighting & Inbound Convergence</span>
+          </div>
+        </div>
+        <div class="chart-canvas-wrapper" style="height: 330px;">
+          <canvas id="chart-flight-convergence"></canvas>
+        </div>
+        <div id="flight-outlier-callout" class="timeseries-outlier-banner" style="margin-top: 8px;">
+          
+          <span><strong>Organic Scale Active:</strong> The right Y-axis is calibrated to steady-state campaign acquisition (0–1,200 leads/qtr) to reveal the true correlation between media flight bursts and operator inquiry volume. The one-time <strong>11/24 database consolidation</strong> (17,199 legacy CRM records in FY25 Q1) is clamped at the ceiling with an indicator.</span>
+        </div>
+      </div>
+
+    </div>
 
       <!-- ISOLATED TACTIC SCORECARD (Hero Card) -->
       <div class="tactic-scorecard-card" id="tactic-scorecard">
@@ -320,132 +406,36 @@
         </div>
       </div>
 
-            <!-- 🌟 THE BRAND & CAMPAIGN DRILL-DOWN SUITE (Compressed Brand Matrix with Sub-Nav, Run Dates, Web Traffic & Distributor Lookups) -->
-      <div class="brand-tactics-section">
-        <div class="brand-tactics-header">
+      <!-- MACRO LEVEL ROLLUP EXPLORER SECTION -->
+      <div class="macro-rollup-section">
+        <div class="macro-rollup-header">
           <div>
-            <span class="section-badge" style="background: rgba(180, 211, 52, 0.2); color: var(--jtm-petrol); border: 1px solid var(--jtm-chartreuse); font-weight: 800;">BRAND PORTFOLIOS</span>
-            <h3 class="section-title">// BRAND & CAMPAIGN TACTIC DRILL-DOWN //</h3>
-            <p class="section-subtitle">
-              Compressed brand portfolios tracking <strong>Media Investment</strong>, <strong>Associated Web Traffic</strong>, <strong>Distributor "Where to Buy" Lookups</strong>, and <strong>Verified Inbound Leads</strong>. Expand any brand to inspect individual placement mechanics and flight run dates.
-            </p>
+            <span class="section-badge">ROLLUP</span>
+            <h3 class="section-title">Performance Rollup</h3>
+            <p class="section-subtitle">Aggregate metrics across key media dimensions</p>
           </div>
-          
-          <div class="brand-tactics-stats">
-            <div class="brand-quick-stat">
-              <span class="b-stat-num" id="bt-brand-count">11 Brands</span>
-              <span class="b-stat-lbl">Portfolios</span>
-            </div>
-            <div class="brand-quick-stat">
-              <span class="b-stat-num" id="bt-tactic-count">449 Tactics</span>
-              <span class="b-stat-lbl">Placements</span>
-            </div>
+
+          <!-- Macro Dimension Toggle Buttons -->
+          <div class="macro-dimension-tabs">
+            <button class="btn-dim-tab active" id="dim-tab-hook" data-dim="hook">
+              By Key Hook
+            </button>
+            <button class="btn-dim-tab" id="dim-tab-pub" data-dim="pub">
+              By Publisher
+            </button>
+            <button class="btn-dim-tab" id="dim-tab-type" data-dim="type">
+              By Format
+            </button>
           </div>
         </div>
 
-        <!-- Brand Sub-Nav Filter Chips -->
-        <div class="brand-subnav-bar" id="brand-subnav-bar">
-          <span class="subnav-label">Brand Focus:</span>
-          <button type="button" class="brand-subnav-pill active" data-brand-filter="all">All Brands (449)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Bacon 1">Bacon 1 (32)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Fontanini">Fontanini (69)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Austin Blues">Austin Blues (81)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Fire Braised">Fire Braised (46)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Flash 180">Flash 180 (28)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="HFS Convenience">Convenience (61)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Halal">Halal (30)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Hormel Foodservice Master">HFS Master (78)</button>
-          <button type="button" class="brand-subnav-pill" data-brand-filter="Other">Other Brands (24)</button>
-        </div>
-
-        <!-- Brand Cards Accordion / Group List -->
-        <div class="brand-portfolios-container" id="brand-portfolios-container">
-          <!-- Dynamically populated via JS -->
+        <!-- Macro Rollup Cards Grid -->
+        <div class="macro-cards-grid" id="macro-cards-grid">
+          <!-- Populated dynamically via JS -->
         </div>
       </div>
 
-  <!-- ========================================================================= -->
-  <!-- VIEW 2: MEDIA TIMELINE & EFFORTS ROADMAP (ZOOM-OUT VIEW)                  -->
-  <!-- ========================================================================= -->
-  <main id="view-timeline" class="app-view">
-    <div class="view-container">
-
-      <!-- Zoom-Out Header -->
-      <div class="timeline-hero">
-        <div class="timeline-hero-text">
-          <span class="hero-badge">MACRO ROADMAP</span>
-          <h2>Zoom-Out View: All Media Efforts & Campaign Flighting Over Time</h2>
-          <p>Chronological roadmap of all trade media placements, brand innovation launches, industry expos, and always-on search efforts across FY24, FY25, and FY26.</p>
-        </div>
-        <div class="timeline-stats-summary">
-          <div class="tl-stat-item">
-            <span class="tl-stat-label">Active Flights</span>
-            <span class="tl-stat-val" id="tl-active-count">18 Campaigns</span>
-          </div>
-          <div class="tl-stat-item">
-            <span class="tl-stat-label">Tracked Window</span>
-            <span class="tl-stat-val">FY24 Q1 – FY26 Q4</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Media Flighting Matrix / Gantt Roadmap -->
-      <div class="timeline-container-card">
-        <div class="timeline-matrix-header">
-          <div class="matrix-brand-col">Brand / Tactic Placement</div>
-          <div class="quarters-timeline-wrapper">
-            <div class="quarter-col-header" data-fy="fy24">FY24 Q1<small>Nov-Jan</small></div>
-            <div class="quarter-col-header" data-fy="fy24">FY24 Q2<small>Feb-Apr</small></div>
-            <div class="quarter-col-header" data-fy="fy24">FY24 Q3<small>May-Jul</small></div>
-            <div class="quarter-col-header" data-fy="fy24">FY24 Q4<small>Aug-Oct</small></div>
-            <div class="quarter-col-header" data-fy="fy25">FY25 Q1<small>Nov-Jan</small></div>
-            <div class="quarter-col-header" data-fy="fy25">FY25 Q2<small>Feb-Apr</small></div>
-            <div class="quarter-col-header" data-fy="fy25">FY25 Q3<small>May-Jul</small></div>
-            <div class="quarter-col-header" data-fy="fy25">FY25 Q4<small>Aug-Oct</small></div>
-            <div class="quarter-col-header" data-fy="fy26">FY26 Q1<small>Nov-Jan</small></div>
-            <div class="quarter-col-header" data-fy="fy26">FY26 Q2<small>Feb-Apr</small></div>
-            <div class="quarter-col-header" data-fy="fy26">FY26 Q3<small>May-Jul</small></div>
-            <div class="quarter-col-header" data-fy="fy26">FY26 Q4<small>Aug-Oct</small></div>
-          </div>
-        </div>
-
-        <div class="timeline-matrix-body" id="timeline-matrix-body">
-          <!-- Populated via JS -->
-        </div>
-      </div>
-
-      <!-- Media Flighting vs Lead Acquisition Spikes Correlation -->
-      <div class="chart-card" style="margin-top: 28px;">
-        <div class="chart-header">
-          <div>
-            <h4>Media Flight Intensity vs. Operator Lead Generation</h4>
-            <span class="section-subtitle">Comparing quarterly paid media spend ($K) against inbound operator inquiry volume</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-            <!-- Axis scale toggle for 11/24 consolidation spike -->
-            <div class="chart-scale-toggle-group" id="flight-scale-toggle-group">
-              <span class="scale-label">Y-Axis Scale:</span>
-              <button type="button" class="btn-scale-toggle active" data-flight-scale="smart" id="btn-flight-scale-smart">
-                Organic Scale
-              </button>
-              <button type="button" class="btn-scale-toggle" data-flight-scale="full" id="btn-flight-scale-full">
-                Full Scale (w/ 11/24 Spike)
-              </button>
-            </div>
-            <span class="chart-tag" id="flight-chart-tag">Flighting & Inbound Convergence</span>
-          </div>
-        </div>
-        <div class="chart-canvas-wrapper" style="height: 330px;">
-          <canvas id="chart-flight-convergence"></canvas>
-        </div>
-        <div id="flight-outlier-callout" class="timeseries-outlier-banner" style="margin-top: 8px;">
-          
-          <span><strong>Organic Scale Active:</strong> The right Y-axis is calibrated to steady-state campaign acquisition (0–1,200 leads/qtr) to reveal the true correlation between media flight bursts and operator inquiry volume. The one-time <strong>11/24 database consolidation</strong> (17,199 legacy CRM records in FY25 Q1) is clamped at the ceiling with an indicator.</span>
-        </div>
-      </div>
-
-    </div>
-  </main>
+    </div></main>
 
   <!-- ========================================================================= -->
   <!-- VIEW 3: TRENDS OVER TIME & WEB ANALYTICS                                   -->
