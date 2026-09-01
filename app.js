@@ -99,6 +99,7 @@
   let globalEndDate = null;
   let globalBrand = '';
   let globalChannel = '';
+  let attributionModel = localStorage.getItem('hfs_attribution_model') || 'strict'; // 'strict' or 'halo'
 
   // View-specific Filters
   let leadFilters = {
@@ -6191,6 +6192,119 @@ Hormel Foodservice`;
       gSearchUrl,
       yelpSearchUrl
     };
+  }
+
+
+  function renderDrawerCulinaryPlaybook(lead) {
+    const section = document.getElementById('drawer-culinary-playbook-section');
+    const container = document.getElementById('drawer-brand-pitch-container');
+    if (!container) return;
+
+    const isHomeCook = lead.mql_tier === 'consumer' || lead.lead_category === 'Home Cook';
+    const isInternal = lead.mql_tier === 'internal' || lead.lead_category === 'Internal';
+    const isDistributor = lead.mql_tier === 'distributor' || lead.lead_category === 'Distributor';
+
+    // Completely hide culinary brand pitch for consumers/home cooks and internal records
+    if (isHomeCook || isInternal) {
+      if (section) section.style.display = 'none';
+      container.innerHTML = '';
+      return;
+    }
+
+    if (section) section.style.display = 'block';
+
+    const brandData = (window.BRAND_CATALOG_DATA || {})[lead.brand] || (window.BRAND_CATALOG_DATA || {})['Hormel Foodservice Master'] || {};
+
+    if (isDistributor) {
+      // Dedicated Distributor Resale & Operator Sell-In Playbook
+      const comp = lead.company || 'Distributor Partner';
+      container.innerHTML = `
+        <div class="distributor-resale-playbook-card" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 0.75rem; font-weight: 800; color: #166534; background: #dcfce7; padding: 3px 10px; border-radius: 12px; border: 1px solid #86efac;">
+              🤝 DISTRIBUTOR RESALE & OPERATOR SELL-IN PITCH
+            </span>
+            <span style="font-size: 0.6875rem; font-weight: 700; color: #15803d;">DSR Route Enablement</span>
+          </div>
+          <div style="font-size: 0.8125rem; font-weight: 700; color: #14532d; margin-bottom: 6px;">
+            Help ${escapeHtml(comp)} DSRs Drive Case Velocity to High-Volume Restaurant Accounts
+          </div>
+          <div style="font-size: 0.75rem; color: #334155; line-height: 1.4; margin-bottom: 10px;">
+            Position Hormel labor-saving lines (Bacon 1, Fontanini, Austin Blues) as prime margin-enhancers for your sales reps when pitching local independent pizzerias, diners, and smokehouses facing BOH labor shortages.
+          </div>
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; font-size: 0.72rem;">
+            <strong>Primary Warehouse Ordering Codes:</strong><br>
+            • Sysco SUPC: <strong>#7092144</strong> • US Foods: <strong>#882190</strong> • Dot Foods: <strong>#614290</strong> • PFG: <strong>#459120</strong>
+          </div>
+          <button type="button" class="btn btn-chartreuse" id="btn-copy-distributor-resale-pitch" style="font-size: 0.75rem; font-weight: 800; padding: 6px 14px; border-radius: 6px; cursor: pointer;">
+            Copy Distributor Resale Pitch Script
+          </button>
+        </div>
+      `;
+
+      const btnDist = document.getElementById('btn-copy-distributor-resale-pitch');
+      if (btnDist) {
+        btnDist.onclick = () => {
+          const rep = lead.full_name || 'Partner';
+          const text = `Hi ${rep},\n\n` +
+            `With rising BOH labor costs impacting independent restaurant operators across your delivery routes, Hormel Foodservice is partnering with ${comp} DSRs to provide high-margin, zero-prep protein solutions (Bacon 1, Fontanini, Austin Blues).\n\n` +
+            `Would you be open to reviewing the top 3 operator sell-in kits and current warehouse stock codes for your route reps this month?\n\n` +
+            `Best regards,\nHormel Foodservice Specialist`;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => showToast('Distributor resale pitch copied to clipboard!'));
+          } else {
+            showToast('Pitch generated');
+          }
+        };
+      }
+      return;
+    }
+
+    // Standard Commercial Operator Brand Pitch
+    const pitch = brandData.sales_pitch || 'Labor-saving, chef-crafted protein solutions engineered to reduce kitchen prep time while delivering authentic scratch flavor.';
+    const highlights = brandData.key_differentiators || ['100% Usable Yield with Zero Waste', 'Eliminates Hours of Skilled BOH Prep Labor', 'Consistent Center-of-Plate Presentation'];
+
+    container.innerHTML = `
+      <div class="brand-pitch-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 0.75rem; font-weight: 800; color: var(--jtm-petrol, #0E313D); background: #e0f2fe; padding: 3px 10px; border-radius: 12px; border: 1px solid #bae6fd;">
+            // ${escapeHtml(lead.brand.toUpperCase())} BRAND PLAYBOOK //
+          </span>
+          <span style="font-size: 0.6875rem; color: #64748b;">Sales Enablement</span>
+        </div>
+        <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin-bottom: 6px;">
+          Operator Value Proposition
+        </div>
+        <div style="font-size: 0.75rem; color: #334155; line-height: 1.4; margin-bottom: 10px;">
+          ${escapeHtml(pitch)}
+        </div>
+        <div class="brand-highlights-list" style="margin-bottom: 10px;">
+          ${highlights.map(h => `<div style="font-size: 0.72rem; color: #475569; margin-bottom: 3px;">✓ ${escapeHtml(h)}</div>`).join('')}
+        </div>
+        <button type="button" class="btn btn-chartreuse" id="btn-copy-brand-sales-pitch" style="font-size: 0.75rem; font-weight: 800; padding: 6px 14px; border-radius: 6px; cursor: pointer;">
+          Copy Operator Sales Pitch
+        </button>
+      </div>
+    `;
+
+    const btnPitch = document.getElementById('btn-copy-brand-sales-pitch');
+    if (btnPitch) {
+      btnPitch.onclick = () => {
+        const rep = getCleanRecipientName(lead);
+        const comp = getCleanCompanyDisplay(lead);
+        const venue = comp ? `at ${comp}` : 'in your kitchen';
+        const text = `Hi ${rep},\n\n` +
+          `I hope service is running smoothly! Reaching out regarding your kitchen operations ${venue}. We work with commercial operators to streamline prep hours and solve labor bottlenecks using ${lead.brand} solutions.\n\n` +
+          `${pitch}\n\n` +
+          `Would you have 5 minutes next week to test a complimentary product sample with your culinary team?\n\n` +
+          `Best regards,\n${lead.sales_rep || 'Hormel Foodservice Specialist'}`;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => showToast('Operator sales pitch copied to clipboard!'));
+        } else {
+          showToast('Pitch generated');
+        }
+      };
+    }
   }
 
   function renderDrawerRestaurantMenuIdeation(lead) {
