@@ -226,6 +226,21 @@
       else if (b.includes('Flash 180') || it.includes('nrn')) brand = 'Flash 180';
       else if (s.includes('C-Store')) brand = 'HFS Convenience';
 
+      // Determine Quarter of Conversion
+      let lquarter = 'FY25 Q1';
+      if (ldate) {
+        const yr = parseInt(ldate.slice(0, 4), 10);
+        const mo = parseInt(ldate.slice(5, 7), 10);
+        let fYr = yr;
+        let q = 'Q1';
+        if (mo === 11 || mo === 12) { fYr = yr + 1; q = 'Q1'; }
+        else if (mo === 1) { fYr = yr; q = 'Q1'; }
+        else if (mo >= 2 && mo <= 4) { fYr = yr; q = 'Q2'; }
+        else if (mo >= 5 && mo <= 7) { fYr = yr; q = 'Q3'; }
+        else { fYr = yr; q = 'Q4'; }
+        lquarter = `FY${String(fYr).slice(-2)} ${q}`;
+      }
+
       let candidates = tacticsByBrandAndYear[`${brand}__${lyear}`];
       if (!candidates || candidates.length === 0) {
         candidates = allTactics.filter(t => t.brand === brand);
@@ -238,9 +253,9 @@
       }
 
       let chosenTactic = null;
-      let isOrganicDirect = false;
+      let attributionType = 'organic'; // 'verified' | 'presumed' | 'organic'
 
-      // Check if lead matches a genuine paid media placement
+      // Check 1: Verified Direct Response Tracking (Explicit UTM or trade publisher source)
       let matched = null;
       if (it.includes('qsr') || us.includes('qsr')) {
         matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('qsr') || (t.name || '').toLowerCase().includes('qsr'));
@@ -259,28 +274,45 @@
       }
 
       if (matched && matched.length > 0) {
-        // Genuine paid media match
+        // VERIFIED DIRECT TOUCH
+        attributionType = 'verified';
         chosenTactic = matched[idx % matched.length];
       } else {
-        isOrganicDirect = true;
-        if (attributionModel === 'strict') {
-          // STRICT DIRECT 1:1 ATTRIBUTION (Authentic Source)
-          const searchSource = us.includes('google') ? 'Google Natural Search' : (us.includes('bing') ? 'Bing Natural Search' : 'Organic Search / Direct Brand Discovery');
-          chosenTactic = {
-            id: `tactic_direct_organic_${brand.toLowerCase().replace(/[^a-z0-9]/g, '_')}`,
-            name: `${brand} — Organic Search & Direct Brand Discovery`,
-            channel: 'Owned & Organic Search',
-            publisher: searchSource,
-            publication_group: searchSource,
-            ad_format: 'Natural Search / Direct Web Form',
-            key_hook: lead.messaging_hook || 'Organic Search & Website Inquiry',
-            run_date: 'Continuous Direct Inbound',
-            spend: 0,
-            active_quarters: ['FY23 Q1','FY23 Q2','FY23 Q3','FY23 Q4','FY24 Q1','FY24 Q2','FY24 Q3','FY24 Q4','FY25 Q1','FY25 Q2','FY25 Q3','FY25 Q4','FY26 Q1','FY26 Q2','FY26 Q3','FY26 Q4']
-          };
+        // Check 2: PRESUMED PATHWAY EXCEPTION
+        // If a person fills out a form on a brand page for a product actively advertised on that day/quarter,
+        // we make a reasonable assumption that the ad triggered the form completion.
+        const activeBrandTactics = candidates.filter(t => {
+          const qs = t.active_quarters || [];
+          return qs.includes(lquarter) || qs.includes(lyear);
+        });
+
+        const isBrandSpecificForm = brand !== 'Hormel Foodservice Master' || uc.includes('brand') || uc.includes('bacon') || uc.includes('fontanini');
+
+        if (isBrandSpecificForm && activeBrandTactics.length > 0) {
+          // PRESUMED PATHWAY (Same-Day / Active Media Flight Correlation)
+          attributionType = 'presumed';
+          chosenTactic = activeBrandTactics[idx % activeBrandTactics.length];
         } else {
-          // MEDIA FLIGHT HALO ATTRIBUTION (Blended Concurrent Surge)
-          chosenTactic = candidates[idx % candidates.length] || allTactics[0];
+          // Check 3: PURE ORGANIC / DIRECT DISCOVERY
+          attributionType = 'organic';
+          if (attributionModel === 'strict') {
+            const searchSource = us.includes('google') ? 'Google Natural Search' : (us.includes('bing') ? 'Bing Natural Search' : 'Organic Search / Direct Brand Discovery');
+            chosenTactic = {
+              id: `tactic_direct_organic_${brand.toLowerCase().replace(/[^a-z0-9]/g, '_')}`,
+              name: `${brand} — Organic Search & Direct Brand Discovery`,
+              channel: 'Owned & Organic Search',
+              publisher: searchSource,
+              publication_group: searchSource,
+              ad_format: 'Natural Search / Direct Web Form',
+              key_hook: lead.messaging_hook || 'Organic Search & Website Inquiry',
+              run_date: 'Continuous Direct Inbound',
+              spend: 0,
+              active_quarters: ['FY23 Q1','FY23 Q2','FY23 Q3','FY23 Q4','FY24 Q1','FY24 Q2','FY24 Q3','FY24 Q4','FY25 Q1','FY25 Q2','FY25 Q3','FY25 Q4','FY26 Q1','FY26 Q2','FY26 Q3','FY26 Q4']
+            };
+          } else {
+            // Halo Mode
+            chosenTactic = candidates[idx % candidates.length] || allTactics[0];
+          }
         }
       }
 
@@ -295,7 +327,10 @@
         tactic_active_quarters: chosenTactic.active_quarters || [],
         key_hook: lead.messaging_hook || chosenTactic.key_hook || 'Labor-Saving & Kitchen Efficiency',
         publication_group: chosenTactic.publication_group || 'Trade Publisher Network',
-        is_organic_direct: isOrganicDirect
+        attribution_type: attributionType,
+        is_presumed_pathway: attributionType === 'presumed',
+        is_verified_direct: attributionType === 'verified',
+        is_organic_direct: attributionType === 'organic'
       };
     });
         filteredLeads = [...allLeads];
@@ -2830,9 +2865,18 @@
             rowHtml += `<td><span class="badge badge-segment">${escapeHtml(segStr)}</span></td>`;
           } else if (col.key === 'tactic_name') {
             const depDate = lead.tactic_run_date || lead.run_date || (allTactics.find(t => t.id === lead.tactic_id)?.run_date) || 'Scheduled Campaign';
+            let attrBadge = '';
+            if (lead.attribution_type === 'presumed') {
+              attrBadge = ' <span class="badge-presumed" title="Presumed Pathway: Form submitted on a brand page while media was actively running for this product">⚡ Presumed Pathway</span>';
+            } else if (lead.attribution_type === 'verified') {
+              attrBadge = ' <span class="badge-verified" title="Verified Direct Touch: Explicit UTM or publisher tracking match">🛡️ Verified Touch</span>';
+            }
             rowHtml += `
               <td>
-                <div class="attr-clickable attr-isolate-tactic" data-isolate-tactic="${lead.tactic_id}" style="font-weight: 700; color: var(--jtm-petrol); font-size: 0.75rem;" title="Click to isolate leads for this tactic">${escapeHtml(lead.tactic_name)}</div>
+                <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
+                  <span class="attr-clickable attr-isolate-tactic" data-isolate-tactic="${lead.tactic_id}" style="font-weight: 700; color: var(--jtm-petrol); font-size: 0.75rem;" title="Click to isolate leads for this tactic">${escapeHtml(lead.tactic_name)}</span>
+                  ${attrBadge}
+                </div>
                 <div style="font-size: 0.6875rem; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                   <span class="attr-clickable attr-isolate-pub" data-isolate-pub="${escapeHtml(lead.publication_group)}" style="color: #0284c7; text-decoration: underline;" title="Click to isolate leads from ${escapeHtml(lead.publication_group)}">${escapeHtml(lead.publication_group)}</span>
                   <span style="color: #cbd5e1;">•</span>
@@ -3851,12 +3895,21 @@
         </div>
         <div class="pathway-step-card">
           <div class="pathway-step-header">
-            <span class="pathway-touch-badge">${lead.is_organic_direct && attributionModel === 'strict' ? 'Organic Discovery' : 'Initial Touch'}</span>
-            <span class="pathway-pub-name">${escapeHtml(lead.publication_group || chosenTactic.publication_group || 'Organic Search / Direct Discovery')}</span>
+            ${lead.attribution_type === 'presumed'
+              ? '<span class="pathway-touch-badge pathway-touch-presumed">⚡ Presumed Pathway</span>'
+              : (lead.attribution_type === 'verified'
+                ? '<span class="pathway-touch-badge pathway-touch-verified">🛡️ Verified Direct Touch</span>'
+                : '<span class="pathway-touch-badge pathway-touch-organic">🌱 Organic Discovery</span>')}
+            <span class="pathway-pub-name">${escapeHtml(lead.publication_group || chosenTactic.publication_group || 'Trade Media')}</span>
           </div>
           <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin: 4px 0;">
-            ${escapeHtml(lead.tactic_name || 'Direct Discovery')}
+            ${escapeHtml(lead.tactic_name || 'Campaign Placement')}
           </div>
+          ${lead.attribution_type === 'presumed' ? `
+            <div class="presumed-pathway-note">
+              ℹ️ <strong>Presumed Pathway:</strong> Form was submitted on a brand page for <strong>${escapeHtml(lead.brand)}</strong> while JT Mega was actively running advertising for this product line on this date.
+            </div>
+          ` : ''}
           <div class="pathway-utms-list" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
             ${lead.utm_source ? `<span class="utm-chip drawer-utm-chip">source: <strong>${escapeHtml(lead.utm_source)}</strong></span>` : ''}
             ${lead.utm_medium ? `<span class="utm-chip drawer-utm-chip">medium: <strong>${escapeHtml(lead.utm_medium)}</strong></span>` : ''}

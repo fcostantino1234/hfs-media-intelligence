@@ -6852,3 +6852,59 @@ body {
   color: #0E313D;
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
+
+/* Presumed Pathway & Attribution Badges */
+.badge-presumed {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.badge-verified {
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.pathway-touch-presumed {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1px solid #fcd34d !important;
+}
+
+.pathway-touch-verified {
+  background-color: #ecfdf5 !important;
+  color: #047857 !important;
+  border: 1px solid #a7f3d0 !important;
+}
+
+.pathway-touch-organic {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.presumed-pathway-note {
+  font-size: 0.72rem;
+  color: #b45309;
+  background-color: #fffbeb;
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-top: 6px;
+  border: 1px dashed #fde68a;
+  line-height: 1.35;
+}
