@@ -1489,7 +1489,43 @@ body {
   border-bottom: 3px solid var(--jtm-chartreuse);
 }
 
-.drawer-header-left h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 2px; }
+
+.drawer-primary-contact-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.drawer-contact-title-company-line {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.drawer-header-job-title {
+  color: var(--jtm-chartreuse);
+  font-weight: 700;
+}
+
+.drawer-header-company-name {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.drawer-header-location {
+  color: #94a3b8;
+  font-size: 0.8125rem;
+}
+
+.drawer-title-dot {
+  color: #64748b;
+}
+
 .drawer-company-line { font-size: 0.8125rem; color: #cbd5e1; margin-bottom: 6px; }
 
 .btn-close-drawer { background: transparent; border: none; color: #ffffff; font-size: 1.25rem; cursor: pointer; opacity: 0.8; }

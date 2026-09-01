@@ -3847,6 +3847,18 @@
 
     const nameEl = document.getElementById('drawer-lead-name');
     if (nameEl) nameEl.textContent = lead.full_name || 'Anonymous Foodservice Contact';
+
+    const headerTitleEl = document.getElementById('drawer-header-job-title');
+    if (headerTitleEl) headerTitleEl.textContent = lead.job_title || 'Foodservice Decision Maker';
+
+    const headerCompEl = document.getElementById('drawer-header-company');
+    if (headerCompEl) headerCompEl.textContent = lead.company || 'Personal / Household';
+
+    const headerLocEl = document.getElementById('drawer-header-location');
+    if (headerLocEl) {
+      const locStr = [lead.city, lead.state].filter(Boolean).join(', ');
+      headerLocEl.textContent = locStr ? `(${locStr})` : '';
+    }
     
     // Populate Top Venue Card
     const venueNameEl = document.getElementById('drawer-company-name');
