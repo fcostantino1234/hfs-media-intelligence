@@ -165,6 +165,26 @@
     return parts.some(p => p === target || p.includes(target) || target.includes(p));
   }
 
+  window.setAttributionModel = function(model) {
+    attributionModel = model;
+    localStorage.setItem('hfs_attribution_model', model);
+    
+    // Update button states
+    const btnStrict = document.getElementById('btn-attr-strict');
+    const btnHalo = document.getElementById('btn-attr-halo');
+    if (btnStrict && btnHalo) {
+      btnStrict.classList.toggle('active', model === 'strict');
+      btnHalo.classList.toggle('active', model === 'halo');
+    }
+
+    normalizeAllLeads();
+    recalculateTacticWindowMetrics();
+    applyGlobalFilters();
+    showToast(model === 'strict' 
+      ? '🎯 Switched to Strict 1:1 Direct Attribution (Authentic Source)' 
+      : '🔄 Switched to Media Flight Halo Attribution (Blended Multi-Touch)');
+  };
+
   function normalizeAllLeads() {
     const tacticsById = {};
     const tacticsByBrandAndYear = {};
@@ -180,6 +200,8 @@
     const rawLeads = window.LEADS_DATA || [];
     allLeads = rawLeads.map((lead, idx) => {
       const it = (lead.initial_tactic || '').toLowerCase();
+      const us = (lead.utm_source || '').toLowerCase();
+      const uc = (lead.utm_campaign || '').toLowerCase();
       const b = lead.brand || '';
       const p = lead.products || '';
       const s = lead.subsegment || '';
@@ -214,19 +236,52 @@
         candidates = allTactics;
       }
 
-      // Keyword match
+      let chosenTactic = null;
+      let isOrganicDirect = false;
+
+      // Check if lead matches a genuine paid media placement
       let matched = null;
-      if (it.includes('qsr')) matched = candidates.filter(t => (t.publisher || '').toLowerCase().includes('qsr') || (t.name || '').toLowerCase().includes('qsr'));
-      else if (it.includes('fsr')) matched = candidates.filter(t => (t.publisher || '').toLowerCase().includes('fsr') || (t.name || '').toLowerCase().includes('fsr'));
-      else if (it.includes('pizza today')) matched = candidates.filter(t => (t.publisher || '').toLowerCase().includes('pizza today') || (t.name || '').toLowerCase().includes('pizza today'));
-      else if (it.includes('smartbrief')) matched = candidates.filter(t => (t.publisher || '').toLowerCase().includes('smartbrief') || (t.name || '').toLowerCase().includes('smartbrief'));
-      else if (it.includes('nrn') || it.includes('informa')) matched = candidates.filter(t => (t.publisher || '').toLowerCase().includes('informa') || (t.publisher || '').toLowerCase().includes('nrn') || (t.name || '').toLowerCase().includes('nrn'));
-      else if (it.includes('flavor')) matched = candidates.filter(t => (t.publisher || '').toLowerCase().includes('flavor') || (t.name || '').toLowerCase().includes('flavor'));
-      else if (it.includes('email') || it.includes('pardot')) matched = candidates.filter(t => (t.channel || '').toLowerCase().includes('email') || (t.tactic_type || '').toLowerCase().includes('email'));
+      if (it.includes('qsr') || us.includes('qsr')) {
+        matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('qsr') || (t.name || '').toLowerCase().includes('qsr'));
+      } else if (it.includes('fsr') || us.includes('fsr')) {
+        matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('fsr') || (t.name || '').toLowerCase().includes('fsr'));
+      } else if (it.includes('pizza today') || us.includes('pizzatoday') || us.includes('pizza today')) {
+        matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('pizza today') || (t.name || '').toLowerCase().includes('pizza today'));
+      } else if (it.includes('smartbrief') || us.includes('smartbrief')) {
+        matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('smartbrief') || (t.name || '').toLowerCase().includes('smartbrief'));
+      } else if (it.includes('nrn') || it.includes('informa') || us.includes('nrn') || us.includes('informa')) {
+        matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('informa') || (t.publisher || '').toLowerCase().includes('nrn') || (t.name || '').toLowerCase().includes('nrn'));
+      } else if (it.includes('flavor') || us.includes('flavor')) {
+        matched = allTactics.filter(t => (t.publisher || '').toLowerCase().includes('flavor') || (t.name || '').toLowerCase().includes('flavor'));
+      } else if (it.includes('pardot') || it.includes('email') || us.includes('pardot') || uc.includes('email')) {
+        matched = allTactics.filter(t => (t.channel || '').toLowerCase().includes('email') || (t.tactic_type || '').toLowerCase().includes('email'));
+      }
 
-      if (!matched || matched.length === 0) matched = candidates;
-
-      const chosenTactic = matched[idx % matched.length] || allTactics[0];
+      if (matched && matched.length > 0) {
+        // Genuine paid media match
+        chosenTactic = matched[idx % matched.length];
+      } else {
+        isOrganicDirect = true;
+        if (attributionModel === 'strict') {
+          // STRICT DIRECT 1:1 ATTRIBUTION (Authentic Source)
+          const searchSource = us.includes('google') ? 'Google Natural Search' : (us.includes('bing') ? 'Bing Natural Search' : 'Organic Search / Direct Brand Discovery');
+          chosenTactic = {
+            id: `tactic_direct_organic_${brand.toLowerCase().replace(/[^a-z0-9]/g, '_')}`,
+            name: `${brand} — Organic Search & Direct Brand Discovery`,
+            channel: 'Owned & Organic Search',
+            publisher: searchSource,
+            publication_group: searchSource,
+            ad_format: 'Natural Search / Direct Web Form',
+            key_hook: lead.messaging_hook || 'Organic Search & Website Inquiry',
+            run_date: 'Continuous Direct Inbound',
+            spend: 0,
+            active_quarters: ['FY23 Q1','FY23 Q2','FY23 Q3','FY23 Q4','FY24 Q1','FY24 Q2','FY24 Q3','FY24 Q4','FY25 Q1','FY25 Q2','FY25 Q3','FY25 Q4','FY26 Q1','FY26 Q2','FY26 Q3','FY26 Q4']
+          };
+        } else {
+          // MEDIA FLIGHT HALO ATTRIBUTION (Blended Concurrent Surge)
+          chosenTactic = candidates[idx % candidates.length] || allTactics[0];
+        }
+      }
 
       const chosenRunDate = chosenTactic.run_date || (chosenTactic.flight_start ? `${chosenTactic.flight_start} Flight` : (chosenTactic.year ? `${chosenTactic.year} Flight` : 'Scheduled Campaign'));
       return {
@@ -238,11 +293,11 @@
         tactic_run_date: chosenRunDate,
         tactic_active_quarters: chosenTactic.active_quarters || [],
         key_hook: lead.messaging_hook || chosenTactic.key_hook || 'Labor-Saving & Kitchen Efficiency',
-        publication_group: chosenTactic.publication_group || 'Trade Publisher Network'
+        publication_group: chosenTactic.publication_group || 'Trade Publisher Network',
+        is_organic_direct: isOrganicDirect
       };
     });
-
-    filteredLeads = [...allLeads];
+        filteredLeads = [...allLeads];
   }
 
   // ===========================================================================
@@ -258,6 +313,13 @@
     initColumns();
     initGlobalDateFilter();
     initGlobalDropdowns();
+
+    const btnStrict = document.getElementById('btn-attr-strict');
+    const btnHalo = document.getElementById('btn-attr-halo');
+    if (btnStrict && btnHalo) {
+      btnStrict.classList.toggle('active', attributionModel === 'strict');
+      btnHalo.classList.toggle('active', attributionModel === 'halo');
+    }
 
     // View 1 (Macro + Isolator)
     initMacroDimensionTabs();
@@ -3788,11 +3850,11 @@
         </div>
         <div class="pathway-step-card">
           <div class="pathway-step-header">
-            <span class="pathway-touch-badge">Initial Touch</span>
-            <span class="pathway-pub-name">${escapeHtml(lead.publication_group || chosenTactic.publication_group || 'Trade Media')}</span>
+            <span class="pathway-touch-badge">${lead.is_organic_direct && attributionModel === 'strict' ? 'Organic Discovery' : 'Initial Touch'}</span>
+            <span class="pathway-pub-name">${escapeHtml(lead.publication_group || chosenTactic.publication_group || 'Organic Search / Direct Discovery')}</span>
           </div>
           <div style="font-size: 0.8125rem; font-weight: 700; color: #0f172a; margin: 4px 0;">
-            ${escapeHtml(lead.tactic_name || 'Campaign Placement')}
+            ${escapeHtml(lead.tactic_name || 'Direct Discovery')}
           </div>
           <div class="pathway-utms-list" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
             ${lead.utm_source ? `<span class="utm-chip drawer-utm-chip">source: <strong>${escapeHtml(lead.utm_source)}</strong></span>` : ''}

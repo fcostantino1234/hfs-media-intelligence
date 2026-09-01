@@ -6813,3 +6813,42 @@ body {
   overflow-y: auto;
   padding-right: 4px;
 }
+
+/* Attribution Model Pill Switcher */
+.attribution-toggle-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.attr-mode-pill-container {
+  display: inline-flex;
+  background: #0f172a;
+  padding: 3px;
+  border-radius: 20px;
+  border: 1px solid #334155;
+}
+
+.btn-attr-pill {
+  background: transparent;
+  color: #94a3b8;
+  border: none;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-attr-pill:hover {
+  color: #ffffff;
+}
+
+.btn-attr-pill.active {
+  background: var(--jtm-chartreuse, #B4D334);
+  color: #0E313D;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}

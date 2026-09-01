@@ -104,8 +104,21 @@
             <option value="Events & Exhibitions">Events & Exhibitions</option>
             <option value="Digital Acquisition">Digital Acquisition</option>
             <option value="Owned Database Marketing">Owned Email Nurture</option>
-            <option value="Organic Inbound">Organic & SEO Inbound</option>
+            <option value="Owned & Organic Search">Owned & Organic Search</option>
           </select>
+        </div>
+
+        <!-- Attribution Model Toggle (Strict 1:1 vs Multi-Touch Halo) -->
+        <div class="global-control-group attribution-toggle-group">
+          <span class="control-label">Attribution:</span>
+          <div class="attr-mode-pill-container">
+            <button type="button" class="btn-attr-pill active" id="btn-attr-strict" onclick="setAttributionModel('strict')" title="Strict 1:1 Direct Attribution: Organic/Natural search leads stay organic; paid tactics only show authentic direct conversions">
+              🎯 Strict Direct
+            </button>
+            <button type="button" class="btn-attr-pill" id="btn-attr-halo" onclick="setAttributionModel('halo')" title="Media Flight Halo: Distributes concurrent website surge across active media flights (Multi-touch allocation)">
+              🔄 Media Halo
+            </button>
+          </div>
         </div>
 
         <!-- History Back & Master Reset Buttons -->
